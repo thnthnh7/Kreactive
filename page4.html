@@ -1,0 +1,1210 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Kreative — Step 04 · Fine Tune</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com" />
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+  <link href="https://fonts.googleapis.com/css2?family=Montserrat:ital,wght@0,400;0,500;0,600;0,700;1,400&display=swap" rel="stylesheet" />
+  <style>
+    /* Typography scale: --fs-* tokens (shared across steps) */
+    :root {
+      --fs-badge: 8px;
+      --fs-micro: 9px;
+      --fs-overline: 10px;
+      --fs-caption: 11px;
+      --fs-body-sm: 12px;
+      --fs-body: 13px;
+      --fs-lead: 14px;
+      --fs-title-sm: 16px;
+      --fs-title: 18px;
+      --fs-title-lg: 20px;
+      --fs-display: 28px;
+      --fs-hero-logo: clamp(64px, 9vw, 112px);
+      --fs-hero-tagline: clamp(13px, 1.4vw, 17px);
+      --fs-preview-headline: clamp(var(--fs-lead), 3vw, var(--fs-title-lg));
+      --fs-preview-desc: clamp(var(--fs-overline), 2.2vw, var(--fs-body));
+      --fs-preview-cta: clamp(var(--fs-overline), 2vw, var(--fs-body-sm));
+      --fs-h1: var(--fs-title-lg);
+      --fs-h2: var(--fs-title);
+      --fs-h3: var(--fs-title-sm);
+      --fs-desc: var(--fs-body);
+      --fs-desc-sm: var(--fs-caption);
+    }
+    /* STATE: READS theme | WRITES theme.temp/temperature/temperatureZone/strength/strengthIndex/palette, fineTune */
+    /* GUARD: theme | NEXT: page5.html | BACK: page3.html */
+
+    :root {
+      color-scheme: dark light;
+      --text: var(--text-primary);
+    }
+
+    [data-theme="dark"],
+    :root:not([data-theme]) {
+      --bg: #0a0b0e;
+      --bg-accent: radial-gradient(120% 80% at 50% 0%, rgba(255, 107, 107, 0.08) 0%, transparent 55%),
+        radial-gradient(90% 60% at 100% 100%, rgba(125, 211, 252, 0.06) 0%, transparent 50%),
+        #0a0b0e;
+      --coral: #ff6b6b;
+      --accent: #c4a5ff;
+      --sage: #8fd9a8;
+      --sky: #7dd3fc;
+      --text-primary: #f4f4f5;
+      --text-secondary: rgba(244, 244, 245, 0.72);
+      --text-muted: rgba(244, 244, 245, 0.42);
+      --border: rgba(255, 255, 255, 0.12);
+      --surface: rgba(255, 255, 255, 0.04);
+      --btn-primary-bg: linear-gradient(135deg, var(--coral) 0%, #ff8787 100%);
+      --btn-primary-color: #0a0b0e;
+      --btn-primary-shadow: 0 12px 32px rgba(255, 107, 107, 0.25);
+      --btn-next-bg: linear-gradient(135deg, #ececf0 0%, #d9d9df 100%);
+      --btn-next-color: #0a0b0e;
+      --btn-next-shadow: 0 10px 28px rgba(0, 0, 0, 0.35);
+      --toggle-bg: rgba(255, 255, 255, 0.06);
+      --toggle-border: var(--border);
+      --toggle-color: var(--text-secondary);
+      --step-nav-active-fg: #f4f4f5;
+      --step-nav-active-bg: rgba(255, 255, 255, 0.1);
+      --step-nav-active-border: rgba(244, 244, 245, 0.38);
+      --ft-card: rgba(255, 255, 255, 0.06);
+      --ft-str-track: rgba(255, 255, 255, 0.1);
+      --ft-str-fill: rgba(255, 255, 255, 0.42);
+      --ft-str-thumb: var(--text-primary);
+      --ft-card-blend: 26, 27, 30;
+    }
+
+    [data-theme="light"] {
+      --bg: #f5f3ef;
+      --bg-accent: radial-gradient(120% 80% at 50% 0%, rgba(255, 107, 107, 0.12) 0%, transparent 55%),
+        radial-gradient(90% 60% at 100% 100%, rgba(125, 211, 252, 0.14) 0%, transparent 50%),
+        #f5f3ef;
+      --coral: #e85555;
+      --accent: #8b6fd6;
+      --sage: #4fa572;
+      --sky: #3a9bc9;
+      --text-primary: #1a1b1f;
+      --text-secondary: rgba(26, 27, 31, 0.68);
+      --text-muted: rgba(26, 27, 31, 0.45);
+      --border: rgba(26, 27, 31, 0.12);
+      --surface: rgba(255, 255, 255, 0.72);
+      --btn-primary-bg: linear-gradient(135deg, var(--coral) 0%, #ff6b6b 100%);
+      --btn-primary-color: #ffffff;
+      --btn-primary-shadow: 0 12px 28px rgba(232, 85, 85, 0.22);
+      --btn-next-bg: linear-gradient(135deg, #33343a 0%, #1a1b1f 100%);
+      --btn-next-color: #fafafa;
+      --btn-next-shadow: 0 10px 26px rgba(0, 0, 0, 0.18);
+      --toggle-bg: rgba(255, 255, 255, 0.9);
+      --toggle-border: rgba(26, 27, 31, 0.1);
+      --toggle-color: var(--text-primary);
+      --step-nav-active-fg: #1a1b1f;
+      --step-nav-active-bg: rgba(26, 27, 31, 0.07);
+      --step-nav-active-border: rgba(26, 27, 31, 0.24);
+      --ft-card: rgba(255, 255, 255, 0.82);
+      --ft-str-track: rgba(26, 27, 31, 0.12);
+      --ft-str-fill: rgba(26, 27, 31, 0.38);
+      --ft-str-thumb: var(--text-primary);
+      --ft-card-blend: 252, 251, 248;
+    }
+
+    *,
+    *::before,
+    *::after {
+      box-sizing: border-box;
+    }
+
+    html {
+      font-family: "Montserrat", system-ui, -apple-system, sans-serif;
+    }
+
+    body {
+      margin: 0;
+      min-height: 100vh;
+      background: var(--bg-accent);
+      background-color: var(--bg);
+      background-attachment: fixed;
+      color: var(--text-primary);
+      -webkit-font-smoothing: antialiased;
+    }
+
+    .k-page {
+      display: flex;
+      min-height: 100vh;
+    }
+
+    .k-sidebar {
+      width: 72px;
+      flex-shrink: 0;
+      align-self: stretch;
+      min-height: 0;
+      border-right: 1px solid var(--border);
+      background: rgba(0, 0, 0, 0.15);
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      padding: 16px 0 20px;
+      gap: 0;
+    }
+
+    [data-theme="light"] .k-sidebar {
+      background: rgba(255, 255, 255, 0.35);
+    }
+
+    .k-sidebar-btn {
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      width: 44px;
+      height: 44px;
+      border-radius: 12px;
+      border: 1px solid transparent;
+      background: transparent;
+      color: var(--text-muted);
+      cursor: pointer;
+      padding: 0;
+      transition: color 0.2s ease, background 0.2s ease, border-color 0.2s ease, opacity 0.2s ease;
+    }
+
+    .k-sidebar-btn svg {
+      width: 22px;
+      height: 22px;
+      stroke: currentColor;
+      fill: none;
+      stroke-width: 1.5;
+      stroke-linecap: round;
+      stroke-linejoin: round;
+    }
+
+    .k-sidebar-btn:hover:not(:disabled) {
+      color: var(--text-secondary);
+      background: var(--surface);
+      border-color: var(--border);
+    }
+
+    .k-sidebar-btn:disabled {
+      opacity: 0.35;
+      cursor: not-allowed;
+    }
+
+    .k-sidebar-btn.active {
+      color: var(--step-nav-active-fg);
+      background: var(--step-nav-active-bg);
+      border-color: var(--step-nav-active-border);
+    }
+
+    .k-sidebar-btn.done:not(.active) {
+      color: var(--text-secondary);
+    }
+
+    .k-main {
+      flex: 1;
+      display: flex;
+      flex-direction: column;
+      min-width: 0;
+      min-height: 0;
+    }
+
+    .k-topbar {
+      display: grid;
+      grid-template-columns: minmax(0, 1fr) auto minmax(0, 1fr);
+      align-items: center;
+      gap: 16px;
+      padding: 16px 24px;
+      border-bottom: 1px solid var(--border);
+      background: rgba(0, 0, 0, 0.12);
+    }
+
+    [data-theme="light"] .k-topbar {
+      background: rgba(255, 255, 255, 0.5);
+    }
+
+    .k-topbar-left {
+      display: flex;
+      align-items: center;
+      gap: 12px;
+      flex-wrap: wrap;
+      justify-self: start;
+      min-width: 0;
+    }
+
+    .k-btn-ghost {
+      appearance: none;
+      border: 1px solid var(--border);
+      background: var(--surface);
+      color: var(--text-secondary);
+      font-family: inherit;
+      font-size: var(--fs-overline);
+      font-weight: 600;
+      letter-spacing: 2px;
+      text-transform: uppercase;
+      padding: 10px 18px;
+      border-radius: 99px;
+      cursor: pointer;
+      transition: background 0.2s ease, color 0.2s ease, border-color 0.2s ease;
+    }
+
+    .k-btn-ghost:hover {
+      color: var(--text-primary);
+      border-color: var(--text-muted);
+    }
+
+    .k-tabs {
+      display: flex;
+      flex-wrap: nowrap;
+      gap: 4px;
+      align-items: center;
+      justify-content: center;
+      justify-self: center;
+      min-width: 0;
+      max-width: min(960px, 100%);
+      overflow-x: auto;
+      -webkit-overflow-scrolling: touch;
+    }
+
+    .k-tab {
+      font-size: var(--fs-micro);
+      font-weight: 600;
+      letter-spacing: 1.5px;
+      text-transform: uppercase;
+      padding: 6px 10px;
+      border-radius: 99px;
+      color: var(--text-muted);
+      border: 1px solid transparent;
+      background: transparent;
+      cursor: default;
+      pointer-events: none;
+    }
+
+    .k-tab.active {
+      color: var(--text-primary);
+      border-color: var(--border);
+      background: rgba(255, 255, 255, 0.06);
+    }
+
+    [data-theme="light"] .k-tab.active {
+      background: rgba(26, 27, 31, 0.05);
+    }
+
+    .k-tab.done {
+      cursor: pointer;
+      pointer-events: auto;
+      color: var(--text-secondary);
+      border-color: var(--border);
+      background: rgba(255, 255, 255, 0.04);
+    }
+
+    [data-theme="light"] .k-tab.done {
+      background: rgba(26, 27, 31, 0.04);
+    }
+
+    .k-tab.done:hover {
+      color: var(--text-primary);
+      border-color: var(--text-muted);
+    }
+
+    .k-topbar-actions {
+      display: flex;
+      align-items: center;
+      gap: 10px;
+      justify-self: end;
+      min-width: 0;
+    }
+
+    .k-btn-next {
+      appearance: none;
+      border: none;
+      font-family: inherit;
+      font-size: var(--fs-overline);
+      font-weight: 600;
+      letter-spacing: 2.5px;
+      text-transform: uppercase;
+      padding: 10px 22px;
+      border-radius: 99px;
+      color: var(--btn-next-color);
+      background: var(--btn-next-bg);
+      box-shadow: var(--btn-next-shadow);
+      cursor: pointer;
+      transition: transform 0.2s ease, filter 0.2s ease;
+    }
+
+    .k-btn-next:hover {
+      transform: translateY(-1px);
+      filter: brightness(1.03);
+    }
+
+    .k-stage {
+      flex: 1;
+      min-height: 0;
+      padding: 0;
+      overflow: auto;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+    }
+
+    .k-stage-inner {
+      width: min(100%, 1248px);
+      max-width: 1248px;
+      margin: auto;
+      padding: 36px 32px 62px;
+      box-sizing: border-box;
+      flex-shrink: 0;
+    }
+
+    .ft-sec-label {
+      font-size: var(--fs-body-sm);
+      font-weight: 700;
+      letter-spacing: 0.12em;
+      text-transform: uppercase;
+      color: var(--text-muted);
+      margin: 0 0 13px;
+    }
+
+    .ft-block + .ft-block {
+      margin-top: 34px;
+    }
+
+    .ft-card {
+      background: var(--ft-card);
+      border: 1px solid var(--border);
+      border-radius: 16px;
+      padding: 24px 28px;
+    }
+
+    .ft-card-row {
+      display: flex;
+      align-items: baseline;
+      justify-content: space-between;
+      gap: 16px;
+      margin-bottom: 18px;
+    }
+
+    .ft-muted {
+      font-size: var(--fs-lead);
+      color: var(--text-secondary);
+    }
+
+    .ft-val {
+      font-size: var(--fs-title);
+      font-weight: 700;
+      color: var(--text-primary);
+      text-align: right;
+    }
+
+    .ft-range-wrap {
+      position: relative;
+      height: 36px;
+      margin-bottom: 10px;
+    }
+
+    .ft-temp-track {
+      position: absolute;
+      left: 0;
+      right: 0;
+      top: 50%;
+      transform: translateY(-50%);
+      height: 5px;
+      border-radius: 3px;
+      background: linear-gradient(90deg, #f97316, #fb923c, #94a3b8, #7dd3fc, #818cf8);
+      pointer-events: none;
+    }
+
+    .ft-range-input {
+      position: absolute;
+      inset: 0;
+      width: 100%;
+      height: 100%;
+      margin: 0;
+      opacity: 0;
+      cursor: pointer;
+      z-index: 2;
+    }
+
+    .ft-thumb {
+      position: absolute;
+      top: 50%;
+      width: 18px;
+      height: 18px;
+      margin-left: -9px;
+      border-radius: 50%;
+      border: 2px solid var(--bg);
+      transform: translateY(-50%);
+      pointer-events: none;
+      z-index: 3;
+      box-sizing: border-box;
+    }
+
+    .ft-temp-ticks {
+      display: grid;
+      grid-template-columns: 1fr 1fr 1fr;
+      gap: 10px;
+      margin-bottom: 13px;
+    }
+
+    .ft-tick {
+      text-align: center;
+    }
+
+    .ft-tick:nth-child(1) {
+      text-align: left;
+    }
+
+    .ft-tick:nth-child(3) {
+      text-align: right;
+    }
+
+    .ft-tick-title {
+      font-size: var(--fs-lead);
+      font-weight: 600;
+      color: var(--text-muted);
+    }
+
+    .ft-tick-title.active {
+      color: var(--text-primary);
+    }
+
+    .ft-tick-sub {
+      font-size: var(--fs-body-sm);
+      color: var(--text-muted);
+      margin-top: 3px;
+    }
+
+    .ft-tick-sub.active {
+      color: var(--text-secondary);
+    }
+
+    .ft-str-track {
+      position: absolute;
+      left: 0;
+      right: 0;
+      top: 50%;
+      transform: translateY(-50%);
+      height: 5px;
+      border-radius: 3px;
+      background: var(--ft-str-track);
+      overflow: hidden;
+      pointer-events: none;
+    }
+
+    .ft-str-fill {
+      height: 100%;
+      width: 0%;
+      border-radius: 2px;
+      background: var(--ft-str-fill);
+      transition: width 0.12s ease;
+    }
+
+    .ft-thumb--str {
+      background: var(--ft-str-thumb);
+    }
+
+    .ft-str-ticks {
+      display: grid;
+      grid-template-columns: repeat(4, 1fr);
+      gap: 8px;
+      margin-top: 8px;
+    }
+
+    .ft-str-tick {
+      text-align: center;
+    }
+
+    .ft-str-name {
+      font-size: var(--fs-lead);
+      font-weight: 600;
+      color: var(--text-muted);
+    }
+
+    .ft-str-name.active {
+      color: var(--text-primary);
+    }
+
+    .ft-str-pct {
+      font-size: var(--fs-body-sm);
+      color: var(--text-muted);
+      margin-top: 3px;
+    }
+
+    .ft-str-pct.active {
+      color: var(--text-secondary);
+    }
+
+    .ft-pal-swatches {
+      display: grid;
+      grid-template-columns: repeat(4, 1fr);
+      gap: 16px;
+      margin-bottom: 18px;
+    }
+
+    @media (max-width: 640px) {
+      .ft-pal-swatches {
+        grid-template-columns: repeat(2, 1fr);
+      }
+    }
+
+    .ft-swatch {
+      text-align: center;
+    }
+
+    .ft-swatch-bar {
+      height: 47px;
+      border-radius: 9px;
+      margin-bottom: 8px;
+      transition: background 0.2s ease;
+    }
+
+    .ft-swatch-lbl {
+      font-size: var(--fs-body-sm);
+      color: var(--text-muted);
+    }
+
+    .ft-swatch-hex {
+      font-size: var(--fs-body-sm);
+      font-family: ui-monospace, monospace;
+      color: var(--text-muted);
+      margin-top: 3px;
+    }
+
+    .ft-usage {
+      display: flex;
+      height: 13px;
+      border-radius: 6px;
+      overflow: hidden;
+      margin-bottom: 16px;
+    }
+
+    .ft-use-seg {
+      min-width: 0;
+    }
+
+    .ft-legend {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 18px 26px;
+    }
+
+    .ft-leg {
+      display: flex;
+      align-items: center;
+      gap: 8px;
+      font-size: var(--fs-body);
+      color: var(--text-secondary);
+    }
+
+    .ft-leg-dot {
+      width: 10px;
+      height: 10px;
+      border-radius: 50%;
+      flex-shrink: 0;
+    }
+
+    .k-step-icon {
+      display: inline-flex;
+      align-items: center;
+      justify-content: center;
+      width: 44px;
+      height: 44px;
+      border-radius: 50%;
+      border: 1px solid var(--toggle-border);
+      background: var(--toggle-bg);
+      color: var(--toggle-color);
+      cursor: pointer;
+      transition: background 0.2s ease, border-color 0.2s ease, color 0.2s ease;
+    }
+
+    .k-step-icon:hover {
+      background: var(--surface);
+    }
+
+    .k-step-icon svg {
+      width: 20px;
+      height: 20px;
+      stroke: currentColor;
+      fill: none;
+      stroke-width: 1.75;
+      stroke-linecap: round;
+      stroke-linejoin: round;
+    }
+
+    .k-theme-toggle {
+      position: static;
+      flex-shrink: 0;
+      margin-bottom: 12px;
+    }
+
+    .k-sidebar-steps {
+      flex: 1;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      justify-content: center;
+      gap: 10px;
+      min-height: 0;
+      width: 100%;
+    }
+  </style>
+</head>
+<body>
+  <div class="k-page">
+    <aside class="k-sidebar" aria-label="Workflow">
+      <button type="button" class="k-step-icon k-theme-toggle" id="themeToggle" aria-label="Toggle color theme">
+        <svg id="icon-moon" viewBox="0 0 24 24" aria-hidden="true">
+          <path d="M21 12.79A9 9 0 1 1 11.21 3 7 7 0 0 0 21 12.79z" />
+        </svg>
+        <svg id="icon-sun" viewBox="0 0 24 24" aria-hidden="true" style="display: none">
+          <circle cx="12" cy="12" r="4" />
+          <path d="M12 2v2M12 20v2M4.93 4.93l1.41 1.41M17.66 17.66l1.41 1.41M2 12h2M20 12h2M4.93 19.07l1.41-1.41M17.66 6.34l1.41-1.41" />
+        </svg>
+      </button>
+      <div class="k-sidebar-steps" id="sidebar" aria-label="Workflow steps"></div>
+    </aside>
+
+    <main class="k-main">
+      <nav class="k-topbar" aria-label="Step navigation">
+        <div class="k-topbar-left">
+          <button type="button" class="k-btn-ghost" id="btnBack">Back</button>
+        </div>
+        <div class="k-tabs" role="tablist" aria-label="Steps">
+            <button type="button" class="k-tab done" id="tabCategory">Category</button>
+            <button type="button" class="k-tab done" id="tabSize">Size</button>
+            <button type="button" class="k-tab done" id="tabTheme">Theme</button>
+            <span class="k-tab active" role="tab" aria-selected="true">Fine Tune</span>
+            <span class="k-tab" role="tab" aria-selected="false">Reference</span>
+            <span class="k-tab" role="tab" aria-selected="false">Text &amp; Brand</span>
+            <span class="k-tab" role="tab" aria-selected="false">Generate</span>
+        </div>
+        <div class="k-topbar-actions">
+          <button type="button" class="k-btn-next" id="btnNext">Next</button>
+        </div>
+      </nav>
+
+      <div class="k-stage">
+        <div class="k-stage-inner">
+          <section class="ft-block" aria-labelledby="lblTemp">
+            <div class="ft-sec-label" id="lblTemp">Color temperature</div>
+            <div class="ft-card">
+              <div class="ft-card-row">
+                <span class="ft-muted">Adjust color cast on top of your theme</span>
+                <span class="ft-val" id="tempValueLabel">Natural</span>
+              </div>
+              <div class="ft-range-wrap" id="tempRangeWrap">
+                <div class="ft-temp-track" aria-hidden="true"></div>
+                <div class="ft-thumb" id="tempThumb" aria-hidden="true"></div>
+                <input type="range" class="ft-range-input" id="tempSlider" min="0" max="100" value="50" aria-valuemin="0" aria-valuemax="100" />
+              </div>
+              <div class="ft-temp-ticks" aria-hidden="true">
+                <div class="ft-tick" data-zone="warm">
+                  <div class="ft-tick-title">Warm</div>
+                  <div class="ft-tick-sub">Amber · golden</div>
+                </div>
+                <div class="ft-tick" data-zone="nat">
+                  <div class="ft-tick-title">Natural</div>
+                  <div class="ft-tick-sub">Default palette</div>
+                </div>
+                <div class="ft-tick" data-zone="cool">
+                  <div class="ft-tick-title">Cool</div>
+                  <div class="ft-tick-sub">Blue-grey</div>
+                </div>
+              </div>
+            </div>
+          </section>
+
+          <section class="ft-block" aria-labelledby="lblStr">
+            <div class="ft-sec-label" id="lblStr">Strength</div>
+            <div class="ft-card">
+              <div class="ft-card-row">
+                <span class="ft-muted">Fine-tune intensity</span>
+                <span class="ft-val" id="strValueLabel">Blend — 50%</span>
+              </div>
+              <div class="ft-range-wrap" id="strRangeWrap">
+                <div class="ft-str-track" aria-hidden="true"><div class="ft-str-fill" id="strFill"></div></div>
+                <div class="ft-thumb ft-thumb--str" id="strThumb" aria-hidden="true"></div>
+                <input type="range" class="ft-range-input" id="strSlider" min="0" max="3" value="1" step="1" aria-valuemin="0" aria-valuemax="3" />
+              </div>
+              <div class="ft-str-ticks" id="strTicks" aria-hidden="true"></div>
+            </div>
+          </section>
+
+          <section class="ft-block" aria-labelledby="lblPal">
+            <div class="ft-sec-label" id="lblPal">Palette preview</div>
+            <div class="ft-card">
+              <div class="ft-pal-swatches" id="palSwatches"></div>
+              <div class="ft-usage" id="palUsage" aria-hidden="true"></div>
+              <div class="ft-legend" id="palLegend"></div>
+            </div>
+          </section>
+        </div>
+      </div>
+    </main>
+  </div>
+
+  <script>
+    (function () {
+      var KREATIVE_KEY = "kreative_session";
+
+      function getState() {
+        try {
+          var raw = localStorage.getItem(KREATIVE_KEY);
+          return raw ? JSON.parse(raw) : {};
+        } catch (e) {
+          return {};
+        }
+      }
+
+      function setState(partial) {
+        var next = Object.assign({}, getState(), partial);
+        localStorage.setItem(KREATIVE_KEY, JSON.stringify(next));
+      }
+
+      function clearState() {
+        localStorage.removeItem(KREATIVE_KEY);
+      }
+
+      if (!getState().theme) {
+        window.location.href = "page3.html";
+        return;
+      }
+
+      function syncIcons() {
+        var moon = document.getElementById("icon-moon");
+        var sun = document.getElementById("icon-sun");
+        if (!moon || !sun) return;
+        var isDark = document.documentElement.getAttribute("data-theme") !== "light";
+        moon.style.display = isDark ? "block" : "none";
+        sun.style.display = isDark ? "none" : "block";
+      }
+
+      function initTheme() {
+        var stored = localStorage.getItem("kreativeTheme");
+        var prefersDark = window.matchMedia("(prefers-color-scheme: dark)").matches;
+        var theme = stored || (prefersDark ? "dark" : "light");
+        document.documentElement.setAttribute("data-theme", theme);
+        syncIcons();
+      }
+
+      var STEP_PAGES = [
+        "page1.html",
+        "page2.html",
+        "page3.html",
+        "page4.html",
+        "page5.html",
+        "page6.html",
+        "page7.html"
+      ];
+
+      function stepReachable(stepIndex) {
+        var s = getState();
+        if (stepIndex <= 1) return true;
+        if (stepIndex === 2) return !!s.category;
+        if (stepIndex === 3) return !!s.category && !!s.size;
+        if (stepIndex === 4) return !!s.category && !!s.size && !!s.theme;
+        if (stepIndex === 5) return !!s.category && !!s.size && !!s.theme && !!s.fineTune;
+        if (stepIndex === 6) {
+          return !!s.category && !!s.size && !!s.theme && !!s.fineTune && !!s.reference;
+        }
+        if (stepIndex === 7) {
+          return (
+            !!s.category &&
+            !!s.size &&
+            !!s.theme &&
+            !!s.fineTune &&
+            !!s.reference &&
+            !!s.textBrand
+          );
+        }
+        return false;
+      }
+
+      var SIDEBAR_SVGS = [
+        '<svg viewBox="0 0 24 24" aria-hidden="true"><rect x="3" y="3" width="7" height="7" rx="1"/><rect x="14" y="3" width="7" height="7" rx="1"/><rect x="3" y="14" width="7" height="7" rx="1"/><rect x="14" y="14" width="7" height="7" rx="1"/></svg>',
+        '<svg viewBox="0 0 24 24" aria-hidden="true"><rect x="5" y="5" width="10" height="10" rx="1"/><path d="M9 3h6M9 21h6M3 9v6M21 9v6"/></svg>',
+        '<svg viewBox="0 0 24 24" aria-hidden="true"><circle cx="12" cy="12" r="4" fill="none" stroke="currentColor"/><path d="M12 2v2M12 20v2M4.93 4.93l1.41 1.41M17.66 17.66l1.41 1.41M2 12h2M20 12h2M4.93 19.07l1.41-1.41M17.66 6.34l1.41-1.41" fill="none"/><circle cx="7.5" cy="7.5" r="1.25" fill="currentColor"/><circle cx="17" cy="16" r="1.25" fill="currentColor"/></svg>',
+        '<svg viewBox="0 0 24 24" aria-hidden="true"><path d="M4 14h4v6H4zM10 8h4v12h-4zM16 4h4v16h-4z"/></svg>',
+        '<svg viewBox="0 0 24 24" aria-hidden="true"><rect x="3" y="5" width="18" height="14" rx="2"/><circle cx="8.5" cy="10.5" r="1.5"/><path d="M21 17l-6-6-4 4-2-2-4 4"/></svg>',
+        '<svg viewBox="0 0 24 24" aria-hidden="true"><path d="M4 6h16M4 12h10M4 18h14"/></svg>',
+        '<svg viewBox="0 0 24 24" aria-hidden="true"><path d="M12 2l1.8 4.5L18 8l-4 2.5L15.5 15 12 12.5 8.5 15 10 10.5 6 8l4.2-1.5L12 2z"/></svg>'
+      ];
+
+      function renderSidebar(currentStep) {
+        var el = document.getElementById("sidebar");
+        if (!el) return;
+        var s = getState();
+        var html = "";
+        for (var i = 0; i < 7; i++) {
+          var stepNum = i + 1;
+          var reachable = stepReachable(stepNum);
+          var done =
+            stepNum < currentStep ||
+            (stepNum === 1 && !!s.category) ||
+            (stepNum === 2 && !!s.size) ||
+            (stepNum === 3 && !!s.theme) ||
+            (stepNum === 4 && !!s.fineTune) ||
+            (stepNum === 5 && !!s.reference) ||
+            (stepNum === 6 && !!s.textBrand) ||
+            (stepNum === 7 && !!s.generated);
+          var classes = "k-sidebar-btn";
+          if (stepNum === currentStep) classes += " active";
+          if (done) classes += " done";
+          var disabled = !reachable && stepNum !== currentStep;
+          var label =
+            "Go to step " +
+            stepNum +
+            (disabled ? " (locked)" : "") +
+            ": " +
+            ["Category", "Size", "Theme", "Fine Tune", "Reference", "Text & Brand", "Generate"][i];
+          html +=
+            '<button type="button" class="' +
+            classes +
+            '" data-step="' +
+            stepNum +
+            '"' +
+            (disabled ? " disabled" : "") +
+            ' aria-label="' +
+            label +
+            '" title="' +
+            label +
+            '">' +
+            SIDEBAR_SVGS[i] +
+            "</button>";
+        }
+        el.innerHTML = html;
+        var buttons = el.querySelectorAll("[data-step]");
+        for (var j = 0; j < buttons.length; j++) {
+          buttons[j].addEventListener("click", onSidebarClick);
+        }
+      }
+
+      function onSidebarClick(ev) {
+        var btn = ev.currentTarget;
+        if (btn.disabled) return;
+        var step = parseInt(btn.getAttribute("data-step"), 10);
+        if (!stepReachable(step)) return;
+        var href = STEP_PAGES[step - 1];
+        if (!href) return;
+        var path = window.location.pathname || "";
+        var at =
+          path.slice(-href.length) === href ||
+          path.replace(/\\/g, "/").split("/").pop() === href;
+        if (!at) window.location.href = href;
+      }
+
+      var PALS = {
+        warm: ["#f97316", "#fb923c", "#94a3b8", "#1a0f05"],
+        nat: ["#10b981", "#3b82f6", "#64748b", "#0f172a"],
+        cool: ["#818cf8", "#7dd3fc", "#94a3b8", "#0f0e2e"]
+      };
+
+      var STR_ALPHA = [0.28, 0.55, 0.8, 1.0];
+      var STR_LABELS = ["Hint", "Blend", "Strong", "Full"];
+      var STR_PCTS = ["25%", "50%", "75%", "100%"];
+      var NEUTRAL_HEX = "#1e3a4a";
+      var DARK_HEX = "#0a1220";
+
+      var tempSlider = null;
+      var strSlider = null;
+
+      function hexToRgb(hex) {
+        var h = String(hex).replace("#", "");
+        var n = parseInt(h, 16);
+        return { r: (n >> 16) & 255, g: (n >> 8) & 255, b: n & 255 };
+      }
+
+      function rgbToHex(r, g, b) {
+        function c(x) {
+          return ("0" + Math.round(Math.max(0, Math.min(255, x))).toString(16)).slice(-2);
+        }
+        return "#" + c(r) + c(g) + c(b);
+      }
+
+      function lerpHex(a, b, t) {
+        var A = hexToRgb(a);
+        var B = hexToRgb(b);
+        return rgbToHex(A.r + (B.r - A.r) * t, A.g + (B.g - A.g) * t, A.b + (B.b - A.b) * t);
+      }
+
+      function getCardBlendRgb() {
+        var raw = getComputedStyle(document.documentElement).getPropertyValue("--ft-card-blend").trim();
+        if (!raw) return { r: 26, g: 27, b: 30 };
+        var parts = raw.split(/\s*,\s*/);
+        if (parts.length !== 3) return { r: 26, g: 27, b: 30 };
+        return { r: +parts[0], g: +parts[1], b: +parts[2] };
+      }
+
+      function blendOnCard(hex, alpha) {
+        var F = hexToRgb(hex);
+        var Bg = getCardBlendRgb();
+        return rgbToHex(
+          F.r * alpha + Bg.r * (1 - alpha),
+          F.g * alpha + Bg.g * (1 - alpha),
+          F.b * alpha + Bg.b * (1 - alpha)
+        );
+      }
+
+      function getZone(tv) {
+        if (tv < 33) return "warm";
+        if (tv > 67) return "cool";
+        return "nat";
+      }
+
+      function getTempValueLabel(tv) {
+        if (tv < 10) return "Warm";
+        if (tv < 33) return "Warm › Natural";
+        if (tv <= 67) return "Natural";
+        if (tv <= 90) return "Natural › Cool";
+        return "Cool";
+      }
+
+      function paletteForTv(tv) {
+        var out = [];
+        var i;
+        if (tv < 33) {
+          var t0 = tv / 33;
+          for (i = 0; i < 4; i++) out.push(lerpHex(PALS.warm[i], PALS.nat[i], t0));
+        } else if (tv > 67) {
+          var t1 = (tv - 67) / 33;
+          for (i = 0; i < 4; i++) out.push(lerpHex(PALS.nat[i], PALS.cool[i], t1));
+        } else {
+          for (i = 0; i < 4; i++) out.push(PALS.nat[i]);
+        }
+        return out;
+      }
+
+      function thumbColorForTv(tv) {
+        if (tv < 33) return lerpHex("#f97316", "#94a3b8", tv / 33);
+        if (tv > 67) return lerpHex("#94a3b8", "#7dd3fc", (tv - 67) / 33);
+        return lerpHex("#fb923c", "#7dd3fc", (tv - 33) / 34);
+      }
+
+      function initFineTuneDom() {
+        var st = document.getElementById("strTicks");
+        if (st && !st.children.length) {
+          var html = "";
+          for (var i = 0; i < 4; i++) {
+            html +=
+              '<div class="ft-str-tick" data-idx="' +
+              i +
+              '"><div class="ft-str-name">' +
+              STR_LABELS[i] +
+              '</div><div class="ft-str-pct">' +
+              STR_PCTS[i] +
+              "</div></div>";
+          }
+          st.innerHTML = html;
+        }
+        var ps = document.getElementById("palSwatches");
+        if (ps && !ps.children.length) {
+          var names = ["Primary", "Secondary", "Neutral", "Dark"];
+          var h = "";
+          for (var j = 0; j < 4; j++) {
+            h +=
+              '<div class="ft-swatch"><div class="ft-swatch-bar" id="palBar' +
+              j +
+              '"></div><div class="ft-swatch-lbl">' +
+              names[j] +
+              '</div><div class="ft-swatch-hex" id="palHex' +
+              j +
+              '"></div></div>';
+          }
+          ps.innerHTML = h;
+        }
+        var u = document.getElementById("palUsage");
+        if (u && !u.children.length) {
+          u.innerHTML =
+            '<div class="ft-use-seg" id="useSeg0" style="width:15%"></div>' +
+            '<div class="ft-use-seg" id="useSeg1" style="width:25%"></div>' +
+            '<div class="ft-use-seg" id="useSeg2" style="width:35%;background:#1e3a4a"></div>' +
+            '<div class="ft-use-seg" id="useSeg3" style="width:25%;background:#0a1220"></div>';
+        }
+        var leg = document.getElementById("palLegend");
+        if (leg && !leg.children.length) {
+          var L = ["Primary", "Secondary", "Neutral", "Dark"];
+          var lh = "";
+          for (var k = 0; k < 4; k++) {
+            lh +=
+              '<div class="ft-leg"><span class="ft-leg-dot" id="legDot' +
+              k +
+              '"></span>' +
+              L[k] +
+              "</div>";
+          }
+          leg.innerHTML = lh;
+        }
+      }
+
+      function updatePreview() {
+        initFineTuneDom();
+        var tv = parseInt(tempSlider.value, 10);
+        var zone = getZone(tv);
+        var tThumb = document.getElementById("tempThumb");
+        if (tThumb) {
+          tThumb.style.left = tv + "%";
+          tThumb.style.background = thumbColorForTv(tv);
+        }
+        document.getElementById("tempValueLabel").textContent = getTempValueLabel(tv);
+
+        var ticks = document.querySelectorAll(".ft-tick");
+        for (var ti = 0; ti < ticks.length; ti++) {
+          var z = ticks[ti].getAttribute("data-zone");
+          var on = (z === "warm" && zone === "warm") || (z === "nat" && zone === "nat") || (z === "cool" && zone === "cool");
+          ticks[ti].querySelector(".ft-tick-title").classList.toggle("active", on);
+          ticks[ti].querySelector(".ft-tick-sub").classList.toggle("active", on);
+        }
+
+        var si = parseInt(strSlider.value, 10);
+        var alpha = STR_ALPHA[si];
+        var strLabel = STR_LABELS[si] + " — " + STR_PCTS[si];
+        document.getElementById("strValueLabel").textContent = strLabel;
+        var pct = (si / 3) * 100;
+        document.getElementById("strFill").style.width = pct + "%";
+        var sThumb = document.getElementById("strThumb");
+        if (sThumb) {
+          sThumb.style.left = (si / 3) * 100 + "%";
+        }
+        var strTicks = document.querySelectorAll(".ft-str-tick");
+        for (var sti = 0; sti < strTicks.length; sti++) {
+          var ons = parseInt(strTicks[sti].getAttribute("data-idx"), 10) === si;
+          strTicks[sti].querySelector(".ft-str-name").classList.toggle("active", ons);
+          strTicks[sti].querySelector(".ft-str-pct").classList.toggle("active", ons);
+        }
+
+        var base = paletteForTv(tv);
+        var disp = [
+          blendOnCard(base[0], alpha),
+          blendOnCard(base[1], alpha),
+          NEUTRAL_HEX,
+          DARK_HEX
+        ];
+        for (var pi = 0; pi < 4; pi++) {
+          var bar = document.getElementById("palBar" + pi);
+          var hx = document.getElementById("palHex" + pi);
+          if (bar) bar.style.background = disp[pi];
+          if (hx) hx.textContent = disp[pi].toUpperCase();
+        }
+        var u0 = document.getElementById("useSeg0");
+        var u1 = document.getElementById("useSeg1");
+        if (u0) u0.style.background = disp[0];
+        if (u1) u1.style.background = disp[1];
+        for (var li = 0; li < 4; li++) {
+          var d = document.getElementById("legDot" + li);
+          if (d) d.style.background = disp[li];
+        }
+      }
+
+      function tempToLegacy(zone) {
+        if (zone === "nat") return "natural";
+        return zone;
+      }
+
+      function restoreFromState() {
+        var th = getState().theme || {};
+        var tv = 50;
+        if (typeof th.temperature === "number" && !isNaN(th.temperature)) {
+          tv = Math.max(0, Math.min(100, th.temperature));
+        } else if (th.temp === "warm") tv = 16;
+        else if (th.temp === "cool") tv = 84;
+        else if (th.temp === "natural") tv = 50;
+        tempSlider.value = String(tv);
+
+        var si = 1;
+        if (typeof th.strengthIndex === "number" && th.strengthIndex >= 0 && th.strengthIndex <= 3) {
+          si = th.strengthIndex;
+        } else if (th.strength) {
+          for (var q = 0; q < STR_LABELS.length; q++) {
+            if (STR_LABELS[q] === th.strength) {
+              si = q;
+              break;
+            }
+          }
+        }
+        strSlider.value = String(si);
+      }
+
+      function proceedToNext() {
+        var tv = parseInt(tempSlider.value, 10);
+        var zone = getZone(tv);
+        var si = parseInt(strSlider.value, 10);
+        var strLabel = STR_LABELS[si];
+        var alpha = STR_ALPHA[si];
+        var base = paletteForTv(tv);
+        var currentPal = [
+          blendOnCard(base[0], alpha),
+          blendOnCard(base[1], alpha),
+          NEUTRAL_HEX,
+          DARK_HEX
+        ];
+        try {
+          sessionStorage.setItem("kreative_temperature", String(tv));
+          sessionStorage.setItem("kreative_temperature_zone", zone);
+          sessionStorage.setItem("kreative_strength", String(si));
+          sessionStorage.setItem("kreative_strength_label", strLabel);
+          sessionStorage.setItem("kreative_palette", JSON.stringify(currentPal));
+          var s0 = getState();
+          var tb = s0.textBrand;
+          var brand =
+            (tb && typeof tb === "object" && tb.name) ||
+            (s0.category && s0.category.name) ||
+            "";
+          if (brand) sessionStorage.setItem("kreative_brand", brand);
+          var thn = (getState().theme && getState().theme.primary) || "";
+          if (thn) sessionStorage.setItem("kreative_theme", thn);
+        } catch (err) {}
+
+        var t = getState().theme || {};
+        setState({
+          theme: Object.assign({}, t, {
+            temp: tempToLegacy(zone),
+            temperature: tv,
+            temperatureZone: zone,
+            strength: strLabel,
+            strengthIndex: si,
+            palette: currentPal
+          }),
+          fineTune: true
+        });
+        window.location.href = "page5.html";
+      }
+
+      document.getElementById("tabCategory").addEventListener("click", function () {
+        window.location.href = "page1.html";
+      });
+      document.getElementById("tabSize").addEventListener("click", function () {
+        window.location.href = "page2.html";
+      });
+      document.getElementById("tabTheme").addEventListener("click", function () {
+        window.location.href = "page3.html";
+      });
+      document.getElementById("btnBack").addEventListener("click", function () {
+        window.location.href = "page3.html";
+      });
+
+      document.getElementById("btnNext").addEventListener("click", proceedToNext);
+
+      tempSlider = document.getElementById("tempSlider");
+      strSlider = document.getElementById("strSlider");
+      tempSlider.addEventListener("input", updatePreview);
+      strSlider.addEventListener("input", updatePreview);
+
+      initTheme();
+      initFineTuneDom();
+      restoreFromState();
+      updatePreview();
+      renderSidebar(4);
+
+      var toggle = document.getElementById("themeToggle");
+      if (toggle) {
+        toggle.addEventListener("click", function () {
+          var next = document.documentElement.getAttribute("data-theme") === "light" ? "dark" : "light";
+          document.documentElement.setAttribute("data-theme", next);
+          localStorage.setItem("kreativeTheme", next);
+          syncIcons();
+          updatePreview();
+        });
+      }
+
+      window.getState = getState;
+      window.setState = setState;
+      window.clearState = clearState;
+    })();
+  </script>
+</body>
+</html>

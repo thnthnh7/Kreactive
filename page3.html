@@ -1,0 +1,1589 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Kreative — Step 03 · Theme</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com" />
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+  <link href="https://fonts.googleapis.com/css2?family=Montserrat:ital,wght@0,400;0,500;0,600;0,700;1,400&display=swap" rel="stylesheet" />
+  <style>
+    /* Typography scale: --fs-* tokens (shared across steps) */
+    :root {
+      --fs-badge: 8px;
+      --fs-micro: 9px;
+      --fs-overline: 10px;
+      --fs-caption: 11px;
+      --fs-body-sm: 12px;
+      --fs-body: 13px;
+      --fs-lead: 14px;
+      --fs-title-sm: 16px;
+      --fs-title: 18px;
+      --fs-title-lg: 20px;
+      --fs-display: 28px;
+      --fs-hero-logo: clamp(64px, 9vw, 112px);
+      --fs-hero-tagline: clamp(13px, 1.4vw, 17px);
+      --fs-preview-headline: clamp(var(--fs-lead), 3vw, var(--fs-title-lg));
+      --fs-preview-desc: clamp(var(--fs-overline), 2.2vw, var(--fs-body));
+      --fs-preview-cta: clamp(var(--fs-overline), 2vw, var(--fs-body-sm));
+      --fs-h1: var(--fs-title-lg);
+      --fs-h2: var(--fs-title);
+      --fs-h3: var(--fs-title-sm);
+      --fs-desc: var(--fs-body);
+      --fs-desc-sm: var(--fs-caption);
+    }
+    /* STATE: READS category, size | WRITES theme */
+    /* GUARD: size | NEXT: page4.html | BACK: page2.html */
+
+    :root {
+      color-scheme: dark light;
+      --text: var(--text-primary);
+    }
+
+    [data-theme="dark"],
+    :root:not([data-theme]) {
+      --bg: #0a0b0e;
+      --bg-accent: radial-gradient(120% 80% at 50% 0%, rgba(255, 107, 107, 0.08) 0%, transparent 55%),
+        radial-gradient(90% 60% at 100% 100%, rgba(125, 211, 252, 0.06) 0%, transparent 50%),
+        #0a0b0e;
+      --coral: #ff6b6b;
+      --accent: #c4a5ff;
+      --sage: #8fd9a8;
+      --sky: #7dd3fc;
+      --text-primary: #f4f4f5;
+      --text-secondary: rgba(244, 244, 245, 0.72);
+      --text-muted: rgba(244, 244, 245, 0.42);
+      --border: rgba(255, 255, 255, 0.12);
+      --surface: rgba(255, 255, 255, 0.04);
+      --btn-primary-bg: linear-gradient(135deg, var(--coral) 0%, #ff8787 100%);
+      --btn-primary-color: #0a0b0e;
+      --btn-primary-shadow: 0 12px 32px rgba(255, 107, 107, 0.25);
+      --btn-next-bg: linear-gradient(135deg, #ececf0 0%, #d9d9df 100%);
+      --btn-next-color: #0a0b0e;
+      --btn-next-shadow: 0 10px 28px rgba(0, 0, 0, 0.35);
+      --toggle-bg: rgba(255, 255, 255, 0.06);
+      --toggle-border: var(--border);
+      --toggle-color: var(--text-secondary);
+      --step-nav-active-fg: #f4f4f5;
+      --step-nav-active-bg: rgba(255, 255, 255, 0.1);
+      --step-nav-active-border: rgba(244, 244, 245, 0.38);
+      --accent-dim: rgba(196, 165, 255, 0.18);
+      --bg-card: rgba(255, 255, 255, 0.03);
+      --bg-card-hover: rgba(255, 255, 255, 0.055);
+      --radius-lg: 14px;
+      --radius-sm: 8px;
+      --transition: 0.2s ease;
+    }
+
+    [data-theme="light"] {
+      --bg: #f5f3ef;
+      --bg-accent: radial-gradient(120% 80% at 50% 0%, rgba(255, 107, 107, 0.12) 0%, transparent 55%),
+        radial-gradient(90% 60% at 100% 100%, rgba(125, 211, 252, 0.14) 0%, transparent 50%),
+        #f5f3ef;
+      --coral: #e85555;
+      --accent: #8b6fd6;
+      --sage: #4fa572;
+      --sky: #3a9bc9;
+      --text-primary: #1a1b1f;
+      --text-secondary: rgba(26, 27, 31, 0.68);
+      --text-muted: rgba(26, 27, 31, 0.45);
+      --border: rgba(26, 27, 31, 0.12);
+      --surface: rgba(255, 255, 255, 0.72);
+      --btn-primary-bg: linear-gradient(135deg, var(--coral) 0%, #ff6b6b 100%);
+      --btn-primary-color: #ffffff;
+      --btn-primary-shadow: 0 12px 28px rgba(232, 85, 85, 0.22);
+      --btn-next-bg: linear-gradient(135deg, #33343a 0%, #1a1b1f 100%);
+      --btn-next-color: #fafafa;
+      --btn-next-shadow: 0 10px 26px rgba(0, 0, 0, 0.18);
+      --toggle-bg: rgba(255, 255, 255, 0.9);
+      --toggle-border: rgba(26, 27, 31, 0.1);
+      --toggle-color: var(--text-primary);
+      --step-nav-active-fg: #1a1b1f;
+      --step-nav-active-bg: rgba(26, 27, 31, 0.07);
+      --step-nav-active-border: rgba(26, 27, 31, 0.24);
+      --accent-dim: rgba(139, 111, 214, 0.14);
+      --bg-card: rgba(255, 255, 255, 0.65);
+      --bg-card-hover: rgba(255, 255, 255, 0.78);
+      --radius-lg: 14px;
+      --radius-sm: 8px;
+      --transition: 0.2s ease;
+    }
+
+    *,
+    *::before,
+    *::after {
+      box-sizing: border-box;
+    }
+
+    html {
+      font-family: "Montserrat", system-ui, -apple-system, sans-serif;
+    }
+
+    body {
+      margin: 0;
+      min-height: 100vh;
+      background: var(--bg-accent);
+      background-color: var(--bg);
+      background-attachment: fixed;
+      color: var(--text-primary);
+      -webkit-font-smoothing: antialiased;
+    }
+
+    .k-page {
+      display: flex;
+      min-height: 100vh;
+    }
+
+    .k-sidebar {
+      width: 72px;
+      flex-shrink: 0;
+      align-self: stretch;
+      min-height: 0;
+      border-right: 1px solid var(--border);
+      background: rgba(0, 0, 0, 0.15);
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      padding: 16px 0 20px;
+      gap: 0;
+    }
+
+    [data-theme="light"] .k-sidebar {
+      background: rgba(255, 255, 255, 0.35);
+    }
+
+    .k-sidebar-btn {
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      width: 44px;
+      height: 44px;
+      border-radius: 12px;
+      border: 1px solid transparent;
+      background: transparent;
+      color: var(--text-muted);
+      cursor: pointer;
+      padding: 0;
+      transition: color 0.2s ease, background 0.2s ease, border-color 0.2s ease, opacity 0.2s ease;
+    }
+
+    .k-sidebar-btn svg {
+      width: 22px;
+      height: 22px;
+      stroke: currentColor;
+      fill: none;
+      stroke-width: 1.5;
+      stroke-linecap: round;
+      stroke-linejoin: round;
+    }
+
+    .k-sidebar-btn:hover:not(:disabled) {
+      color: var(--text-secondary);
+      background: var(--surface);
+      border-color: var(--border);
+    }
+
+    .k-sidebar-btn:disabled {
+      opacity: 0.35;
+      cursor: not-allowed;
+    }
+
+    .k-sidebar-btn.active {
+      color: var(--step-nav-active-fg);
+      background: var(--step-nav-active-bg);
+      border-color: var(--step-nav-active-border);
+    }
+
+    .k-sidebar-btn.done:not(.active) {
+      color: var(--text-secondary);
+    }
+
+    .k-main {
+      flex: 1;
+      display: flex;
+      flex-direction: column;
+      min-width: 0;
+      min-height: 0;
+    }
+
+    .k-topbar {
+      display: grid;
+      grid-template-columns: minmax(0, 1fr) auto minmax(0, 1fr);
+      align-items: center;
+      gap: 16px;
+      padding: 16px 24px;
+      border-bottom: 1px solid var(--border);
+      background: rgba(0, 0, 0, 0.12);
+    }
+
+    [data-theme="light"] .k-topbar {
+      background: rgba(255, 255, 255, 0.5);
+    }
+
+    .k-topbar-left {
+      display: flex;
+      align-items: center;
+      gap: 12px;
+      flex-wrap: wrap;
+      justify-self: start;
+      min-width: 0;
+    }
+
+    .k-btn-ghost {
+      appearance: none;
+      border: 1px solid var(--border);
+      background: var(--surface);
+      color: var(--text-secondary);
+      font-family: inherit;
+      font-size: var(--fs-overline);
+      font-weight: 600;
+      letter-spacing: 2px;
+      text-transform: uppercase;
+      padding: 10px 18px;
+      border-radius: 99px;
+      cursor: pointer;
+      transition: background 0.2s ease, color 0.2s ease, border-color 0.2s ease;
+    }
+
+    .k-btn-ghost:hover {
+      color: var(--text-primary);
+      border-color: var(--text-muted);
+    }
+
+    .k-tabs {
+      display: flex;
+      flex-wrap: nowrap;
+      gap: 4px;
+      align-items: center;
+      justify-content: center;
+      justify-self: center;
+      min-width: 0;
+      max-width: min(960px, 100%);
+      overflow-x: auto;
+      -webkit-overflow-scrolling: touch;
+    }
+
+    .k-tab {
+      font-size: var(--fs-micro);
+      font-weight: 600;
+      letter-spacing: 1.5px;
+      text-transform: uppercase;
+      padding: 6px 10px;
+      border-radius: 99px;
+      color: var(--text-muted);
+      border: 1px solid transparent;
+      background: transparent;
+      cursor: default;
+      pointer-events: none;
+    }
+
+    .k-tab.active {
+      color: var(--text-primary);
+      border-color: var(--border);
+      background: rgba(255, 255, 255, 0.06);
+    }
+
+    [data-theme="light"] .k-tab.active {
+      background: rgba(26, 27, 31, 0.05);
+    }
+
+    .k-tab.done {
+      cursor: pointer;
+      pointer-events: auto;
+      color: var(--text-secondary);
+      border-color: var(--border);
+      background: rgba(255, 255, 255, 0.04);
+    }
+
+    [data-theme="light"] .k-tab.done {
+      background: rgba(26, 27, 31, 0.04);
+    }
+
+    .k-tab.done:hover {
+      color: var(--text-primary);
+      border-color: var(--text-muted);
+    }
+
+    .k-topbar-actions {
+      display: flex;
+      align-items: center;
+      gap: 10px;
+      justify-self: end;
+      min-width: 0;
+    }
+
+    .k-btn-next {
+      appearance: none;
+      border: none;
+      font-family: inherit;
+      font-size: var(--fs-overline);
+      font-weight: 600;
+      letter-spacing: 2.5px;
+      text-transform: uppercase;
+      padding: 10px 22px;
+      border-radius: 99px;
+      color: var(--btn-next-color);
+      background: var(--btn-next-bg);
+      box-shadow: var(--btn-next-shadow);
+      cursor: pointer;
+      transition: opacity 0.2s ease, transform 0.2s ease, filter 0.2s ease;
+    }
+
+    .k-btn-next:hover:not(:disabled) {
+      transform: translateY(-1px);
+      filter: brightness(1.03);
+    }
+
+    .k-btn-next:disabled {
+      opacity: 0.4;
+      cursor: not-allowed;
+      transform: none;
+      filter: none;
+      box-shadow: none;
+    }
+
+    .k-stage {
+      display: flex;
+      flex-direction: column;
+      padding: 28px 36px;
+      flex: 1;
+      min-height: 0;
+      height: 100%;
+      overflow: hidden;
+    }
+
+    .theme-layout {
+      display: grid;
+      grid-template-columns: 200px 1fr;
+      gap: 12px;
+      flex: 1;
+      min-height: 0;
+      align-items: stretch;
+    }
+
+    @media (max-width: 720px) {
+      .theme-layout {
+        grid-template-columns: 1fr;
+        grid-template-rows: auto 1fr;
+      }
+    }
+
+    .theme-list {
+      display: flex;
+      flex-direction: column;
+      gap: 2px;
+      background: var(--bg-card);
+      border: 1px solid var(--border);
+      border-radius: var(--radius-lg);
+      padding: 12px 8px;
+      overflow-y: auto;
+      min-height: 0;
+    }
+
+    .tl-group {
+      font-size: var(--fs-micro);
+      font-weight: 700;
+      letter-spacing: 2.5px;
+      text-transform: uppercase;
+      color: var(--text-muted);
+      padding: 0 10px;
+      margin: 8px 0 4px;
+    }
+
+    .tl-group:first-child {
+      margin-top: 0;
+    }
+
+    .tl-divider {
+      height: 1px;
+      background: var(--border);
+      margin: 5px 10px;
+    }
+
+    .tl-spacer {
+      flex: 1;
+    }
+
+    .tl-item {
+      padding: 8px 10px;
+      border-radius: var(--radius-sm);
+      cursor: pointer;
+      border: 1px solid transparent;
+      transition: background var(--transition), border-color var(--transition);
+    }
+
+    .tl-item:hover {
+      background: var(--bg-card-hover);
+    }
+
+    .tl-item.role-primary {
+      background: var(--accent-dim);
+      border-color: var(--accent);
+    }
+
+    .tl-item.role-secondary {
+      background: rgba(99, 179, 237, 0.08);
+      border-color: var(--sky);
+    }
+
+    .tl-item.role-avoid {
+      opacity: 0.42;
+      border-color: var(--coral);
+    }
+
+    .tl-item.role-avoid .tl-name {
+      text-decoration: line-through;
+    }
+
+    .tl-name {
+      font-size: var(--fs-body);
+      font-weight: 600;
+      color: var(--text);
+    }
+
+    .tl-mood {
+      font-size: var(--fs-overline);
+      color: var(--text-secondary);
+      margin-top: 2px;
+    }
+
+    .theme-preview {
+      display: grid;
+      grid-template-rows: 1fr 1fr;
+      gap: 10px;
+      min-height: 0;
+    }
+
+    .tp-palette {
+      background: var(--bg-card);
+      border: 1px solid var(--border);
+      border-radius: var(--radius-lg);
+      padding: 14px 16px;
+      display: flex;
+      flex-direction: column;
+      gap: 10px;
+      min-height: 0;
+    }
+
+    .tp-header {
+      display: flex;
+      align-items: baseline;
+      justify-content: space-between;
+      flex-shrink: 0;
+    }
+
+    .tp-name {
+      font-size: var(--fs-title);
+      font-weight: 700;
+      color: var(--text);
+    }
+
+    .tp-mood {
+      font-size: var(--fs-caption);
+      color: var(--text-secondary);
+    }
+
+    .tp-swatches {
+      display: flex;
+      gap: 6px;
+      flex: 1;
+      min-height: 0;
+    }
+
+    .tp-swatch-wrap {
+      flex: 1;
+      display: flex;
+      flex-direction: column;
+      gap: 4px;
+    }
+
+    .tp-swatch-bar {
+      flex: 1;
+      border-radius: 6px;
+      min-height: 24px;
+      transition: background 0.3s ease;
+    }
+
+    .tp-swatch-name {
+      font-size: var(--fs-badge);
+      color: var(--text-muted);
+      text-align: center;
+    }
+
+    .tp-tags {
+      display: flex;
+      gap: 5px;
+      flex-wrap: wrap;
+      flex-shrink: 0;
+    }
+
+    .tp-tag {
+      font-size: var(--fs-overline);
+      padding: 2px 8px;
+      border-radius: 99px;
+      background: var(--bg-card-hover);
+      color: var(--text-secondary);
+      border: 1px solid var(--border);
+    }
+
+    .tp-photos {
+      background: var(--bg-card);
+      border: 1px solid var(--border);
+      border-radius: var(--radius-lg);
+      padding: 12px 14px;
+      display: flex;
+      flex-direction: column;
+      gap: 8px;
+      min-height: 0;
+    }
+
+    .tp-photos-label {
+      font-size: var(--fs-micro);
+      font-weight: 700;
+      letter-spacing: 2px;
+      text-transform: uppercase;
+      color: var(--text-muted);
+      display: flex;
+      align-items: center;
+      gap: 8px;
+      flex-shrink: 0;
+    }
+
+    .tp-photos-label::after {
+      content: "";
+      flex: 1;
+      height: 1px;
+      background: var(--border);
+    }
+
+    .tp-photos-grid {
+      flex: 1;
+      min-height: 0;
+      display: grid;
+      grid-template-columns: 1.4fr 1fr 1fr;
+      grid-template-rows: 1fr 1fr;
+      gap: 5px;
+    }
+
+    .tp-photo {
+      border-radius: 7px;
+      overflow: hidden;
+      position: relative;
+      transition: background 0.3s ease, background-image 0.3s ease, box-shadow 0.3s ease;
+      background-color: #141414;
+      background-size: cover;
+      background-position: center;
+      background-repeat: no-repeat;
+    }
+
+    .tp-photo.tall {
+      grid-row: span 2;
+    }
+
+    .tp-photo-ov {
+      position: absolute;
+      inset: 0;
+      background: linear-gradient(to top, rgba(0, 0, 0, 0.45), transparent 55%);
+    }
+
+    .tp-photo-lbl {
+      position: absolute;
+      bottom: 5px;
+      left: 7px;
+      font-size: var(--fs-badge);
+      color: rgba(255, 255, 255, 0.82);
+      letter-spacing: 0.3px;
+    }
+
+    .k-step-icon {
+      display: inline-flex;
+      align-items: center;
+      justify-content: center;
+      width: 44px;
+      height: 44px;
+      border-radius: 50%;
+      border: 1px solid var(--toggle-border);
+      background: var(--toggle-bg);
+      color: var(--toggle-color);
+      cursor: pointer;
+      transition: background 0.2s ease, border-color 0.2s ease, color 0.2s ease;
+    }
+
+    .k-step-icon:hover {
+      background: var(--surface);
+    }
+
+    .k-step-icon svg {
+      width: 20px;
+      height: 20px;
+      stroke: currentColor;
+      fill: none;
+      stroke-width: 1.75;
+      stroke-linecap: round;
+      stroke-linejoin: round;
+    }
+
+    .k-theme-toggle {
+      position: static;
+      flex-shrink: 0;
+      margin-bottom: 12px;
+    }
+
+    .k-sidebar-steps {
+      flex: 1;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      justify-content: center;
+      gap: 10px;
+      min-height: 0;
+      width: 100%;
+    }
+  </style>
+</head>
+<body>
+  <div class="k-page">
+    <aside class="k-sidebar" aria-label="Workflow">
+      <button type="button" class="k-step-icon k-theme-toggle" id="themeToggle" aria-label="Toggle color theme">
+        <svg id="icon-moon" viewBox="0 0 24 24" aria-hidden="true">
+          <path d="M21 12.79A9 9 0 1 1 11.21 3 7 7 0 0 0 21 12.79z" />
+        </svg>
+        <svg id="icon-sun" viewBox="0 0 24 24" aria-hidden="true" style="display: none">
+          <circle cx="12" cy="12" r="4" />
+          <path d="M12 2v2M12 20v2M4.93 4.93l1.41 1.41M17.66 17.66l1.41 1.41M2 12h2M20 12h2M4.93 19.07l1.41-1.41M17.66 6.34l1.41-1.41" />
+        </svg>
+      </button>
+      <div class="k-sidebar-steps" id="sidebar" aria-label="Workflow steps"></div>
+    </aside>
+
+    <main class="k-main">
+      <nav class="k-topbar" aria-label="Step navigation">
+        <div class="k-topbar-left">
+          <button type="button" class="k-btn-ghost" id="btnBack">Back</button>
+        </div>
+        <div class="k-tabs" role="tablist" aria-label="Steps">
+            <button type="button" class="k-tab done" id="tabCategory">Category</button>
+            <button type="button" class="k-tab done" id="tabSize">Size</button>
+            <span class="k-tab active" role="tab" aria-selected="true">Theme</span>
+            <span class="k-tab" role="tab" aria-selected="false">Fine Tune</span>
+            <span class="k-tab" role="tab" aria-selected="false">Reference</span>
+            <span class="k-tab" role="tab" aria-selected="false">Text &amp; Brand</span>
+            <span class="k-tab" role="tab" aria-selected="false">Generate</span>
+        </div>
+        <div class="k-topbar-actions">
+          <button type="button" class="k-btn-next" id="btnNext">Next</button>
+        </div>
+      </nav>
+
+      <div class="k-stage">
+        <div class="theme-layout">
+          <div class="theme-list" id="themeList">
+            <div class="tl-group">Environment &amp; Lifestyle</div>
+            <div class="tl-item" data-id="t01" role="button" tabindex="0">
+              <div class="tl-name">Café &amp; Warm</div>
+              <div class="tl-mood">airy · warm · natural light</div>
+            </div>
+            <div class="tl-item" data-id="t02" role="button" tabindex="0">
+              <div class="tl-name">Nature Organic</div>
+              <div class="tl-mood">natural · honest · earth tones</div>
+            </div>
+            <div class="tl-item" data-id="t03" role="button" tabindex="0">
+              <div class="tl-name">Home Lifestyle</div>
+              <div class="tl-mood">lived-in · comfortable · domestic</div>
+            </div>
+            <div class="tl-item" data-id="t04" role="button" tabindex="0">
+              <div class="tl-name">Travel &amp; Explorer</div>
+              <div class="tl-mood">open · expansive · discovery</div>
+            </div>
+            <div class="tl-divider"></div>
+            <div class="tl-group">Premium &amp; Studio</div>
+            <div class="tl-item" data-id="t05" role="button" tabindex="0">
+              <div class="tl-name">Dark Luxury</div>
+              <div class="tl-mood">exclusive · dark · dramatic</div>
+            </div>
+            <div class="tl-item" data-id="t06" role="button" tabindex="0">
+              <div class="tl-name">Quiet Luxury</div>
+              <div class="tl-mood">restrained · muted · tasteful</div>
+            </div>
+            <div class="tl-item" data-id="t07" role="button" tabindex="0">
+              <div class="tl-name">Spa &amp; Wellness</div>
+              <div class="tl-mood">peaceful · clean · mindful</div>
+            </div>
+            <div class="tl-item" data-id="t08" role="button" tabindex="0">
+              <div class="tl-name">Minimal Studio</div>
+              <div class="tl-mood">clean · precise · product-first</div>
+            </div>
+            <div class="tl-spacer"></div>
+          </div>
+          <div class="theme-preview">
+            <div class="tp-palette">
+              <div class="tp-header">
+                <div class="tp-name" id="tpName"></div>
+                <div class="tp-mood" id="tpMood"></div>
+              </div>
+              <div class="tp-swatches" id="tpSwatches">
+                <div class="tp-swatch-wrap">
+                  <div class="tp-swatch-bar"></div>
+                  <div class="tp-swatch-name"></div>
+                </div>
+                <div class="tp-swatch-wrap">
+                  <div class="tp-swatch-bar"></div>
+                  <div class="tp-swatch-name"></div>
+                </div>
+                <div class="tp-swatch-wrap">
+                  <div class="tp-swatch-bar"></div>
+                  <div class="tp-swatch-name"></div>
+                </div>
+                <div class="tp-swatch-wrap">
+                  <div class="tp-swatch-bar"></div>
+                  <div class="tp-swatch-name"></div>
+                </div>
+                <div class="tp-swatch-wrap">
+                  <div class="tp-swatch-bar"></div>
+                  <div class="tp-swatch-name"></div>
+                </div>
+              </div>
+              <div class="tp-tags" id="tpTags"></div>
+            </div>
+            <div class="tp-photos">
+              <div class="tp-photos-label">Visual references</div>
+              <div class="tp-photos-grid" id="tpPhotos">
+                <div class="tp-photo tall">
+                  <div class="tp-photo-ov"></div>
+                  <div class="tp-photo-lbl"></div>
+                </div>
+                <div class="tp-photo">
+                  <div class="tp-photo-ov"></div>
+                  <div class="tp-photo-lbl"></div>
+                </div>
+                <div class="tp-photo">
+                  <div class="tp-photo-ov"></div>
+                  <div class="tp-photo-lbl"></div>
+                </div>
+                <div class="tp-photo">
+                  <div class="tp-photo-ov"></div>
+                  <div class="tp-photo-lbl"></div>
+                </div>
+                <div class="tp-photo">
+                  <div class="tp-photo-ov"></div>
+                  <div class="tp-photo-lbl"></div>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </main>
+  </div>
+
+  <script>
+    (function () {
+      var KREATIVE_KEY = "kreative_session";
+
+      function getState() {
+        try {
+          var raw = localStorage.getItem(KREATIVE_KEY);
+          return raw ? JSON.parse(raw) : {};
+        } catch (e) {
+          return {};
+        }
+      }
+
+      function setState(partial) {
+        var next = Object.assign({}, getState(), partial);
+        localStorage.setItem(KREATIVE_KEY, JSON.stringify(next));
+      }
+
+      function clearState() {
+        localStorage.removeItem(KREATIVE_KEY);
+      }
+
+      if (!getState().size) {
+        window.location.href = "page2.html";
+        return;
+      }
+
+      function syncIcons() {
+        var moon = document.getElementById("icon-moon");
+        var sun = document.getElementById("icon-sun");
+        if (!moon || !sun) return;
+        var isDark = document.documentElement.getAttribute("data-theme") !== "light";
+        moon.style.display = isDark ? "block" : "none";
+        sun.style.display = isDark ? "none" : "block";
+      }
+
+      function initTheme() {
+        var stored = localStorage.getItem("kreativeTheme");
+        var prefersDark = window.matchMedia("(prefers-color-scheme: dark)").matches;
+        var theme = stored || (prefersDark ? "dark" : "light");
+        document.documentElement.setAttribute("data-theme", theme);
+        syncIcons();
+      }
+
+      var STEP_PAGES = [
+        "page1.html",
+        "page2.html",
+        "page3.html",
+        "page4.html",
+        "page5.html",
+        "page6.html",
+        "page7.html"
+      ];
+
+      function stepReachable(stepIndex) {
+        var s = getState();
+        if (stepIndex <= 1) return true;
+        if (stepIndex === 2) return !!s.category;
+        if (stepIndex === 3) return !!s.category && !!s.size;
+        if (stepIndex === 4) return !!s.category && !!s.size && !!s.theme;
+        if (stepIndex === 5) return !!s.category && !!s.size && !!s.theme && !!s.fineTune;
+        if (stepIndex === 6) {
+          return !!s.category && !!s.size && !!s.theme && !!s.fineTune && !!s.reference;
+        }
+        if (stepIndex === 7) {
+          return (
+            !!s.category &&
+            !!s.size &&
+            !!s.theme &&
+            !!s.fineTune &&
+            !!s.reference &&
+            !!s.textBrand
+          );
+        }
+        return false;
+      }
+
+      var SIDEBAR_SVGS = [
+        '<svg viewBox="0 0 24 24" aria-hidden="true"><rect x="3" y="3" width="7" height="7" rx="1"/><rect x="14" y="3" width="7" height="7" rx="1"/><rect x="3" y="14" width="7" height="7" rx="1"/><rect x="14" y="14" width="7" height="7" rx="1"/></svg>',
+        '<svg viewBox="0 0 24 24" aria-hidden="true"><rect x="5" y="5" width="10" height="10" rx="1"/><path d="M9 3h6M9 21h6M3 9v6M21 9v6"/></svg>',
+        '<svg viewBox="0 0 24 24" aria-hidden="true"><circle cx="12" cy="12" r="4" fill="none" stroke="currentColor"/><path d="M12 2v2M12 20v2M4.93 4.93l1.41 1.41M17.66 17.66l1.41 1.41M2 12h2M20 12h2M4.93 19.07l1.41-1.41M17.66 6.34l1.41-1.41" fill="none"/><circle cx="7.5" cy="7.5" r="1.25" fill="currentColor"/><circle cx="17" cy="16" r="1.25" fill="currentColor"/></svg>',
+        '<svg viewBox="0 0 24 24" aria-hidden="true"><path d="M4 14h4v6H4zM10 8h4v12h-4zM16 4h4v16h-4z"/></svg>',
+        '<svg viewBox="0 0 24 24" aria-hidden="true"><rect x="3" y="5" width="18" height="14" rx="2"/><circle cx="8.5" cy="10.5" r="1.5"/><path d="M21 17l-6-6-4 4-2-2-4 4"/></svg>',
+        '<svg viewBox="0 0 24 24" aria-hidden="true"><path d="M4 6h16M4 12h10M4 18h14"/></svg>',
+        '<svg viewBox="0 0 24 24" aria-hidden="true"><path d="M12 2l1.8 4.5L18 8l-4 2.5L15.5 15 12 12.5 8.5 15 10 10.5 6 8l4.2-1.5L12 2z"/></svg>'
+      ];
+
+      function renderSidebar(currentStep) {
+        var el = document.getElementById("sidebar");
+        if (!el) return;
+        var s = getState();
+        var html = "";
+        for (var i = 0; i < 7; i++) {
+          var stepNum = i + 1;
+          var reachable = stepReachable(stepNum);
+          var done =
+            stepNum < currentStep ||
+            (stepNum === 1 && !!s.category) ||
+            (stepNum === 2 && !!s.size) ||
+            (stepNum === 3 && !!s.theme) ||
+            (stepNum === 4 && !!s.fineTune) ||
+            (stepNum === 5 && !!s.reference) ||
+            (stepNum === 6 && !!s.textBrand) ||
+            (stepNum === 7 && !!s.generated);
+          var classes = "k-sidebar-btn";
+          if (stepNum === currentStep) classes += " active";
+          if (done) classes += " done";
+          var disabled = !reachable && stepNum !== currentStep;
+          var label =
+            "Go to step " +
+            stepNum +
+            (disabled ? " (locked)" : "") +
+            ": " +
+            ["Category", "Size", "Theme", "Fine Tune", "Reference", "Text & Brand", "Generate"][i];
+          html +=
+            '<button type="button" class="' +
+            classes +
+            '" data-step="' +
+            stepNum +
+            '"' +
+            (disabled ? " disabled" : "") +
+            ' aria-label="' +
+            label +
+            '" title="' +
+            label +
+            '">' +
+            SIDEBAR_SVGS[i] +
+            "</button>";
+        }
+        el.innerHTML = html;
+        var buttons = el.querySelectorAll("[data-step]");
+        for (var j = 0; j < buttons.length; j++) {
+          buttons[j].addEventListener("click", onSidebarClick);
+        }
+      }
+
+      function onSidebarClick(ev) {
+        var btn = ev.currentTarget;
+        if (btn.disabled) return;
+        var step = parseInt(btn.getAttribute("data-step"), 10);
+        if (!stepReachable(step)) return;
+        var href = STEP_PAGES[step - 1];
+        if (!href) return;
+        var path = window.location.pathname || "";
+        var at =
+          path.slice(-href.length) === href ||
+          path.replace(/\\/g, "/").split("/").pop() === href;
+        if (!at) window.location.href = href;
+      }
+
+      var THEMES = [
+        {
+          id: "t01",
+          name: "Café & Warm",
+          mood: "airy · warm · natural light",
+          swatches: [
+            { c: "#E8C49A", l: "Sand" },
+            { c: "#C4832A", l: "Amber" },
+            { c: "#8B5E2A", l: "Caramel" },
+            { c: "#5C3D1E", l: "Espresso" },
+            { c: "#2D1F0E", l: "Dark" }
+          ],
+          tags: ["Ambient light", "Soft shadows", "Golden hour", "Wood textures"],
+          photos: [
+            {
+              bg: "linear-gradient(145deg,#5C3D1E,#8B6040,#C4A882)",
+              img: "https://images.unsplash.com/photo-1495474472287-4d71bcdd2085?auto=format&fit=crop&w=800&q=78",
+              l: "Product on wood",
+              tall: true
+            },
+            {
+              bg: "linear-gradient(145deg,#3D2B1A,#6B4E30)",
+              img: "https://images.unsplash.com/photo-1558618666-fcd25c85cd64?auto=format&fit=crop&w=800&q=78",
+              l: "Café surface"
+            },
+            {
+              bg: "linear-gradient(145deg,#8B7355,#C4A882)",
+              img: "https://images.unsplash.com/photo-1442512595331-e89e73853f31?auto=format&fit=crop&w=800&q=78",
+              l: "Warm bokeh"
+            },
+            {
+              bg: "linear-gradient(145deg,#4A3520,#7A6040)",
+              img: "https://images.unsplash.com/photo-1517248135467-4c7edcad34c4?auto=format&fit=crop&w=800&q=78",
+              l: "Warm dining"
+            },
+            {
+              bg: "linear-gradient(145deg,#6B5035,#A0805A)",
+              img: "https://images.unsplash.com/photo-1533090161767-e6ffed986c88?auto=format&fit=crop&w=800&q=78",
+              l: "Morning light"
+            }
+          ]
+        },
+        {
+          id: "t02",
+          name: "Nature Organic",
+          mood: "natural · honest · earth tones",
+          swatches: [
+            { c: "#C8E6C9", l: "Leaf" },
+            { c: "#68D391", l: "Sage" },
+            { c: "#3A8C5C", l: "Moss" },
+            { c: "#1E5C38", l: "Forest" },
+            { c: "#0E2D1C", l: "Deep" }
+          ],
+          tags: ["Diffused light", "Natural surface", "Earthy tones", "Organic forms"],
+          photos: [
+            {
+              bg: "linear-gradient(145deg,#0E2D1C,#1E5C38,#3A8C5C)",
+              img: "https://images.unsplash.com/photo-1441974231531-c6227db76b6e?auto=format&fit=crop&w=800&q=78",
+              l: "Forest path",
+              tall: true
+            },
+            {
+              bg: "linear-gradient(145deg,#1A3D25,#2D6040)",
+              img: "https://images.unsplash.com/photo-1582719478250-c89cae4dc85b?auto=format&fit=crop&w=800&q=78",
+              l: "Leaf texture"
+            },
+            {
+              bg: "linear-gradient(145deg,#3D5C30,#6B8C50)",
+              img: "https://images.unsplash.com/photo-1470071459604-3b5ec3a7fe05?auto=format&fit=crop&w=800&q=78",
+              l: "Mist & trees"
+            },
+            {
+              bg: "linear-gradient(145deg,#2D4A20,#4A7A35)",
+              img: "https://images.unsplash.com/photo-1506905925346-21bda4d32df4?auto=format&fit=crop&w=800&q=78",
+              l: "Open hillside"
+            },
+            {
+              bg: "linear-gradient(145deg,#1E3D18,#3A6030)",
+              img: "https://images.unsplash.com/photo-1505142468610-359e7d316be0?auto=format&fit=crop&w=800&q=78",
+              l: "Coastal green"
+            }
+          ]
+        },
+        {
+          id: "t03",
+          name: "Home Lifestyle",
+          mood: "lived-in · comfortable · domestic",
+          swatches: [
+            { c: "#F5C5C5", l: "Blush" },
+            { c: "#E07070", l: "Terracotta" },
+            { c: "#A84040", l: "Brick" },
+            { c: "#6B2828", l: "Deep red" },
+            { c: "#3A1414", l: "Dark" }
+          ],
+          tags: ["Cozy interior", "Warm fabrics", "Soft light", "Home scene"],
+          photos: [
+            {
+              bg: "linear-gradient(145deg,#6B2828,#A84040,#E07070)",
+              img: "https://images.unsplash.com/photo-1600585154340-be6161a56a0c?auto=format&fit=crop&w=800&q=78",
+              l: "Living room",
+              tall: true
+            },
+            {
+              bg: "linear-gradient(145deg,#3A1414,#6B2828)",
+              img: "https://images.unsplash.com/photo-1571896349842-33c89424de2d?auto=format&fit=crop&w=800&q=78",
+              l: "Warm fabrics"
+            },
+            {
+              bg: "linear-gradient(145deg,#A84040,#E07070)",
+              img: "https://images.unsplash.com/photo-1533090161767-e6ffed986c88?auto=format&fit=crop&w=800&q=78",
+              l: "Soft daylight"
+            },
+            {
+              bg: "linear-gradient(145deg,#4A1C1C,#8B3535)",
+              img: "https://images.unsplash.com/photo-1517248135467-4c7edcad34c4?auto=format&fit=crop&w=800&q=78",
+              l: "Dining light"
+            },
+            {
+              bg: "linear-gradient(145deg,#5C2020,#9B4040)",
+              img: "https://images.unsplash.com/photo-1495474472287-4d71bcdd2085?auto=format&fit=crop&w=800&q=78",
+              l: "Cozy nook"
+            }
+          ]
+        },
+        {
+          id: "t04",
+          name: "Travel & Explorer",
+          mood: "open · expansive · discovery",
+          swatches: [
+            { c: "#BEE3F8", l: "Sky" },
+            { c: "#63B3ED", l: "Azure" },
+            { c: "#2874A6", l: "Ocean" },
+            { c: "#1A4A72", l: "Deep" },
+            { c: "#0E2D4A", l: "Night" }
+          ],
+          tags: ["Open sky", "Horizon", "Natural light", "Airy space"],
+          photos: [
+            {
+              bg: "linear-gradient(145deg,#0E2D4A,#1A4A72,#2874A6)",
+              img: "https://images.unsplash.com/photo-1506905925346-21bda4d32df4?auto=format&fit=crop&w=800&q=78",
+              l: "Open horizon",
+              tall: true
+            },
+            {
+              bg: "linear-gradient(145deg,#1A3A5C,#2D6080)",
+              img: "https://images.unsplash.com/photo-1507525428034-b723cf961d3e?auto=format&fit=crop&w=800&q=78",
+              l: "Coastal air"
+            },
+            {
+              bg: "linear-gradient(145deg,#2874A6,#63B3ED)",
+              img: "https://images.unsplash.com/photo-1505142468610-359e7d316be0?auto=format&fit=crop&w=800&q=78",
+              l: "Ocean tone"
+            },
+            {
+              bg: "linear-gradient(145deg,#1E4060,#3A7090)",
+              img: "https://images.unsplash.com/photo-1470071459604-3b5ec3a7fe05?auto=format&fit=crop&w=800&q=78",
+              l: "Mountain mist"
+            },
+            {
+              bg: "linear-gradient(145deg,#0E2240,#1A3D60)",
+              img: "https://images.unsplash.com/photo-1519681393784-d120267933ba?auto=format&fit=crop&w=800&q=78",
+              l: "Night trail"
+            }
+          ]
+        },
+        {
+          id: "t05",
+          name: "Dark Luxury",
+          mood: "exclusive · dark · dramatic",
+          swatches: [
+            { c: "#C0B090", l: "Gold" },
+            { c: "#8B7D60", l: "Bronze" },
+            { c: "#4A4030", l: "Dark gold" },
+            { c: "#1E1A14", l: "Near black" },
+            { c: "#0A0806", l: "Void" }
+          ],
+          tags: ["Deep shadows", "Gold accent", "Dramatic light", "Luxury surface"],
+          photos: [
+            {
+              bg: "linear-gradient(145deg,#0A0806,#1E1A14,#4A4030)",
+              img: "https://images.unsplash.com/photo-1517248135467-4c7edcad34c4?auto=format&fit=crop&w=800&q=78",
+              l: "Low-lit lounge",
+              tall: true
+            },
+            {
+              bg: "linear-gradient(145deg,#1E1A14,#4A4030)",
+              img: "https://images.unsplash.com/photo-1558618666-fcd25c85cd64?auto=format&fit=crop&w=800&q=78",
+              l: "Dark wood"
+            },
+            {
+              bg: "linear-gradient(145deg,#4A4030,#8B7D60)",
+              img: "https://images.unsplash.com/photo-1442512595331-e89e73853f31?auto=format&fit=crop&w=800&q=78",
+              l: "Warm spotlight"
+            },
+            {
+              bg: "linear-gradient(145deg,#141008,#2D2618)",
+              img: "https://images.unsplash.com/photo-1495474472287-4d71bcdd2085?auto=format&fit=crop&w=800&q=78",
+              l: "Rich surface"
+            },
+            {
+              bg: "linear-gradient(145deg,#0E0C08,#221E14)",
+              img: "https://images.unsplash.com/photo-1600585154340-be6161a56a0c?auto=format&fit=crop&w=800&q=78",
+              l: "Noir interior"
+            }
+          ]
+        },
+        {
+          id: "t06",
+          name: "Quiet Luxury",
+          mood: "restrained · muted · tasteful",
+          swatches: [
+            { c: "#E8E4DC", l: "Cream" },
+            { c: "#C8C0B0", l: "Stone" },
+            { c: "#8C8478", l: "Taupe" },
+            { c: "#4A4640", l: "Slate" },
+            { c: "#1E1C18", l: "Charcoal" }
+          ],
+          tags: ["Muted palette", "Soft texture", "Understated", "Premium neutral"],
+          photos: [
+            {
+              bg: "linear-gradient(145deg,#1E1C18,#4A4640,#8C8478)",
+              img: "https://images.unsplash.com/photo-1600585154340-be6161a56a0c?auto=format&fit=crop&w=800&q=78",
+              l: "Muted interior",
+              tall: true
+            },
+            {
+              bg: "linear-gradient(145deg,#2A2820,#504C44)",
+              img: "https://images.unsplash.com/photo-1533090161767-e6ffed986c88?auto=format&fit=crop&w=800&q=78",
+              l: "Soft window"
+            },
+            {
+              bg: "linear-gradient(145deg,#8C8478,#C8C0B0)",
+              img: "https://images.unsplash.com/photo-1515378791036-0648a3ef77b2?auto=format&fit=crop&w=800&q=78",
+              l: "Quiet workspace"
+            },
+            {
+              bg: "linear-gradient(145deg,#3A3830,#6A6660)",
+              img: "https://images.unsplash.com/photo-1540555700478-4be289fbecef?auto=format&fit=crop&w=800&q=78",
+              l: "Restful space"
+            },
+            {
+              bg: "linear-gradient(145deg,#2E2C26,#5A5650)",
+              img: "https://images.unsplash.com/photo-1501785888041-af3ef285b470?auto=format&fit=crop&w=800&q=78",
+              l: "Open distance"
+            }
+          ]
+        },
+        {
+          id: "t07",
+          name: "Spa & Wellness",
+          mood: "peaceful · clean · mindful",
+          swatches: [
+            { c: "#C8F0E0", l: "Mint" },
+            { c: "#68D391", l: "Sage" },
+            { c: "#3A8C6C", l: "Calm" },
+            { c: "#1E5C44", l: "Deep" },
+            { c: "#0E2D22", l: "Forest" }
+          ],
+          tags: ["Soft green", "Clean space", "Natural calm", "Wellness scene"],
+          photos: [
+            {
+              bg: "linear-gradient(145deg,#0E2D22,#1E5C44,#3A8C6C)",
+              img: "https://images.unsplash.com/photo-1540555700478-4be289fbecef?auto=format&fit=crop&w=800&q=78",
+              l: "Wellness bath",
+              tall: true
+            },
+            {
+              bg: "linear-gradient(145deg,#1A3D2E,#2D6050)",
+              img: "https://images.unsplash.com/photo-1544161515-4ab6ce6db874?auto=format&fit=crop&w=800&q=78",
+              l: "Treatment calm"
+            },
+            {
+              bg: "linear-gradient(145deg,#3A8C6C,#68D391)",
+              img: "https://images.unsplash.com/photo-1582719478250-c89cae4dc85b?auto=format&fit=crop&w=800&q=78",
+              l: "Botanical green"
+            },
+            {
+              bg: "linear-gradient(145deg,#2D5A44,#4A8C68)",
+              img: "https://images.unsplash.com/photo-1441974231531-c6227db76b6e?auto=format&fit=crop&w=800&q=78",
+              l: "Forest air"
+            },
+            {
+              bg: "linear-gradient(145deg,#1E4035,#3A7060)",
+              img: "https://images.unsplash.com/photo-1439066615861-d1af74d74000?auto=format&fit=crop&w=800&q=78",
+              l: "Clean water"
+            }
+          ]
+        },
+        {
+          id: "t08",
+          name: "Minimal Studio",
+          mood: "clean · precise · product-first",
+          swatches: [
+            { c: "#F0EEE8", l: "White" },
+            { c: "#C8C5BE", l: "Light" },
+            { c: "#888580", l: "Mid" },
+            { c: "#404040", l: "Dark" },
+            { c: "#141414", l: "Black" }
+          ],
+          tags: ["Clean white", "Neutral gray", "Hard shadow", "Product focus"],
+          photos: [
+            {
+              bg: "linear-gradient(145deg,#141414,#404040,#888580)",
+              img: "https://images.unsplash.com/photo-1560472354-b33ff0c44a43?auto=format&fit=crop&w=800&q=78",
+              l: "Flat lay set",
+              tall: true
+            },
+            {
+              bg: "linear-gradient(145deg,#1A1A1A,#404040)",
+              img: "https://images.unsplash.com/photo-1531297484001-80022131f5a1?auto=format&fit=crop&w=800&q=78",
+              l: "Clean desk"
+            },
+            {
+              bg: "linear-gradient(145deg,#888580,#C8C5BE)",
+              img: "https://images.unsplash.com/photo-1618005182384-a83a8bd57fbe?auto=format&fit=crop&w=800&q=78",
+              l: "Neutral still life"
+            },
+            {
+              bg: "linear-gradient(145deg,#2A2A2A,#505050)",
+              img: "https://images.unsplash.com/photo-1497366754035-f200968a6e72?auto=format&fit=crop&w=800&q=78",
+              l: "Architectural light"
+            },
+            {
+              bg: "linear-gradient(145deg,#0A0A0A,#282828)",
+              img: "https://images.unsplash.com/photo-1519710164239-da123dc03ef4?auto=format&fit=crop&w=800&q=78",
+              l: "Hard shadow"
+            }
+          ]
+        }
+      ];
+
+var themeRoles = {};
+
+      function hexToRgba(hex, alpha) {
+        var h = (hex || "#000000").replace("#", "");
+        if (h.length !== 6) return "rgba(0,0,0," + alpha + ")";
+        var n = parseInt(h, 16);
+        if (isNaN(n)) return "rgba(0,0,0," + alpha + ")";
+        var r = (n >> 16) & 255;
+        var g = (n >> 8) & 255;
+        var b = n & 255;
+        return "rgba(" + r + "," + g + "," + b + "," + alpha + ")";
+      }
+
+      function tpPhotoCssUrl(u) {
+        return 'url("' + String(u).replace(/\\/g, "\\\\").replace(/"/g, '\\"') + '")';
+      }
+
+      function findThemeById(id) {
+        for (var i = 0; i < THEMES.length; i++) {
+          if (THEMES[i].id === id) return THEMES[i];
+        }
+        return null;
+      }
+
+      function findThemeByName(name) {
+        if (!name) return null;
+        for (var i = 0; i < THEMES.length; i++) {
+          if (THEMES[i].name === name) return THEMES[i];
+        }
+        return null;
+      }
+
+      function nextRole(current) {
+        if (!current || current === "none") return "primary";
+        if (current === "primary") return "secondary";
+        if (current === "secondary") return "avoid";
+        return "none";
+      }
+
+      function getPrimaryThemeId() {
+        for (var tid in themeRoles) {
+          if (themeRoles[tid] === "primary") return tid;
+        }
+        return null;
+      }
+
+      function updatePreview(id) {
+        var t = findThemeById(id);
+        if (!t) return;
+        document.getElementById("tpName").textContent = t.name;
+        document.getElementById("tpMood").textContent = t.mood;
+        var wraps = document.querySelectorAll(".tp-swatch-wrap");
+        for (var si = 0; si < t.swatches.length; si++) {
+          var sw = t.swatches[si];
+          if (!wraps[si]) continue;
+          wraps[si].querySelector(".tp-swatch-bar").style.background = sw.c;
+          wraps[si].querySelector(".tp-swatch-name").textContent = sw.l;
+        }
+        document.getElementById("tpTags").innerHTML = t.tags
+          .map(function (tag) {
+            return '<span class="tp-tag">' + tag + "</span>";
+          })
+          .join("");
+        var cells = document.querySelectorAll(".tp-photo");
+        var wash;
+        var wash2;
+        if (t.id === "t08") {
+          wash = "rgba(255,255,255,0.1)";
+          wash2 = "rgba(0,0,0,0.18)";
+        } else {
+          wash = hexToRgba(t.swatches[0] && t.swatches[0].c ? t.swatches[0].c : "#888888", 0.2);
+          wash2 = hexToRgba(
+            t.swatches[1] && t.swatches[1].c ? t.swatches[1].c : t.swatches[0].c,
+            0.14
+          );
+        }
+        for (var pi = 0; pi < t.photos.length; pi++) {
+          var ph = t.photos[pi];
+          if (!cells[pi]) continue;
+          cells[pi].querySelector(".tp-photo-lbl").textContent = ph.l;
+          if (ph.tall) cells[pi].classList.add("tall");
+          else cells[pi].classList.remove("tall");
+          if (ph.img) {
+            cells[pi].style.background = "none";
+            var imgUrl = tpPhotoCssUrl(ph.img);
+            if (t.id === "t07") {
+              var s7 = t.swatches;
+              cells[pi].style.backgroundColor = s7[4].c;
+              cells[pi].style.backgroundImage =
+                "linear-gradient(165deg, " +
+                hexToRgba(s7[0].c, 0.4) +
+                " 0%, transparent 42%), linear-gradient(310deg, " +
+                hexToRgba(s7[1].c, 0.32) +
+                " 0%, transparent 38%), linear-gradient(205deg, " +
+                hexToRgba(s7[2].c, 0.22) +
+                " 0%, transparent 40%), linear-gradient(to top, " +
+                hexToRgba(s7[3].c, 0.38) +
+                " 0%, transparent 52%), " +
+                imgUrl;
+              cells[pi].style.backgroundSize = "cover, cover, cover, cover, cover";
+              cells[pi].style.backgroundPosition = "center, center, center, center, center";
+              cells[pi].style.backgroundRepeat = "no-repeat";
+              cells[pi].style.boxShadow =
+                "inset 0 0 96px " + hexToRgba(s7[4].c, 0.48);
+            } else {
+              cells[pi].style.backgroundColor = "#121212";
+              cells[pi].style.backgroundImage =
+                "linear-gradient(155deg, " +
+                wash +
+                " 0%, transparent 46%), linear-gradient(335deg, " +
+                wash2 +
+                " 0%, transparent 38%), " +
+                imgUrl;
+              cells[pi].style.backgroundSize = "cover, cover, cover";
+              cells[pi].style.backgroundPosition = "center, center, center";
+              cells[pi].style.backgroundRepeat = "no-repeat";
+              cells[pi].style.boxShadow =
+                t.id === "t08"
+                  ? "inset 0 0 72px rgba(0,0,0,0.24)"
+                  : "inset 0 0 64px " + hexToRgba(t.swatches[0].c, 0.12);
+            }
+          } else {
+            cells[pi].style.backgroundImage = "";
+            cells[pi].style.boxShadow = "";
+            cells[pi].style.background = ph.bg || "";
+            cells[pi].style.backgroundSize = "";
+            cells[pi].style.backgroundPosition = "";
+            cells[pi].style.backgroundRepeat = "";
+          }
+          cells[pi].style.filter =
+            t.id === "t08" ? "grayscale(1) contrast(1.06)" : "";
+        }
+      }
+
+      function onTlItemClick(id) {
+        var cur = themeRoles[id] || "none";
+        var nxt = nextRole(cur);
+
+        if (nxt === "none") {
+          delete themeRoles[id];
+        } else if (nxt === "primary") {
+          for (var k in themeRoles) {
+            if (themeRoles[k] === "primary") delete themeRoles[k];
+          }
+          themeRoles[id] = "primary";
+        } else if (nxt === "secondary") {
+          for (var k2 in themeRoles) {
+            if (themeRoles[k2] === "secondary") delete themeRoles[k2];
+          }
+          themeRoles[id] = "secondary";
+        } else if (nxt === "avoid") {
+          themeRoles[id] = "avoid";
+        }
+
+        syncAllTlItems();
+        updatePreview(getPrimaryThemeId() || id);
+        renderSidebar(3);
+      }
+
+      function syncAllTlItems() {
+        var items = document.querySelectorAll(".tl-item");
+        for (var i = 0; i < items.length; i++) {
+          var tid = items[i].getAttribute("data-id");
+          items[i].classList.remove("role-primary", "role-secondary", "role-avoid");
+          var role = themeRoles[tid];
+          if (role && role !== "none") items[i].classList.add("role-" + role);
+        }
+      }
+
+      function bindThemeList() {
+        var items = document.querySelectorAll(".tl-item");
+        for (var j = 0; j < items.length; j++) {
+          items[j].addEventListener("click", function (ev) {
+            var tid = ev.currentTarget.getAttribute("data-id");
+            onTlItemClick(tid);
+          });
+          items[j].addEventListener("keydown", function (ev) {
+            if (ev.key === "Enter" || ev.key === " ") {
+              ev.preventDefault();
+              var tid = ev.currentTarget.getAttribute("data-id");
+              onTlItemClick(tid);
+            }
+          });
+        }
+      }
+
+      function buildThemePayload() {
+        var primaryId = null;
+        var secondaryId = null;
+        var avoidIds = [];
+        for (var tid in themeRoles) {
+          var r = themeRoles[tid];
+          if (r === "primary") primaryId = tid;
+          else if (r === "secondary") secondaryId = tid;
+          else if (r === "avoid") avoidIds.push(tid);
+        }
+        var primaryName = primaryId && findThemeById(primaryId) ? findThemeById(primaryId).name : null;
+        var secondaryName = secondaryId && findThemeById(secondaryId) ? findThemeById(secondaryId).name : null;
+        var avoidNames = avoidIds
+          .map(function (id) {
+            var t = findThemeById(id);
+            return t ? t.name : null;
+          })
+          .filter(Boolean);
+        return {
+          primary: primaryName,
+          secondary: secondaryName,
+          avoid: avoidNames
+        };
+      }
+
+      function renderThemeGroups() {
+        var host = document.getElementById("themeGroups");
+        if (!host) return;
+        var html = "";
+        for (var g = 0; g < THEME_GROUPS.length; g++) {
+          var grp = THEME_GROUPS[g];
+          html += '<p class="theme-group-label">' + grp.label + "</p>";
+          html += '<div class="theme-grid">';
+          for (var i = 0; i < grp.ids.length; i++) {
+            var t = findThemeById(grp.ids[i]);
+            if (!t) continue;
+            var bg = accentBg(t.accent);
+            html +=
+              '<div class="k-card theme-card" data-id="' +
+              t.id +
+              '" role="button" tabindex="0" data-role="none">' +
+              '<span class="theme-tag tag-p" aria-hidden="true">P</span>' +
+              '<span class="theme-tag tag-s" aria-hidden="true">S</span>' +
+              '<span class="theme-tag tag-x" aria-hidden="true">✕</span>' +
+              '<div class="theme-thumb" style="background:' +
+              bg +
+              ";color:" +
+              t.accent +
+              '">' +
+              t.name +
+              "</div>" +
+              '<div class="theme-info">' +
+              '<div class="theme-name">' +
+              t.name +
+              "</div>" +
+              '<div class="theme-mood">' +
+              t.mood +
+              "</div></div></div>";
+          }
+          html += "</div>";
+        }
+        host.innerHTML = html;
+        var cards = host.querySelectorAll(".theme-card");
+        for (var j = 0; j < cards.length; j++) {
+          cards[j].addEventListener("click", function (ev) {
+            var id = ev.currentTarget.getAttribute("data-id");
+            onThemeCardClick(id);
+          });
+          cards[j].addEventListener("keydown", function (ev) {
+            if (ev.key === "Enter" || ev.key === " ") {
+              ev.preventDefault();
+              var id = ev.currentTarget.getAttribute("data-id");
+              onThemeCardClick(id);
+            }
+          });
+        }
+        syncAllThemeCards();
+      }
+
+      function restoreFromState() {
+        var s = getState();
+        if (!s.theme) return;
+        var th = s.theme;
+        if (th.primary) {
+          var tp = findThemeByName(th.primary);
+          if (tp) themeRoles[tp.id] = "primary";
+        }
+        if (th.secondary) {
+          var ts = findThemeByName(th.secondary);
+          if (ts) themeRoles[ts.id] = "secondary";
+        }
+        if (th.avoid && th.avoid.length) {
+          for (var i = 0; i < th.avoid.length; i++) {
+            var ta = findThemeByName(th.avoid[i]);
+            if (ta) themeRoles[ta.id] = "avoid";
+          }
+        }
+      }
+
+      document.getElementById("tabCategory").addEventListener("click", function () {
+        window.location.href = "page1.html";
+      });
+      document.getElementById("tabSize").addEventListener("click", function () {
+        window.location.href = "page2.html";
+      });
+      document.getElementById("btnBack").addEventListener("click", function () {
+        window.location.href = "page2.html";
+      });
+
+      document.getElementById("btnNext").addEventListener("click", function () {
+        var prev = getState().theme || {};
+        var payload = buildThemePayload();
+        setState({
+          theme: Object.assign({}, prev, {
+            primary: payload.primary,
+            secondary: payload.secondary,
+            avoid: payload.avoid
+          })
+        });
+        window.location.href = "page4.html";
+      });
+
+      initTheme();
+      restoreFromState();
+      bindThemeList();
+      syncAllTlItems();
+      updatePreview(getPrimaryThemeId() || "t01");
+      renderSidebar(3);
+
+      var toggle = document.getElementById("themeToggle");
+      if (toggle) {
+        toggle.addEventListener("click", function () {
+          var next = document.documentElement.getAttribute("data-theme") === "light" ? "dark" : "light";
+          document.documentElement.setAttribute("data-theme", next);
+          localStorage.setItem("kreativeTheme", next);
+          syncIcons();
+        });
+      }
+
+      window.getState = getState;
+      window.setState = setState;
+      window.clearState = clearState;
+    })();
+  </script>

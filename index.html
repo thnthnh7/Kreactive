@@ -1,0 +1,393 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Kreative — Brand Identity Engine</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com" />
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+  <link href="https://fonts.googleapis.com/css2?family=Montserrat:ital,wght@0,400;0,500;0,600;0,700;1,400&display=swap" rel="stylesheet" />
+  <style>
+    /* Typography scale: --fs-* tokens (shared across steps) */
+    :root {
+      --fs-badge: 8px;
+      --fs-micro: 9px;
+      --fs-overline: 10px;
+      --fs-caption: 11px;
+      --fs-body-sm: 12px;
+      --fs-body: 13px;
+      --fs-lead: 14px;
+      --fs-title-sm: 16px;
+      --fs-title: 18px;
+      --fs-title-lg: 20px;
+      --fs-display: 28px;
+      --fs-hero-logo: clamp(64px, 9vw, 112px);
+      --fs-hero-tagline: clamp(13px, 1.4vw, 17px);
+      --fs-preview-headline: clamp(var(--fs-lead), 3vw, var(--fs-title-lg));
+      --fs-preview-desc: clamp(var(--fs-overline), 2.2vw, var(--fs-body));
+      --fs-preview-cta: clamp(var(--fs-overline), 2vw, var(--fs-body-sm));
+      --fs-h1: var(--fs-title-lg);
+      --fs-h2: var(--fs-title);
+      --fs-h3: var(--fs-title-sm);
+      --fs-desc: var(--fs-body);
+      --fs-desc-sm: var(--fs-caption);
+    }
+    /* PAGE: index.html | Landing | Clears state | NEXT: page1.html */
+
+    :root {
+      color-scheme: dark light;
+    }
+
+    [data-theme="dark"],
+    :root:not([data-theme]) {
+      --bg: #0a0b0e;
+      --bg-accent: radial-gradient(120% 80% at 50% 0%, rgba(255, 107, 107, 0.08) 0%, transparent 55%),
+        radial-gradient(90% 60% at 100% 100%, rgba(125, 211, 252, 0.06) 0%, transparent 50%),
+        #0a0b0e;
+      --coral: #ff6b6b;
+      --accent: #c4a5ff;
+      --sage: #8fd9a8;
+      --sky: #7dd3fc;
+      --text-primary: #f4f4f5;
+      --text-secondary: rgba(244, 244, 245, 0.72);
+      --text-muted: rgba(244, 244, 245, 0.42);
+      --border: rgba(255, 255, 255, 0.12);
+      --surface: rgba(255, 255, 255, 0.04);
+      --btn-primary-bg: linear-gradient(135deg, var(--coral) 0%, #ff8787 100%);
+      --btn-primary-color: #0a0b0e;
+      --btn-primary-shadow: 0 12px 32px rgba(255, 107, 107, 0.25);
+      --toggle-bg: rgba(255, 255, 255, 0.06);
+      --toggle-border: var(--border);
+      --toggle-color: var(--text-secondary);
+    }
+
+    [data-theme="light"] {
+      --bg: #f5f3ef;
+      --bg-accent: radial-gradient(120% 80% at 50% 0%, rgba(255, 107, 107, 0.12) 0%, transparent 55%),
+        radial-gradient(90% 60% at 100% 100%, rgba(125, 211, 252, 0.14) 0%, transparent 50%),
+        #f5f3ef;
+      --coral: #e85555;
+      --accent: #8b6fd6;
+      --sage: #4fa572;
+      --sky: #3a9bc9;
+      --text-primary: #1a1b1f;
+      --text-secondary: rgba(26, 27, 31, 0.68);
+      --text-muted: rgba(26, 27, 31, 0.45);
+      --border: rgba(26, 27, 31, 0.12);
+      --surface: rgba(255, 255, 255, 0.72);
+      --btn-primary-bg: linear-gradient(135deg, var(--coral) 0%, #ff6b6b 100%);
+      --btn-primary-color: #ffffff;
+      --btn-primary-shadow: 0 12px 28px rgba(232, 85, 85, 0.22);
+      --toggle-bg: rgba(255, 255, 255, 0.9);
+      --toggle-border: rgba(26, 27, 31, 0.1);
+      --toggle-color: var(--text-primary);
+    }
+
+    *,
+    *::before,
+    *::after {
+      box-sizing: border-box;
+    }
+
+    html {
+      font-family: "Montserrat", system-ui, -apple-system, sans-serif;
+    }
+
+    body {
+      margin: 0;
+      min-height: 100vh;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      justify-content: center;
+      background: var(--bg-accent);
+      background-color: var(--bg);
+      background-attachment: fixed;
+      color: var(--text-primary);
+      -webkit-font-smoothing: antialiased;
+    }
+
+    main {
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      text-align: center;
+      padding: 80px 24px 100px;
+      max-width: 960px;
+    }
+
+    @keyframes fadeUp {
+      from {
+        opacity: 0;
+        transform: translateY(10px);
+      }
+      to {
+        opacity: 1;
+        transform: none;
+      }
+    }
+
+    .anim-fade-up {
+      opacity: 0;
+      animation: fadeUp 0.75s ease-out;
+      animation-fill-mode: both;
+    }
+
+    .eyebrow {
+      font-size: var(--fs-overline);
+      letter-spacing: 5px;
+      text-transform: uppercase;
+      color: var(--text-muted);
+      margin: 0 0 28px;
+      font-weight: 500;
+    }
+
+    .logo {
+      font-size: var(--fs-hero-logo);
+      font-weight: 700;
+      letter-spacing: 0.32em;
+      line-height: 1.05;
+      margin: 0 0 12px;
+      user-select: none;
+    }
+
+    .logo span {
+      display: inline-block;
+      cursor: default;
+      transition: opacity 0.25s ease;
+    }
+
+    .logo:hover span {
+      opacity: 0.75;
+    }
+
+    .logo .l-k {
+      color: var(--coral);
+    }
+
+    .logo .l-r {
+      color: var(--accent);
+    }
+
+    .logo .l-e {
+      color: var(--sage);
+    }
+
+    .logo .l-a {
+      color: var(--sky);
+    }
+
+    .tagline {
+      font-size: var(--fs-hero-tagline);
+      font-style: italic;
+      font-weight: 400;
+      color: var(--text-secondary);
+      margin: 0 0 44px;
+    }
+
+    .pills {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 6px;
+      justify-content: center;
+      margin: 0 0 40px;
+      max-width: 640px;
+    }
+
+    .pill {
+      font-size: var(--fs-micro);
+      letter-spacing: 2px;
+      text-transform: uppercase;
+      padding: 4px 12px;
+      border-radius: 99px;
+      background: rgba(255, 255, 255, 0.06);
+      border: 1px solid var(--border);
+      color: var(--text-muted);
+      font-weight: 500;
+    }
+
+    [data-theme="light"] .pill {
+      background: rgba(26, 27, 31, 0.04);
+    }
+
+    .k-btn-primary {
+      appearance: none;
+      border: none;
+      cursor: pointer;
+      font-family: inherit;
+      font-size: var(--fs-caption);
+      font-weight: 600;
+      letter-spacing: 3px;
+      text-transform: uppercase;
+      padding: 14px 40px;
+      border-radius: 99px;
+      color: var(--btn-primary-color);
+      background: var(--btn-primary-bg);
+      box-shadow: var(--btn-primary-shadow);
+      transition: transform 0.2s ease, box-shadow 0.2s ease, filter 0.2s ease;
+    }
+
+    .k-btn-primary:hover {
+      transform: translateY(-2px);
+      filter: brightness(1.03);
+    }
+
+    .k-btn-primary:active {
+      transform: translateY(0);
+    }
+
+    .k-step-icon {
+      display: inline-flex;
+      align-items: center;
+      justify-content: center;
+      width: 44px;
+      height: 44px;
+      border-radius: 50%;
+      border: 1px solid var(--toggle-border);
+      background: var(--toggle-bg);
+      color: var(--toggle-color);
+      cursor: pointer;
+      transition: background 0.2s ease, border-color 0.2s ease, color 0.2s ease;
+    }
+
+    .k-step-icon:hover {
+      background: var(--surface);
+    }
+
+    .k-step-icon svg {
+      width: 20px;
+      height: 20px;
+      stroke: currentColor;
+      fill: none;
+      stroke-width: 1.75;
+      stroke-linecap: round;
+      stroke-linejoin: round;
+    }
+
+    .k-theme-toggle {
+      position: fixed;
+      top: 20px;
+      right: 20px;
+      z-index: 50;
+    }
+
+    .site-footer {
+      position: fixed;
+      bottom: 18px;
+      left: 50%;
+      transform: translateX(-50%);
+      font-size: var(--fs-micro);
+      letter-spacing: 2.5px;
+      text-transform: uppercase;
+      color: var(--text-muted);
+      pointer-events: none;
+      white-space: nowrap;
+      font-weight: 500;
+    }
+  </style>
+</head>
+<body>
+  <button
+    type="button"
+    class="k-step-icon k-theme-toggle"
+    id="themeToggle"
+    aria-label="Toggle color theme"
+  >
+    <svg id="icon-moon" viewBox="0 0 24 24" aria-hidden="true">
+      <path d="M21 12.79A9 9 0 1 1 11.21 3 7 7 0 0 0 21 12.79z" />
+    </svg>
+    <svg id="icon-sun" viewBox="0 0 24 24" aria-hidden="true" style="display: none">
+      <circle cx="12" cy="12" r="4" />
+      <path d="M12 2v2M12 20v2M4.93 4.93l1.41 1.41M17.66 17.66l1.41 1.41M2 12h2M20 12h2M4.93 19.07l1.41-1.41M17.66 6.34l1.41-1.41" />
+    </svg>
+  </button>
+
+  <main>
+    <p class="eyebrow anim-fade-up" style="animation-delay: 0.1s">Brand Identity Engine</p>
+
+    <div aria-label="Kreative" class="logo">
+      <span class="l-k anim-fade-up" aria-hidden="true" style="animation-delay: 0.2s">K</span>
+      <span class="l-r anim-fade-up" aria-hidden="true" style="animation-delay: 0.3s">R</span>
+      <span class="l-e anim-fade-up" aria-hidden="true" style="animation-delay: 0.4s">E</span>
+      <span class="l-a anim-fade-up" aria-hidden="true" style="animation-delay: 0.5s">A</span>
+    </div>
+
+    <p class="tagline anim-fade-up" style="animation-delay: 0.6s">brand, made whole.</p>
+
+    <div class="pills anim-fade-up" style="animation-delay: 0.72s" aria-hidden="true">
+      <span class="pill">01 Category</span>
+      <span class="pill">02 Size</span>
+      <span class="pill">03 Theme</span>
+      <span class="pill">04 Fine Tune</span>
+      <span class="pill">05 Reference</span>
+      <span class="pill">06 Text &amp; Brand</span>
+      <span class="pill">07 Generate</span>
+    </div>
+
+    <button type="button" class="k-btn-primary anim-fade-up" style="animation-delay: 0.85s" onclick="window.location.href = 'page1.html'">
+      Start
+    </button>
+  </main>
+
+  <footer class="site-footer">Shopee · Lazada · Instagram · Thailand · Beta</footer>
+
+  <script>
+    (function () {
+      var STATE_KEY = "kreative_session";
+
+      function getState() {
+        try {
+          var raw = localStorage.getItem(STATE_KEY);
+          return raw ? JSON.parse(raw) : {};
+        } catch (e) {
+          return {};
+        }
+      }
+
+      function setState(partial) {
+        var next = Object.assign({}, getState(), partial);
+        localStorage.setItem(STATE_KEY, JSON.stringify(next));
+      }
+
+      function clearState() {
+        localStorage.removeItem(STATE_KEY);
+      }
+
+      function syncIcons() {
+        var moon = document.getElementById("icon-moon");
+        var sun = document.getElementById("icon-sun");
+        if (!moon || !sun) return;
+        var isDark = document.documentElement.getAttribute("data-theme") !== "light";
+        moon.style.display = isDark ? "block" : "none";
+        sun.style.display = isDark ? "none" : "block";
+      }
+
+      function initTheme() {
+        var stored = localStorage.getItem("kreativeTheme");
+        var prefersDark = window.matchMedia("(prefers-color-scheme: dark)").matches;
+        var theme = stored || (prefersDark ? "dark" : "light");
+        document.documentElement.setAttribute("data-theme", theme);
+        syncIcons();
+      }
+
+      clearState();
+
+      initTheme();
+
+      var toggle = document.getElementById("themeToggle");
+      if (toggle) {
+        toggle.addEventListener("click", function () {
+          var next = document.documentElement.getAttribute("data-theme") === "light" ? "dark" : "light";
+          document.documentElement.setAttribute("data-theme", next);
+          localStorage.setItem("kreativeTheme", next);
+          syncIcons();
+        });
+      }
+
+      window.getState = getState;
+      window.setState = setState;
+      window.clearState = clearState;
+    })();
+  </script>
+</body>
+</html>

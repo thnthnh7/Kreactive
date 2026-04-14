@@ -1,0 +1,1912 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Kreative — Step 07 · Generate</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com" />
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+  <link href="https://fonts.googleapis.com/css2?family=Montserrat:ital,wght@0,400;0,500;0,600;0,700;1,400&display=swap" rel="stylesheet" />
+  <style>
+    /* Typography scale: --fs-* tokens (shared across steps) */
+    :root {
+      --fs-badge: 8px;
+      --fs-micro: 9px;
+      --fs-overline: 10px;
+      --fs-caption: 11px;
+      --fs-body-sm: 12px;
+      --fs-body: 13px;
+      --fs-lead: 14px;
+      --fs-title-sm: 16px;
+      --fs-title: 18px;
+      --fs-title-lg: 20px;
+      --fs-display: 28px;
+      --fs-hero-logo: clamp(64px, 9vw, 112px);
+      --fs-hero-tagline: clamp(13px, 1.4vw, 17px);
+      --fs-preview-headline: clamp(var(--fs-lead), 3vw, var(--fs-title-lg));
+      --fs-preview-desc: clamp(var(--fs-overline), 2.2vw, var(--fs-body));
+      --fs-preview-cta: clamp(var(--fs-overline), 2vw, var(--fs-body-sm));
+      --fs-h1: var(--fs-title-lg);
+      --fs-h2: var(--fs-title);
+      --fs-h3: var(--fs-title-sm);
+      --fs-desc: var(--fs-body);
+      --fs-desc-sm: var(--fs-caption);
+    }
+    /* STATE: READS all | WRITES camera (+ generated for flow) | camera.angleRef optional image for angle/pose */
+    /* GUARD: copy | Prompt: internal only, never in DOM */
+
+    :root {
+      color-scheme: dark light;
+      --text: var(--text-primary);
+      --radius-lg: 16px;
+      --radius-xl: 20px;
+      --radius-sm: 8px;
+    }
+
+    [data-theme="dark"],
+    :root:not([data-theme]) {
+      --bg: #0a0b0e;
+      --bg-accent: radial-gradient(120% 80% at 50% 0%, rgba(255, 107, 107, 0.08) 0%, transparent 55%),
+        radial-gradient(90% 60% at 100% 100%, rgba(125, 211, 252, 0.06) 0%, transparent 50%),
+        #0a0b0e;
+      --coral: #ff6b6b;
+      --accent: #c4a5ff;
+      --sage: #8fd9a8;
+      --sky: #7dd3fc;
+      --text-primary: #f4f4f5;
+      --text-secondary: rgba(244, 244, 245, 0.72);
+      --text-muted: rgba(244, 244, 245, 0.42);
+      --border: rgba(255, 255, 255, 0.12);
+      --surface: rgba(255, 255, 255, 0.04);
+      --btn-primary-bg: linear-gradient(135deg, var(--coral) 0%, #ff8787 100%);
+      --btn-primary-color: #0a0b0e;
+      --btn-primary-shadow: 0 12px 32px rgba(255, 107, 107, 0.25);
+      --btn-next-bg: linear-gradient(135deg, #ececf0 0%, #d9d9df 100%);
+      --btn-next-color: #0a0b0e;
+      --btn-next-shadow: 0 10px 28px rgba(0, 0, 0, 0.35);
+      --toggle-bg: rgba(255, 255, 255, 0.06);
+      --toggle-border: var(--border);
+      --toggle-color: var(--text-secondary);
+      --bg-card: rgba(255, 255, 255, 0.06);
+      --bg-card-hover: rgba(255, 255, 255, 0.12);
+      --step-nav-active-fg: #f4f4f5;
+      --step-nav-active-bg: rgba(255, 255, 255, 0.1);
+      --step-nav-active-border: rgba(244, 244, 245, 0.38);
+    }
+
+    [data-theme="light"] {
+      --bg: #f5f3ef;
+      --bg-accent: radial-gradient(120% 80% at 50% 0%, rgba(255, 107, 107, 0.12) 0%, transparent 55%),
+        radial-gradient(90% 60% at 100% 100%, rgba(125, 211, 252, 0.14) 0%, transparent 50%),
+        #f5f3ef;
+      --coral: #e85555;
+      --accent: #8b6fd6;
+      --sage: #4fa572;
+      --sky: #3a9bc9;
+      --text-primary: #1a1b1f;
+      --text-secondary: rgba(26, 27, 31, 0.68);
+      --text-muted: rgba(26, 27, 31, 0.45);
+      --border: rgba(26, 27, 31, 0.12);
+      --surface: rgba(255, 255, 255, 0.72);
+      --btn-primary-bg: linear-gradient(135deg, var(--coral) 0%, #ff6b6b 100%);
+      --btn-primary-color: #ffffff;
+      --btn-primary-shadow: 0 12px 28px rgba(232, 85, 85, 0.22);
+      --btn-next-bg: linear-gradient(135deg, #33343a 0%, #1a1b1f 100%);
+      --btn-next-color: #fafafa;
+      --btn-next-shadow: 0 10px 26px rgba(0, 0, 0, 0.18);
+      --toggle-bg: rgba(255, 255, 255, 0.9);
+      --toggle-border: rgba(26, 27, 31, 0.1);
+      --toggle-color: var(--text-primary);
+      --bg-card: rgba(26, 27, 31, 0.06);
+      --bg-card-hover: rgba(26, 27, 31, 0.1);
+      --step-nav-active-fg: #1a1b1f;
+      --step-nav-active-bg: rgba(26, 27, 31, 0.07);
+      --step-nav-active-border: rgba(26, 27, 31, 0.24);
+    }
+
+    *,
+    *::before,
+    *::after {
+      box-sizing: border-box;
+    }
+
+    html {
+      font-family: "Montserrat", system-ui, -apple-system, sans-serif;
+    }
+
+    body {
+      margin: 0;
+      min-height: 100vh;
+      background: var(--bg-accent);
+      background-color: var(--bg);
+      background-attachment: fixed;
+      color: var(--text-primary);
+      -webkit-font-smoothing: antialiased;
+    }
+
+    .k-page {
+      display: flex;
+      min-height: 100vh;
+    }
+
+    .k-sidebar {
+      width: 72px;
+      flex-shrink: 0;
+      align-self: stretch;
+      min-height: 0;
+      border-right: 1px solid var(--border);
+      background: rgba(0, 0, 0, 0.15);
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      padding: 16px 0 20px;
+      gap: 0;
+    }
+
+    [data-theme="light"] .k-sidebar {
+      background: rgba(255, 255, 255, 0.35);
+    }
+
+    .k-sidebar-btn {
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      width: 44px;
+      height: 44px;
+      border-radius: 12px;
+      border: 1px solid transparent;
+      background: transparent;
+      color: var(--text-muted);
+      cursor: pointer;
+      padding: 0;
+      transition: color 0.2s ease, background 0.2s ease, border-color 0.2s ease, opacity 0.2s ease;
+    }
+
+    .k-sidebar-btn svg {
+      width: 22px;
+      height: 22px;
+      stroke: currentColor;
+      fill: none;
+      stroke-width: 1.5;
+      stroke-linecap: round;
+      stroke-linejoin: round;
+    }
+
+    .k-sidebar-btn:hover:not(:disabled) {
+      color: var(--text-secondary);
+      background: var(--surface);
+      border-color: var(--border);
+    }
+
+    .k-sidebar-btn:disabled {
+      opacity: 0.35;
+      cursor: not-allowed;
+    }
+
+    .k-sidebar-btn.active {
+      color: var(--step-nav-active-fg);
+      background: var(--step-nav-active-bg);
+      border-color: var(--step-nav-active-border);
+    }
+
+    .k-sidebar-btn.done:not(.active) {
+      color: var(--text-secondary);
+    }
+
+    .k-main {
+      flex: 1;
+      display: flex;
+      flex-direction: column;
+      min-width: 0;
+      min-height: 0;
+    }
+
+    .k-topbar {
+      display: grid;
+      grid-template-columns: minmax(0, 1fr) auto minmax(0, 1fr);
+      align-items: center;
+      gap: 16px;
+      padding: 16px 24px;
+      border-bottom: 1px solid var(--border);
+      background: rgba(0, 0, 0, 0.12);
+      flex-shrink: 0;
+    }
+
+    [data-theme="light"] .k-topbar {
+      background: rgba(255, 255, 255, 0.5);
+    }
+
+    .k-topbar-left {
+      display: flex;
+      align-items: center;
+      gap: 12px;
+      flex-wrap: wrap;
+      justify-self: start;
+      min-width: 0;
+    }
+
+    .k-btn-ghost {
+      appearance: none;
+      border: 1px solid var(--border);
+      background: var(--surface);
+      color: var(--text-secondary);
+      font-family: inherit;
+      font-size: var(--fs-overline);
+      font-weight: 600;
+      letter-spacing: 2px;
+      text-transform: uppercase;
+      padding: 10px 18px;
+      border-radius: 99px;
+      cursor: pointer;
+      transition: background 0.2s ease, color 0.2s ease, border-color 0.2s ease;
+    }
+
+    .k-btn-ghost:hover {
+      color: var(--text-primary);
+      border-color: var(--text-muted);
+    }
+
+    .k-btn-next {
+      appearance: none;
+      border: none;
+      font-family: inherit;
+      font-size: var(--fs-overline);
+      font-weight: 600;
+      letter-spacing: 2.5px;
+      text-transform: uppercase;
+      padding: 10px 22px;
+      border-radius: 99px;
+      color: var(--btn-next-color);
+      background: var(--btn-next-bg);
+      box-shadow: var(--btn-next-shadow);
+      cursor: pointer;
+      transition: transform 0.2s ease, filter 0.2s ease;
+    }
+
+    .k-btn-next:hover {
+      transform: translateY(-1px);
+      filter: brightness(1.03);
+    }
+
+    .k-tabs {
+      display: flex;
+      flex-wrap: nowrap;
+      gap: 4px;
+      align-items: center;
+      justify-content: center;
+      justify-self: center;
+      min-width: 0;
+      max-width: min(960px, 100%);
+      overflow-x: auto;
+      -webkit-overflow-scrolling: touch;
+    }
+
+    .k-tab {
+      font-size: var(--fs-micro);
+      font-weight: 600;
+      letter-spacing: 1.5px;
+      text-transform: uppercase;
+      padding: 6px 10px;
+      border-radius: 99px;
+      color: var(--text-muted);
+      border: 1px solid transparent;
+      background: transparent;
+      cursor: default;
+      pointer-events: none;
+    }
+
+    .k-tab.active {
+      color: var(--text-primary);
+      border-color: var(--border);
+      background: rgba(255, 255, 255, 0.06);
+    }
+
+    [data-theme="light"] .k-tab.active {
+      background: rgba(26, 27, 31, 0.05);
+    }
+
+    .k-tab.done {
+      cursor: pointer;
+      pointer-events: auto;
+      color: var(--text-secondary);
+      border-color: var(--border);
+      background: rgba(255, 255, 255, 0.04);
+    }
+
+    [data-theme="light"] .k-tab.done {
+      background: rgba(26, 27, 31, 0.04);
+    }
+
+    .k-tab.done:hover {
+      color: var(--text-primary);
+      border-color: var(--text-muted);
+    }
+
+    .k-topbar-actions {
+      display: flex;
+      align-items: center;
+      gap: 10px;
+      justify-self: end;
+      min-width: 0;
+    }
+
+    #phase-config {
+      flex: 1;
+      display: flex;
+      flex-direction: column;
+      min-height: 0;
+    }
+
+    #phase-config[hidden] {
+      display: none !important;
+    }
+
+    .canvas-shell {
+      flex: 1;
+      position: relative;
+      overflow: hidden;
+      min-height: 0;
+      --cpanel-w: 200px;
+    }
+
+    .canvas-scene {
+      position: absolute;
+      inset: 0;
+      background: var(--bg-accent);
+      background-color: var(--bg);
+      background-attachment: fixed;
+      overflow: hidden;
+    }
+
+    .canvas-preview-root {
+      position: absolute;
+      z-index: 1;
+      top: 20px;
+      left: calc(16px + var(--cpanel-w) + 20px);
+      right: 20px;
+      bottom: 88px;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      pointer-events: none;
+      padding-bottom: 40px;
+      box-sizing: border-box;
+    }
+
+    .canvas-comp-frame {
+      width: min(100%, 680px);
+      max-height: 100%;
+      aspect-ratio: 4 / 3;
+      border-radius: 16px;
+      overflow: hidden;
+      position: relative;
+      background: rgba(0, 0, 0, 0.28);
+      box-shadow:
+        0 0 0 1px rgba(255, 255, 255, 0.1),
+        0 28px 56px rgba(0, 0, 0, 0.45);
+    }
+
+    [data-theme="light"] .canvas-comp-frame {
+      background: rgba(255, 255, 255, 0.35);
+      box-shadow:
+        0 0 0 1px rgba(26, 27, 31, 0.1),
+        0 20px 40px rgba(26, 27, 31, 0.12);
+    }
+
+    .canvas-product-placeholder {
+      position: absolute;
+      left: 50%;
+      top: 50%;
+      width: 122%;
+      height: 122%;
+      border-radius: 14px;
+      background: rgba(255, 255, 255, 0.08);
+      border: 1px solid rgba(255, 255, 255, 0.15);
+      background-size: cover;
+      background-position: center;
+      background-repeat: no-repeat;
+      transform: translate(-50%, -50%);
+      transform-origin: center center;
+      transition: transform 0.45s cubic-bezier(0.22, 0.85, 0.32, 1);
+    }
+
+    .canvas-preview-hud {
+      position: absolute;
+      left: 50%;
+      bottom: 4px;
+      transform: translateX(-50%);
+      font-size: var(--fs-overline);
+      font-weight: 600;
+      letter-spacing: 0.14em;
+      text-transform: uppercase;
+      color: rgba(255, 255, 255, 0.55);
+      background: rgba(0, 0, 0, 0.5);
+      padding: 7px 16px;
+      border-radius: 99px;
+      border: 1px solid rgba(255, 255, 255, 0.12);
+      white-space: nowrap;
+      max-width: calc(100% - 24px);
+      overflow: hidden;
+      text-overflow: ellipsis;
+    }
+
+    [data-theme="light"] .canvas-preview-hud {
+      color: rgba(26, 27, 31, 0.65);
+      background: rgba(255, 255, 255, 0.82);
+      border-color: rgba(26, 27, 31, 0.1);
+    }
+
+    .canvas-panel-left {
+      position: absolute;
+      top: 16px;
+      left: 16px;
+      bottom: 80px;
+      width: var(--cpanel-w);
+      background: rgba(0, 0, 0, 0.52);
+      -webkit-backdrop-filter: blur(16px) saturate(160%);
+      backdrop-filter: blur(16px) saturate(160%);
+      border: 1px solid rgba(255, 255, 255, 0.1);
+      border-radius: 14px;
+      padding: 12px 8px;
+      display: flex;
+      flex-direction: column;
+      gap: 3px;
+      overflow-y: auto;
+      scrollbar-width: none;
+    }
+
+    .canvas-panel-left::-webkit-scrollbar {
+      display: none;
+    }
+
+    [data-theme="light"] .canvas-panel-left {
+      background: rgba(255, 255, 255, 0.72);
+      border-color: rgba(26, 27, 31, 0.12);
+    }
+
+    .cpanel-label {
+      font-size: var(--fs-body-sm);
+      font-weight: 700;
+      letter-spacing: 2.5px;
+      text-transform: uppercase;
+      color: rgba(255, 255, 255, 0.28);
+      padding: 0 6px;
+      margin-bottom: 5px;
+    }
+
+    [data-theme="light"] .cpanel-label {
+      color: rgba(26, 27, 31, 0.45);
+    }
+
+    #angleGrid {
+      display: flex;
+      flex-direction: column;
+      gap: 6px;
+      min-height: 0;
+    }
+
+    .cpanel-label--spaced {
+      margin-top: 12px;
+    }
+
+    .cpanel-ref {
+      display: flex;
+      flex-direction: column;
+      gap: 5px;
+      padding: 0 4px 2px;
+    }
+
+    .cpanel-ref-row {
+      display: flex;
+      align-items: center;
+      gap: 4px;
+    }
+
+    .cpanel-ref-btn {
+      flex: 1;
+      appearance: none;
+      font-family: inherit;
+      font-size: var(--fs-badge);
+      font-weight: 600;
+      letter-spacing: 1.2px;
+      text-transform: uppercase;
+      padding: 7px 8px;
+      border-radius: 8px;
+      border: 1px solid rgba(255, 255, 255, 0.14);
+      background: rgba(255, 255, 255, 0.06);
+      color: rgba(255, 255, 255, 0.78);
+      cursor: pointer;
+      transition: background 0.2s ease, border-color 0.2s ease;
+    }
+
+    .cpanel-ref-btn:hover {
+      background: rgba(255, 255, 255, 0.11);
+      border-color: rgba(255, 255, 255, 0.22);
+    }
+
+    .cpanel-ref-clear {
+      appearance: none;
+      flex-shrink: 0;
+      width: 26px;
+      height: 26px;
+      padding: 0;
+      border-radius: 8px;
+      border: 1px solid rgba(255, 255, 255, 0.14);
+      background: rgba(255, 255, 255, 0.06);
+      color: rgba(255, 255, 255, 0.55);
+      font-size: var(--fs-lead);
+      line-height: 1;
+      cursor: pointer;
+      transition: background 0.2s ease, color 0.2s ease;
+    }
+
+    .cpanel-ref-clear:hover {
+      background: rgba(255, 255, 255, 0.12);
+      color: rgba(255, 255, 255, 0.9);
+    }
+
+    .cpanel-ref-name {
+      font-size: var(--fs-badge);
+      font-weight: 500;
+      line-height: 1.25;
+      color: rgba(255, 255, 255, 0.38);
+      max-height: 2.5em;
+      overflow: hidden;
+      padding: 0 2px;
+      word-break: break-word;
+    }
+
+    [data-theme="light"] .cpanel-ref-btn {
+      border-color: rgba(26, 27, 31, 0.12);
+      background: rgba(26, 27, 31, 0.05);
+      color: rgba(26, 27, 31, 0.78);
+    }
+
+    [data-theme="light"] .cpanel-ref-btn:hover {
+      background: rgba(26, 27, 31, 0.09);
+      border-color: rgba(26, 27, 31, 0.16);
+    }
+
+    [data-theme="light"] .cpanel-ref-clear {
+      border-color: rgba(26, 27, 31, 0.12);
+      background: rgba(26, 27, 31, 0.05);
+      color: rgba(26, 27, 31, 0.45);
+    }
+
+    [data-theme="light"] .cpanel-ref-clear:hover {
+      background: rgba(26, 27, 31, 0.09);
+      color: rgba(26, 27, 31, 0.85);
+    }
+
+    [data-theme="light"] .cpanel-ref-name {
+      color: rgba(26, 27, 31, 0.45);
+    }
+
+    .canvas-panel-left .k-card.pick-card {
+      padding: 7px 8px;
+      border-radius: 8px;
+      border: 1px solid transparent;
+      background: transparent;
+      display: flex;
+      align-items: center;
+      gap: 7px;
+      cursor: pointer;
+      text-align: left;
+      position: relative;
+      transition: background 0.2s ease, border-color 0.2s ease;
+    }
+
+    .canvas-panel-left .k-card.pick-card:hover {
+      background: rgba(255, 255, 255, 0.07);
+      border-color: rgba(255, 255, 255, 0.1);
+    }
+
+    .canvas-panel-left .k-card.pick-card.active {
+      background: var(--step-nav-active-bg);
+      border-color: var(--step-nav-active-border);
+      box-shadow: none;
+    }
+
+    [data-theme="light"] .canvas-panel-left .k-card.pick-card:hover {
+      background: rgba(26, 27, 31, 0.05);
+      border-color: rgba(26, 27, 31, 0.1);
+    }
+
+    .canvas-panel-left .pick-label {
+      font-size: var(--fs-caption);
+      font-weight: 600;
+      color: rgba(255, 255, 255, 0.6);
+      margin-bottom: 0;
+      display: flex;
+      align-items: center;
+      gap: 6px;
+      flex-wrap: nowrap;
+    }
+
+    .canvas-panel-left .k-card.pick-card.active .pick-label {
+      color: rgba(255, 255, 255, 0.95);
+    }
+
+    [data-theme="light"] .canvas-panel-left .pick-label {
+      color: rgba(26, 27, 31, 0.55);
+    }
+
+    [data-theme="light"] .canvas-panel-left .k-card.pick-card.active .pick-label {
+      color: rgba(26, 27, 31, 0.92);
+    }
+
+    .canvas-panel-left .pick-desc {
+      display: none;
+    }
+
+    .canvas-panel-left .rec-pill {
+      display: none !important;
+    }
+
+    .canvas-panel-left .k-card.pick-card::before {
+      content: "";
+      width: 5px;
+      height: 5px;
+      border-radius: 50%;
+      background: rgba(255, 255, 255, 0.2);
+      flex-shrink: 0;
+    }
+
+    .canvas-panel-left .k-card.pick-card.active::before {
+      background: var(--step-nav-active-fg);
+    }
+
+    .canvas-bar-bottom {
+      position: absolute;
+      bottom: 16px;
+      left: 168px;
+      right: 16px;
+      min-height: 52px;
+      background: rgba(0, 0, 0, 0.52);
+      -webkit-backdrop-filter: blur(16px) saturate(160%);
+      backdrop-filter: blur(16px) saturate(160%);
+      border: 1px solid rgba(255, 255, 255, 0.1);
+      border-radius: 14px;
+      padding: 10px 14px;
+      display: flex;
+      align-items: center;
+      gap: 0;
+    }
+
+    [data-theme="light"] .canvas-bar-bottom {
+      background: rgba(255, 255, 255, 0.78);
+      border-color: rgba(26, 27, 31, 0.12);
+    }
+
+    #compGrid.cpanel-comp-grid {
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: 6px;
+      width: 100%;
+      justify-items: center;
+      padding: 0 2px 2px;
+    }
+
+    .canvas-panel-left .k-card.comp-card {
+      width: 40px;
+      height: 40px;
+      padding: 0;
+      border-radius: 8px;
+      border: 1px solid rgba(255, 255, 255, 0.1);
+      background: rgba(255, 255, 255, 0.06);
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      cursor: pointer;
+      transition: background 0.2s ease, border-color 0.2s ease;
+    }
+
+    .canvas-panel-left .k-card.comp-card:hover {
+      background: rgba(255, 255, 255, 0.12);
+      border-color: rgba(255, 255, 255, 0.18);
+    }
+
+    .canvas-panel-left .k-card.comp-card.active {
+      background: var(--step-nav-active-bg);
+      border-color: var(--step-nav-active-border);
+      box-shadow: none;
+    }
+
+    [data-theme="light"] .canvas-panel-left .k-card.comp-card {
+      background: rgba(26, 27, 31, 0.06);
+      border-color: rgba(26, 27, 31, 0.12);
+    }
+
+    [data-theme="light"] .canvas-panel-left .k-card.comp-card:hover {
+      background: rgba(26, 27, 31, 0.1);
+    }
+
+    .canvas-panel-left .comp-diagram {
+      width: 22px;
+      height: 22px;
+      color: rgba(255, 255, 255, 0.4);
+      flex-shrink: 0;
+    }
+
+    .canvas-panel-left .comp-diagram svg {
+      width: 22px;
+      height: 22px;
+      stroke: currentColor;
+      fill: none;
+      stroke-width: 1.25;
+    }
+
+    .canvas-panel-left .k-card.comp-card.active .comp-diagram {
+      color: var(--step-nav-active-fg);
+    }
+
+    .canvas-panel-left .comp-text {
+      display: none;
+    }
+
+    .cbar-detail {
+      flex: 1;
+      min-width: 0;
+      width: 100%;
+      background: rgba(255, 255, 255, 0.05);
+      border: 1px solid rgba(255, 255, 255, 0.08);
+      border-radius: 8px;
+      padding: 8px 10px;
+      color: rgba(255, 255, 255, 0.8);
+      font-family: inherit;
+      font-size: var(--fs-body-sm);
+      outline: none;
+      transition: border-color 0.2s ease, background 0.2s ease;
+    }
+
+    .cbar-detail::placeholder {
+      color: rgba(255, 255, 255, 0.28);
+    }
+
+    .cbar-detail:focus {
+      border-color: var(--step-nav-active-border);
+      background: rgba(255, 255, 255, 0.08);
+    }
+
+    [data-theme="light"] .cbar-detail {
+      background: rgba(255, 255, 255, 0.9);
+      border-color: rgba(26, 27, 31, 0.12);
+      color: rgba(26, 27, 31, 0.88);
+    }
+
+    [data-theme="light"] .cbar-detail::placeholder {
+      color: rgba(26, 27, 31, 0.38);
+    }
+
+    [data-theme="light"] .cbar-detail:focus {
+      border-color: var(--step-nav-active-border);
+      background: #fff;
+    }
+
+    .rec-pill {
+      display: none;
+      font-size: var(--fs-badge);
+      font-weight: 700;
+      letter-spacing: 1px;
+      text-transform: uppercase;
+      padding: 2px 6px;
+      border-radius: 99px;
+      background: var(--sage);
+      color: #1a1a1a;
+    }
+
+    .k-card.pick-card[data-id="original"].show-rec .rec-pill {
+      display: inline-block;
+    }
+
+    .k-btn-primary {
+      appearance: none;
+      border: none;
+      cursor: pointer;
+      font-family: inherit;
+      font-size: var(--fs-caption);
+      font-weight: 600;
+      letter-spacing: 2px;
+      text-transform: uppercase;
+      padding: 14px 40px;
+      border-radius: 99px;
+      color: var(--btn-primary-color);
+      background: var(--btn-primary-bg);
+      box-shadow: var(--btn-primary-shadow);
+      transition: transform 0.2s ease, filter 0.2s ease;
+    }
+
+    .k-btn-primary:hover {
+      transform: translateY(-2px);
+      filter: brightness(1.03);
+    }
+
+    .k-btn-primary .btn-icon {
+      width: 16px;
+      height: 16px;
+      vertical-align: -3px;
+      margin-right: 8px;
+      stroke: currentColor;
+      fill: none;
+      stroke-width: 2;
+    }
+
+    #phase-result {
+      display: none;
+      position: fixed;
+      inset: 0;
+      z-index: 300;
+      flex-direction: column;
+      background: var(--bg);
+      background-image: var(--bg-accent);
+      background-color: var(--bg);
+    }
+
+    #phase-result.is-visible {
+      display: flex;
+    }
+
+    #phase-result .k-theme-toggle-result {
+      position: fixed;
+      top: 20px;
+      right: 20px;
+      z-index: 310;
+    }
+
+    .result-image-wrap {
+      flex: 1;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      padding: 32px;
+      position: relative;
+      min-height: 0;
+    }
+
+    .result-frame {
+      position: relative;
+      max-height: 82vh;
+      max-width: min(82vh, 680px);
+      width: 100%;
+      aspect-ratio: 1;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+    }
+
+    .result-shimmer {
+      position: absolute;
+      inset: 0;
+      margin: auto;
+      max-height: 82vh;
+      max-width: min(82vh, 680px);
+      width: 100%;
+      aspect-ratio: 1;
+      border-radius: var(--radius-xl);
+      border: 1px solid var(--border);
+      background: linear-gradient(
+        90deg,
+        var(--bg-card) 25%,
+        var(--bg-card-hover) 50%,
+        var(--bg-card) 75%
+      );
+      background-size: 200% 100%;
+      animation: shimmer 1.6s infinite;
+    }
+
+    @keyframes shimmer {
+      0% {
+        background-position: 200% 0;
+      }
+      100% {
+        background-position: -200% 0;
+      }
+    }
+
+    .result-shimmer[hidden] {
+      display: none !important;
+    }
+
+    .result-main-img {
+      max-height: 82vh;
+      max-width: min(82vh, 680px);
+      width: auto;
+      height: auto;
+      object-fit: contain;
+      border-radius: var(--radius-xl);
+      border: 1px solid var(--border);
+      opacity: 0;
+      transition: opacity 0.6s ease;
+      position: relative;
+      z-index: 1;
+    }
+
+    .variations {
+      position: absolute;
+      bottom: 10px;
+      left: 50%;
+      transform: translateX(-50%);
+      display: flex;
+      gap: 7px;
+      z-index: 2;
+    }
+
+    .variations img {
+      width: 60px;
+      height: 60px;
+      border-radius: var(--radius-sm);
+      border: 1.5px solid var(--border);
+      cursor: pointer;
+      object-fit: cover;
+      transition: border-color 0.2s ease, box-shadow 0.2s ease;
+    }
+
+    .variations img:hover {
+      border-color: var(--accent);
+    }
+
+    .variations img.selected {
+      border-color: var(--accent);
+      box-shadow: 0 0 0 1.5px var(--accent);
+    }
+
+    .result-action-bar {
+      height: 60px;
+      padding: 0 32px;
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      gap: 16px;
+      flex-wrap: wrap;
+      border-top: 1px solid var(--border);
+      background: rgba(0, 0, 0, 0.12);
+      flex-shrink: 0;
+    }
+
+    [data-theme="light"] .result-action-bar {
+      background: rgba(255, 255, 255, 0.5);
+    }
+
+    .result-actions-left {
+      display: flex;
+      align-items: center;
+      gap: 10px;
+      flex-wrap: wrap;
+    }
+
+    .result-actions-left .k-btn-primary,
+    .result-actions-left .k-btn-ghost {
+      display: inline-flex;
+      align-items: center;
+      gap: 6px;
+    }
+
+    .result-actions-right {
+      display: flex;
+      align-items: center;
+      gap: 20px;
+      flex-wrap: wrap;
+    }
+
+    .result-link {
+      font-size: var(--fs-body-sm);
+      color: var(--text-muted);
+      cursor: pointer;
+      letter-spacing: 1px;
+      background: none;
+      border: none;
+      padding: 0;
+      font-family: inherit;
+      text-decoration: none;
+      transition: color 0.2s ease;
+    }
+
+    .result-link:hover {
+      color: var(--text-primary);
+    }
+
+    .k-step-icon {
+      display: inline-flex;
+      align-items: center;
+      justify-content: center;
+      width: 44px;
+      height: 44px;
+      border-radius: 50%;
+      border: 1px solid var(--toggle-border);
+      background: var(--toggle-bg);
+      color: var(--toggle-color);
+      cursor: pointer;
+      transition: background 0.2s ease, border-color 0.2s ease, color 0.2s ease;
+    }
+
+    .k-step-icon:hover {
+      background: var(--surface);
+    }
+
+    .k-step-icon svg {
+      width: 20px;
+      height: 20px;
+      stroke: currentColor;
+      fill: none;
+      stroke-width: 1.75;
+      stroke-linecap: round;
+      stroke-linejoin: round;
+    }
+
+    .k-theme-toggle {
+      position: static;
+      flex-shrink: 0;
+      margin-bottom: 12px;
+    }
+
+    .k-sidebar-steps {
+      flex: 1;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      justify-content: center;
+      gap: 10px;
+      min-height: 0;
+      width: 100%;
+    }
+  </style>
+</head>
+<body>
+  <div class="k-page" id="pageShell">
+    <aside class="k-sidebar" aria-label="Workflow">
+      <button type="button" class="k-step-icon k-theme-toggle" id="themeToggle" aria-label="Toggle color theme">
+        <svg id="icon-moon" viewBox="0 0 24 24" aria-hidden="true">
+          <path d="M21 12.79A9 9 0 1 1 11.21 3 7 7 0 0 0 21 12.79z" />
+        </svg>
+        <svg id="icon-sun" viewBox="0 0 24 24" aria-hidden="true" style="display: none">
+          <circle cx="12" cy="12" r="4" />
+          <path d="M12 2v2M12 20v2M4.93 4.93l1.41 1.41M17.66 17.66l1.41 1.41M2 12h2M20 12h2M4.93 19.07l1.41-1.41M17.66 6.34l1.41-1.41" />
+        </svg>
+      </button>
+      <div class="k-sidebar-steps" id="sidebar" aria-label="Workflow steps"></div>
+    </aside>
+
+    <main class="k-main">
+      <nav class="k-topbar" aria-label="Step navigation">
+        <div class="k-topbar-left">
+          <button type="button" class="k-btn-ghost" id="btnBack">Back</button>
+        </div>
+        <div class="k-tabs" role="tablist" aria-label="Steps">
+            <button type="button" class="k-tab done" id="tabCategory">Category</button>
+            <button type="button" class="k-tab done" id="tabSize">Size</button>
+            <button type="button" class="k-tab done" id="tabTheme">Theme</button>
+            <button type="button" class="k-tab done" id="tabFineTune">Fine Tune</button>
+            <button type="button" class="k-tab done" id="tabReference">Reference</button>
+            <button type="button" class="k-tab done" id="tabTextBrand">Text &amp; Brand</button>
+            <span class="k-tab active" role="tab" aria-selected="true">Generate</span>
+        </div>
+        <div class="k-topbar-actions">
+          <button type="button" class="k-btn-next" id="btnGenerate">Generate →</button>
+        </div>
+      </nav>
+
+      <div id="phase-config">
+        <div class="canvas-shell">
+          <div class="canvas-scene" id="canvasScene">
+            <div class="canvas-preview-root" id="canvasPreviewRoot">
+              <div class="canvas-comp-frame" id="canvasCompFrame">
+                <div class="canvas-product-placeholder" id="canvasProduct"></div>
+              </div>
+              <div class="canvas-preview-hud" id="canvasPreviewHud" aria-live="polite">
+                <span id="canvasHudLine"></span>
+              </div>
+            </div>
+          </div>
+
+          <div class="canvas-panel-left" aria-label="Camera, composition, and reference">
+            <div class="cpanel-label">Camera</div>
+            <div id="angleGrid"></div>
+            <div class="cpanel-label cpanel-label--spaced">Composition</div>
+            <div id="compGrid" class="cpanel-comp-grid"></div>
+            <div class="cpanel-label cpanel-label--spaced">Angle reference</div>
+            <div class="cpanel-ref" id="angleRefBlock">
+              <input
+                type="file"
+                id="angleRefInput"
+                accept="image/jpeg,image/png,image/webp"
+                hidden
+              />
+              <div class="cpanel-ref-row">
+                <button type="button" class="cpanel-ref-btn" id="angleRefPick">Upload</button>
+                <button type="button" class="cpanel-ref-clear" id="angleRefClear" hidden aria-label="Remove angle reference">
+                  ×
+                </button>
+              </div>
+              <div class="cpanel-ref-name" id="angleRefName" hidden></div>
+            </div>
+          </div>
+
+          <div class="canvas-bar-bottom">
+            <input
+              class="cbar-detail"
+              id="detailArea"
+              type="text"
+              placeholder="Add detail hint…"
+              autocomplete="off"
+            />
+          </div>
+        </div>
+      </div>
+    </main>
+  </div>
+
+  <div id="phase-result" aria-hidden="true">
+    <button
+      type="button"
+      class="k-step-icon k-theme-toggle k-theme-toggle-result"
+      id="themeToggleResult"
+      aria-label="Toggle color theme"
+    >
+      <svg id="icon-moon-result" viewBox="0 0 24 24" aria-hidden="true">
+        <path d="M21 12.79A9 9 0 1 1 11.21 3 7 7 0 0 0 21 12.79z" />
+      </svg>
+      <svg id="icon-sun-result" viewBox="0 0 24 24" aria-hidden="true" style="display: none">
+        <circle cx="12" cy="12" r="4" />
+        <path d="M12 2v2M12 20v2M4.93 4.93l1.41 1.41M17.66 17.66l1.41 1.41M2 12h2M20 12h2M4.93 19.07l1.41-1.41M17.66 6.34l1.41-1.41" />
+      </svg>
+    </button>
+    <div class="result-image-wrap">
+      <div class="result-frame">
+        <div class="result-shimmer" id="resultShimmer" hidden></div>
+        <img class="result-main-img" id="resultMainImg" alt="Generated preview" />
+        <div class="variations" id="variations"></div>
+      </div>
+    </div>
+    <div class="result-action-bar">
+      <div class="result-actions-left">
+        <button type="button" class="k-btn-primary" id="btnDownload">
+          <svg class="btn-icon" viewBox="0 0 24 24" aria-hidden="true">
+            <path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4M7 10l5 5 5-5M12 15V3" />
+          </svg>
+          Download
+        </button>
+        <button type="button" class="k-btn-ghost" id="btnRegenerate">
+          <svg class="btn-icon" viewBox="0 0 24 24" aria-hidden="true" style="stroke-width: 1.75">
+            <path d="M23 4v6h-6M1 20v-6h6M3.51 9a9 9 0 0 1 14.85-3.36L23 10M1 14l4.64 4.36A9 9 0 0 0 20.49 15" />
+          </svg>
+          Regenerate
+        </button>
+      </div>
+      <div class="result-actions-right">
+        <button type="button" class="result-link" id="linkEditSettings">Edit Settings</button>
+        <button type="button" class="result-link" id="linkStartOver">Start Over</button>
+      </div>
+    </div>
+  </div>
+
+  <script>
+    (function () {
+      var KREATIVE_KEY = "kreative_session";
+
+      function getState() {
+        try {
+          var raw = localStorage.getItem(KREATIVE_KEY);
+          return raw ? JSON.parse(raw) : {};
+        } catch (e) {
+          return {};
+        }
+      }
+
+      function setState(partial) {
+        var next = Object.assign({}, getState(), partial);
+        localStorage.setItem(KREATIVE_KEY, JSON.stringify(next));
+      }
+
+      function clearState() {
+        localStorage.removeItem(KREATIVE_KEY);
+      }
+
+      if (!getState().copy) {
+        window.location.href = "page6.html";
+        return;
+      }
+
+      function buildPrompt(s) {
+        var lines = [];
+        if (s.category) lines.push("Product: " + s.category.name);
+        if (s.size) lines.push("Size: " + s.size.ratio + " (" + s.size.w + "x" + s.size.h + ")");
+        if (s.theme && s.theme.primary) lines.push("Theme: " + s.theme.primary);
+        if (s.theme && s.theme.secondary) lines.push("Secondary: " + s.theme.secondary);
+        if (s.theme && s.theme.avoid && s.theme.avoid.length)
+          lines.push("Avoid: " + s.theme.avoid.join(", "));
+        lines.push("Strength: " + (s.theme && s.theme.strength ? s.theme.strength : "Blend"));
+        lines.push("Temperature: " + ((s.theme && s.theme.temp) || "Natural"));
+        if (s.reference && s.reference.type && s.reference.type !== "none")
+          lines.push("Reference: " + s.reference.type);
+        lines.push("Camera: " + (s.camera && s.camera.angle ? s.camera.angle : "original"));
+        lines.push("Composition: " + (s.camera && s.camera.composition ? s.camera.composition : "center"));
+        if (s.camera && s.camera.additionalDetail) lines.push("Detail: " + s.camera.additionalDetail);
+        if (s.camera && s.camera.angleRef && s.camera.angleRef.b64 && s.camera.angleRef.mime) {
+          lines.push(
+            "Camera angle reference: attached image — match camera height, lens angle, perspective, and framing of this reference."
+          );
+        }
+        if (s.copy && s.copy.hasText) {
+          if (s.copy.headline) lines.push("Headline: " + s.copy.headline);
+          if (s.copy.desc) lines.push("Desc: " + s.copy.desc);
+          if (s.copy.cta) lines.push("CTA: " + s.copy.cta);
+        }
+        if (s.logo) lines.push("Logo: position " + s.logo.position);
+        return lines.join("\n");
+      }
+
+      function syncIcons() {
+        var isDark = document.documentElement.getAttribute("data-theme") !== "light";
+        function pair(moonId, sunId) {
+          var moon = document.getElementById(moonId);
+          var sun = document.getElementById(sunId);
+          if (!moon || !sun) return;
+          moon.style.display = isDark ? "block" : "none";
+          sun.style.display = isDark ? "none" : "block";
+        }
+        pair("icon-moon", "icon-sun");
+        pair("icon-moon-result", "icon-sun-result");
+      }
+
+      function initTheme() {
+        var stored = localStorage.getItem("kreativeTheme");
+        var prefersDark = window.matchMedia("(prefers-color-scheme: dark)").matches;
+        var theme = stored || (prefersDark ? "dark" : "light");
+        document.documentElement.setAttribute("data-theme", theme);
+        syncIcons();
+      }
+
+      var STEP_PAGES = [
+        "page1.html",
+        "page2.html",
+        "page3.html",
+        "page4.html",
+        "page5.html",
+        "page6.html",
+        "page7.html"
+      ];
+
+      function stepReachable(stepIndex) {
+        var s = getState();
+        if (stepIndex <= 1) return true;
+        if (stepIndex === 2) return !!s.category;
+        if (stepIndex === 3) return !!s.category && !!s.size;
+        if (stepIndex === 4) return !!s.category && !!s.size && !!s.theme;
+        if (stepIndex === 5) return !!s.category && !!s.size && !!s.theme && !!s.fineTune;
+        if (stepIndex === 6) {
+          return !!s.category && !!s.size && !!s.theme && !!s.fineTune && !!s.reference;
+        }
+        if (stepIndex === 7) {
+          return (
+            !!s.category &&
+            !!s.size &&
+            !!s.theme &&
+            !!s.fineTune &&
+            !!s.reference &&
+            !!s.textBrand
+          );
+        }
+        return false;
+      }
+
+      var SIDEBAR_SVGS = [
+        '<svg viewBox="0 0 24 24" aria-hidden="true"><rect x="3" y="3" width="7" height="7" rx="1"/><rect x="14" y="3" width="7" height="7" rx="1"/><rect x="3" y="14" width="7" height="7" rx="1"/><rect x="14" y="14" width="7" height="7" rx="1"/></svg>',
+        '<svg viewBox="0 0 24 24" aria-hidden="true"><rect x="5" y="5" width="10" height="10" rx="1"/><path d="M9 3h6M9 21h6M3 9v6M21 9v6"/></svg>',
+        '<svg viewBox="0 0 24 24" aria-hidden="true"><circle cx="12" cy="12" r="4" fill="none" stroke="currentColor"/><path d="M12 2v2M12 20v2M4.93 4.93l1.41 1.41M17.66 17.66l1.41 1.41M2 12h2M20 12h2M4.93 19.07l1.41-1.41M17.66 6.34l1.41-1.41" fill="none"/><circle cx="7.5" cy="7.5" r="1.25" fill="currentColor"/><circle cx="17" cy="16" r="1.25" fill="currentColor"/></svg>',
+        '<svg viewBox="0 0 24 24" aria-hidden="true"><path d="M4 14h4v6H4zM10 8h4v12h-4zM16 4h4v16h-4z"/></svg>',
+        '<svg viewBox="0 0 24 24" aria-hidden="true"><rect x="3" y="5" width="18" height="14" rx="2"/><circle cx="8.5" cy="10.5" r="1.5"/><path d="M21 17l-6-6-4 4-2-2-4 4"/></svg>',
+        '<svg viewBox="0 0 24 24" aria-hidden="true"><path d="M8 4h8M12 4v16"/></svg>',
+        '<svg viewBox="0 0 24 24" aria-hidden="true"><path d="M12 2l1.8 4.5L18 8l-4 2.5L15.5 15 12 12.5 8.5 15 10 10.5 6 8l4.2-1.5L12 2z"/></svg>'
+      ];
+
+      function renderSidebar(currentStep) {
+        var el = document.getElementById("sidebar");
+        if (!el) return;
+        var s = getState();
+        var html = "";
+        for (var i = 0; i < 7; i++) {
+          var stepNum = i + 1;
+          var reachable = stepReachable(stepNum);
+          var done =
+            stepNum < currentStep ||
+            (stepNum === 1 && !!s.category) ||
+            (stepNum === 2 && !!s.size) ||
+            (stepNum === 3 && !!s.theme) ||
+            (stepNum === 4 && !!s.fineTune) ||
+            (stepNum === 5 && !!s.reference) ||
+            (stepNum === 6 && !!s.textBrand) ||
+            (stepNum === 7 && !!s.generated);
+          var classes = "k-sidebar-btn";
+          if (stepNum === currentStep) classes += " active";
+          if (done) classes += " done";
+          var disabled = !reachable && stepNum !== currentStep;
+          var label =
+            "Go to step " +
+            stepNum +
+            (disabled ? " (locked)" : "") +
+            ": " +
+            ["Category", "Size", "Theme", "Fine Tune", "Reference", "Text & Brand", "Generate"][i];
+          html +=
+            '<button type="button" class="' +
+            classes +
+            '" data-step="' +
+            stepNum +
+            '"' +
+            (disabled ? " disabled" : "") +
+            ' aria-label="' +
+            label +
+            '" title="' +
+            label +
+            '">' +
+            SIDEBAR_SVGS[i] +
+            "</button>";
+        }
+        el.innerHTML = html;
+        var buttons = el.querySelectorAll("[data-step]");
+        for (var j = 0; j < buttons.length; j++) {
+          buttons[j].addEventListener("click", onSidebarClick);
+        }
+      }
+
+      function onSidebarClick(ev) {
+        var btn = ev.currentTarget;
+        if (btn.disabled) return;
+        var step = parseInt(btn.getAttribute("data-step"), 10);
+        if (!stepReachable(step)) return;
+        var href = STEP_PAGES[step - 1];
+        if (!href) return;
+        var path = window.location.pathname || "";
+        var at =
+          path.slice(-href.length) === href ||
+          path.replace(/\\/g, "/").split("/").pop() === href;
+        if (!at) window.location.href = href;
+      }
+
+      var ANGLES = [
+        { id: "original", label: "Same as Original", desc: "Match your upload" },
+        { id: "topdown", label: "Top-Down", desc: "90° bird's eye" },
+        { id: "overhead", label: "45° Overhead", desc: "High three-quarter" },
+        { id: "eyelevel", label: "Eye-Level", desc: "Straight-on" },
+        { id: "lowangle", label: "Low Angle", desc: "Looking up" },
+        { id: "flatlay", label: "Flat Lay", desc: "Parallel to surface" }
+      ];
+
+      var COMPS = [
+        {
+          id: "center",
+          label: "Center Hero",
+          desc: "Centered · maximum weight",
+          svg: '<rect x="4" y="4" width="16" height="16" rx="1"/><rect x="10" y="10" width="4" height="4" rx="0.5" fill="currentColor" stroke="none"/>'
+        },
+        {
+          id: "heroLeft",
+          label: "Hero Left · Thirds",
+          desc: "Product left · space right",
+          svg: '<rect x="4" y="4" width="16" height="16" rx="1"/><rect x="5" y="11" width="5" height="5" rx="0.5" fill="currentColor" stroke="none"/>'
+        },
+        {
+          id: "heroRight",
+          label: "Hero Right · Thirds",
+          desc: "Product right · space left",
+          svg: '<rect x="4" y="4" width="16" height="16" rx="1"/><rect x="14" y="11" width="5" height="5" rx="0.5" fill="currentColor" stroke="none"/>'
+        },
+        {
+          id: "flatlay2",
+          label: "Overhead / Flat Lay",
+          desc: "Top-down arrangement",
+          svg: '<rect x="4" y="4" width="16" height="16" rx="1"/><circle cx="12" cy="12" r="3" fill="currentColor" stroke="none"/><path d="M4 12h16M12 4v16" stroke="currentColor" fill="none" opacity="0.35"/>'
+        }
+      ];
+
+      /** Demo hero when user has not uploaded: real product photos (FakeStore API CDN). */
+      var DEMO_PRODUCT_IMAGES = [
+        "https://fakestoreapi.com/img/81fPKd-2AYL._AC_SL1500_t.png",
+        "https://fakestoreapi.com/img/71-3HjGNDUL._AC_SY879._SX._UX._SY._UY_t.png",
+        "https://fakestoreapi.com/img/71li-ujtlUL._AC_UX679_t.png",
+        "https://fakestoreapi.com/img/71YXzeOuslL._AC_UY879_t.png",
+        "https://fakestoreapi.com/img/71pWzhdJNwL._AC_UL640_QL65_ML3_t.png",
+        "https://fakestoreapi.com/img/61sbMiUnoGL._AC_UL640_QL65_ML3_t.png",
+        "https://fakestoreapi.com/img/71YAIFU48IL._AC_UL640_QL65_ML3_t.png",
+        "https://fakestoreapi.com/img/51UDEzMJVpL._AC_UL640_QL65_ML3_t.png",
+        "https://fakestoreapi.com/img/61IBBVJvSDL._AC_SY879_t.png",
+        "https://fakestoreapi.com/img/61U7T1koQqL._AC_SX679_t.png",
+        "https://fakestoreapi.com/img/71kWymZ+c+L._AC_SX679_t.png",
+        "https://fakestoreapi.com/img/61mtL65D4cL._AC_SX679_t.png",
+        "https://fakestoreapi.com/img/81QpkIctqPL._AC_SX679_t.png",
+        "https://fakestoreapi.com/img/81Zt42ioCgL._AC_SX679_t.png",
+        "https://fakestoreapi.com/img/51Y5NI-I5jL._AC_UX679_t.png",
+        "https://fakestoreapi.com/img/81XH0e8fefL._AC_UY879_t.png",
+        "https://fakestoreapi.com/img/71HblAHs5xL._AC_UY879_-2t.png",
+        "https://fakestoreapi.com/img/71z3kpMAYsL._AC_UY879_t.png",
+        "https://fakestoreapi.com/img/51eg55uWmdL._AC_UX679_t.png",
+        "https://fakestoreapi.com/img/61pHAEJ4NML._AC_UX679_t.png"
+      ];
+      var demoProductImageUrl =
+        DEMO_PRODUCT_IMAGES[Math.floor(Math.random() * DEMO_PRODUCT_IMAGES.length)];
+
+      var selectedAngle = "original";
+      var selectedComp = "center";
+      var lastImageSrc = "";
+      var lastImageMime = "image/png";
+
+      function cssBackgroundUrl(url) {
+        return 'url("' + String(url).replace(/\\/g, "\\\\").replace(/"/g, '\\"') + '")';
+      }
+
+      function heroDataUrl(s) {
+        if (s.hero && s.hero.b64 && s.hero.mime) {
+          return "data:" + s.hero.mime + ";base64," + s.hero.b64;
+        }
+        var ar = s.camera && s.camera.angleRef;
+        if (ar && ar.b64 && ar.mime) {
+          return "data:" + ar.mime + ";base64," + ar.b64;
+        }
+        return demoProductImageUrl;
+      }
+
+      function updateRecPills() {
+        var hasHero = !!(getState().hero && getState().hero.b64);
+        var orig = document.querySelector('.pick-card[data-id="original"]');
+        if (orig) orig.classList.toggle("show-rec", hasHero);
+      }
+
+      function renderAngles() {
+        var grid = document.getElementById("angleGrid");
+        var html = "";
+        for (var i = 0; i < ANGLES.length; i++) {
+          var a = ANGLES[i];
+          html +=
+            '<div class="k-card pick-card" data-id="' +
+            a.id +
+            '" role="button" tabindex="0">' +
+            '<div class="pick-label">' +
+            a.label +
+            '<span class="rec-pill">REC</span></div>' +
+            '<div class="pick-desc">' +
+            a.desc +
+            "</div></div>";
+        }
+        grid.innerHTML = html;
+        var nodes = grid.querySelectorAll(".pick-card");
+        for (var j = 0; j < nodes.length; j++) {
+          nodes[j].addEventListener("click", function () {
+            selectAngle(this.getAttribute("data-id"));
+          });
+          nodes[j].addEventListener("keydown", function (ev) {
+            if (ev.key === "Enter" || ev.key === " ") {
+              ev.preventDefault();
+              selectAngle(ev.currentTarget.getAttribute("data-id"));
+            }
+          });
+        }
+        updateRecPills();
+        selectAngle(selectedAngle);
+      }
+
+      function selectAngle(id) {
+        selectedAngle = id;
+        var cards = document.querySelectorAll(".pick-card");
+        for (var i = 0; i < cards.length; i++) {
+          cards[i].classList.toggle("active", cards[i].getAttribute("data-id") === id);
+        }
+        renderSidebar(7);
+        updateCanvasPreview();
+      }
+
+      function renderComps() {
+        var grid = document.getElementById("compGrid");
+        var html = "";
+        for (var i = 0; i < COMPS.length; i++) {
+          var c = COMPS[i];
+          html +=
+            '<div class="k-card comp-card" data-id="' +
+            c.id +
+            '" role="button" tabindex="0">' +
+            '<div class="comp-diagram"><svg viewBox="0 0 24 24">' +
+            c.svg +
+            "</svg></div>" +
+            '<div class="comp-text"><div class="pick-label">' +
+            c.label +
+            "</div>" +
+            '<div class="pick-desc">' +
+            c.desc +
+            "</div></div></div>";
+        }
+        grid.innerHTML = html;
+        var nodes = grid.querySelectorAll(".comp-card");
+        for (var j = 0; j < nodes.length; j++) {
+          nodes[j].addEventListener("click", function () {
+            selectComp(this.getAttribute("data-id"));
+          });
+          nodes[j].addEventListener("keydown", function (ev) {
+            if (ev.key === "Enter" || ev.key === " ") {
+              ev.preventDefault();
+              selectComp(ev.currentTarget.getAttribute("data-id"));
+            }
+          });
+        }
+        selectComp(selectedComp);
+      }
+
+      function selectComp(id) {
+        selectedComp = id;
+        var cards = document.querySelectorAll(".comp-card");
+        for (var i = 0; i < cards.length; i++) {
+          cards[i].classList.toggle("active", cards[i].getAttribute("data-id") === id);
+        }
+        renderSidebar(7);
+        updateCanvasPreview();
+      }
+
+      function setVariationsSrc(src) {
+        var wrap = document.getElementById("variations");
+        wrap.innerHTML = "";
+        for (var v = 0; v < 4; v++) {
+          var im = document.createElement("img");
+          im.src = src;
+          im.alt = "Variation " + (v + 1);
+          if (v === 0) im.classList.add("selected");
+          im.addEventListener("click", function () {
+            var imgs = wrap.querySelectorAll("img");
+            for (var k = 0; k < imgs.length; k++) imgs[k].classList.remove("selected");
+            this.classList.add("selected");
+            document.getElementById("resultMainImg").src = this.src;
+          });
+          wrap.appendChild(im);
+        }
+      }
+
+      function startGeneration() {
+        var img = document.getElementById("resultMainImg");
+        var sh = document.getElementById("resultShimmer");
+        img.style.opacity = "0";
+        sh.hidden = false;
+        var s = getState();
+        var src = heroDataUrl(s);
+        if (s.hero && s.hero.b64 && s.hero.mime) {
+          lastImageMime = s.hero.mime;
+        } else if (s.camera && s.camera.angleRef && s.camera.angleRef.b64 && s.camera.angleRef.mime) {
+          lastImageMime = s.camera.angleRef.mime;
+        } else if (/^https?:\/\//i.test(src)) {
+          lastImageMime = /\.png(\?|$)/i.test(src) ? "image/png" : "image/jpeg";
+        } else {
+          lastImageMime = "image/jpeg";
+        }
+        lastImageSrc = src;
+
+        window.setTimeout(function () {
+          sh.hidden = true;
+          if (img.getAttribute("src") === src) {
+            img.removeAttribute("src");
+            void img.offsetWidth;
+          }
+          img.onload = function () {
+            img.style.opacity = "1";
+          };
+          img.src = src;
+          if (img.complete) img.style.opacity = "1";
+          window.setTimeout(function () {
+            if (img.style.opacity !== "1") img.style.opacity = "1";
+          }, 700);
+          setVariationsSrc(src);
+        }, 2500);
+      }
+
+      function showResultPhase() {
+        document.getElementById("phase-config").setAttribute("hidden", "");
+        document.getElementById("pageShell").style.display = "none";
+        var pr = document.getElementById("phase-result");
+        pr.classList.add("is-visible");
+        pr.setAttribute("aria-hidden", "false");
+      }
+
+      function showConfigPhase() {
+        document.getElementById("phase-result").classList.remove("is-visible");
+        document.getElementById("phase-result").setAttribute("aria-hidden", "true");
+        document.getElementById("pageShell").style.display = "";
+        document.getElementById("phase-config").removeAttribute("hidden");
+      }
+
+      function onGenerateClick() {
+        var detail = document.getElementById("detailArea").value.trim();
+        var prevCam = getState().camera || {};
+        setState({
+          camera: Object.assign({}, prevCam, {
+            angle: selectedAngle,
+            composition: selectedComp,
+            additionalDetail: detail || null
+          }),
+          generated: true
+        });
+        buildPrompt(getState());
+        showResultPhase();
+        startGeneration();
+      }
+
+      function syncAngleRefUI() {
+        var s = getState();
+        var ar = s.camera && s.camera.angleRef;
+        var has = !!(ar && ar.b64 && ar.mime);
+        var pick = document.getElementById("angleRefPick");
+        var clr = document.getElementById("angleRefClear");
+        var nameEl = document.getElementById("angleRefName");
+        if (!pick || !clr || !nameEl) return;
+        if (has) {
+          pick.textContent = "Replace";
+          clr.hidden = false;
+          nameEl.hidden = false;
+          nameEl.textContent = ar.fileName || "Reference image";
+        } else {
+          pick.textContent = "Upload";
+          clr.hidden = true;
+          nameEl.hidden = true;
+          nameEl.textContent = "";
+        }
+      }
+
+      function restoreCamera() {
+        var s = getState();
+        if (s.camera) {
+          if (s.camera.angle) selectedAngle = s.camera.angle;
+          if (s.camera.composition) selectedComp = s.camera.composition;
+          if (s.camera.additionalDetail != null) {
+            document.getElementById("detailArea").value = s.camera.additionalDetail;
+          }
+        }
+        syncAngleRefUI();
+      }
+
+      function applyCanvasHero() {
+        var s = getState();
+        var product = document.getElementById("canvasProduct");
+        if (!product) return;
+        var bgSrc = null;
+        if (s && s.hero && s.hero.b64 && s.hero.mime) {
+          bgSrc = "data:" + s.hero.mime + ";base64," + s.hero.b64;
+        } else if (s.camera && s.camera.angleRef && s.camera.angleRef.b64 && s.camera.angleRef.mime) {
+          bgSrc = "data:" + s.camera.angleRef.mime + ";base64," + s.camera.angleRef.b64;
+        } else {
+          bgSrc = demoProductImageUrl;
+        }
+        product.style.backgroundColor = "transparent";
+        product.style.backgroundImage = cssBackgroundUrl(bgSrc);
+        product.style.backgroundSize = "cover";
+        product.style.backgroundPosition = "center";
+        product.style.backgroundRepeat = "no-repeat";
+        product.style.border = "none";
+        updateCanvasPreview();
+      }
+
+      function labelForAngle(id) {
+        for (var ai = 0; ai < ANGLES.length; ai++) {
+          if (ANGLES[ai].id === id) return ANGLES[ai].label;
+        }
+        return id;
+      }
+
+      function labelForComp(id) {
+        for (var ci = 0; ci < COMPS.length; ci++) {
+          if (COMPS[ci].id === id) return COMPS[ci].label;
+        }
+        return id;
+      }
+
+      function buildPreviewTransform(angle, comp) {
+        var rot = 0;
+        var sc = 0.62;
+        var ox = 0;
+        var oy = 0;
+        switch (angle) {
+          case "original":
+            rot = 0;
+            sc = 0.64;
+            break;
+          case "topdown":
+            rot = -12;
+            sc = 0.52;
+            oy = -10;
+            break;
+          case "overhead":
+            rot = -24;
+            sc = 0.5;
+            oy = -8;
+            break;
+          case "eyelevel":
+            rot = 0;
+            sc = 0.64;
+            break;
+          case "lowangle":
+            rot = 14;
+            sc = 0.68;
+            oy = 14;
+            break;
+          case "flatlay":
+            rot = 0;
+            sc = 0.48;
+            oy = -4;
+            break;
+          default:
+            rot = 0;
+            sc = 0.6;
+        }
+        switch (comp) {
+          case "center":
+            break;
+          case "heroLeft":
+            ox = -11;
+            break;
+          case "heroRight":
+            ox = 11;
+            break;
+          case "flatlay2":
+            sc *= 0.92;
+            oy -= 6;
+            break;
+          default:
+            break;
+        }
+        return (
+          "translate(-50%, -50%) translate(" +
+          ox +
+          "%, " +
+          oy +
+          "%) rotate(" +
+          rot +
+          "deg) scale(" +
+          sc +
+          ")"
+        );
+      }
+
+      function updateCanvasPreview() {
+        var prod = document.getElementById("canvasProduct");
+        var hud = document.getElementById("canvasHudLine");
+        if (prod) {
+          prod.style.transform = buildPreviewTransform(selectedAngle, selectedComp);
+        }
+        if (hud) {
+          hud.textContent = labelForAngle(selectedAngle) + " · " + labelForComp(selectedComp);
+        }
+      }
+
+      function sanitizeFilenamePart(str) {
+        return String(str || "product")
+          .replace(/[^a-zA-Z0-9-_]+/g, "_")
+          .slice(0, 40);
+      }
+
+      document.getElementById("btnDownload").addEventListener("click", function () {
+        var s = getState();
+        var cat = s.category && s.category.name ? s.category.name : "Kreative";
+        var date = new Date().toISOString().slice(0, 10);
+        var ext = "jpg";
+        if (lastImageMime.indexOf("png") !== -1) ext = "png";
+        else if (lastImageMime.indexOf("svg") !== -1) ext = "svg";
+        else if (lastImageMime.indexOf("webp") !== -1) ext = "webp";
+        var name = "Kreative_" + sanitizeFilenamePart(cat) + "_" + date + "." + ext;
+        var a = document.createElement("a");
+        a.href = lastImageSrc;
+        a.download = name;
+        document.body.appendChild(a);
+        a.click();
+        document.body.removeChild(a);
+      });
+
+      document.getElementById("btnRegenerate").addEventListener("click", function () {
+        startGeneration();
+      });
+
+      document.getElementById("linkEditSettings").addEventListener("click", function () {
+        showConfigPhase();
+        restoreCamera();
+        applyCanvasHero();
+        renderAngles();
+        renderComps();
+        updateRecPills();
+        selectAngle(selectedAngle);
+        selectComp(selectedComp);
+        renderSidebar(7);
+      });
+
+      document.getElementById("linkStartOver").addEventListener("click", function () {
+        clearState();
+        window.location.href = "index.html";
+      });
+
+      document.getElementById("btnGenerate").addEventListener("click", onGenerateClick);
+
+      document.getElementById("btnBack").addEventListener("click", function () {
+        window.location.href = "page6.html";
+      });
+
+      document.getElementById("tabCategory").addEventListener("click", function () {
+        window.location.href = "page1.html";
+      });
+      document.getElementById("tabSize").addEventListener("click", function () {
+        window.location.href = "page2.html";
+      });
+      document.getElementById("tabTheme").addEventListener("click", function () {
+        window.location.href = "page3.html";
+      });
+      document.getElementById("tabFineTune").addEventListener("click", function () {
+        window.location.href = "page4.html";
+      });
+      document.getElementById("tabReference").addEventListener("click", function () {
+        window.location.href = "page5.html";
+      });
+      document.getElementById("tabTextBrand").addEventListener("click", function () {
+        window.location.href = "page6.html";
+      });
+
+      function onAngleRefSelected(file) {
+        if (!file) return;
+        var okTypes = ["image/jpeg", "image/png", "image/webp"];
+        if (okTypes.indexOf(file.type) === -1) {
+          alert("Please choose a JPG, PNG, or WEBP image.");
+          return;
+        }
+        if (file.size > 10 * 1024 * 1024) {
+          alert("File must be 10MB or smaller.");
+          return;
+        }
+        var reader = new FileReader();
+        reader.onload = function () {
+          var res = reader.result;
+          if (typeof res !== "string") return;
+          var comma = res.indexOf(",");
+          var b64 = comma >= 0 ? res.slice(comma + 1) : res;
+          var cam = Object.assign({}, getState().camera || {});
+          cam.angleRef = { b64: b64, mime: file.type, fileName: file.name || "" };
+          setState({ camera: cam });
+          applyCanvasHero();
+          syncAngleRefUI();
+        };
+        reader.readAsDataURL(file);
+      }
+
+      document.getElementById("angleRefPick").addEventListener("click", function () {
+        document.getElementById("angleRefInput").click();
+      });
+
+      document.getElementById("angleRefInput").addEventListener("change", function () {
+        var inp = document.getElementById("angleRefInput");
+        var f = inp && inp.files && inp.files[0];
+        onAngleRefSelected(f);
+        if (inp) inp.value = "";
+      });
+
+      document.getElementById("angleRefClear").addEventListener("click", function () {
+        var inp = document.getElementById("angleRefInput");
+        if (inp) inp.value = "";
+        var cam = Object.assign({}, getState().camera || {});
+        delete cam.angleRef;
+        setState({ camera: cam });
+        applyCanvasHero();
+        syncAngleRefUI();
+      });
+
+      initTheme();
+      restoreCamera();
+      applyCanvasHero();
+      renderAngles();
+      renderComps();
+      renderSidebar(7);
+
+      function onThemeClick() {
+        var next = document.documentElement.getAttribute("data-theme") === "light" ? "dark" : "light";
+        document.documentElement.setAttribute("data-theme", next);
+        localStorage.setItem("kreativeTheme", next);
+        syncIcons();
+      }
+      var toggle = document.getElementById("themeToggle");
+      if (toggle) toggle.addEventListener("click", onThemeClick);
+      var toggleResult = document.getElementById("themeToggleResult");
+      if (toggleResult) toggleResult.addEventListener("click", onThemeClick);
+
+      window.getState = getState;
+      window.setState = setState;
+      window.clearState = clearState;
+    })();
+  </script>
+</body>
+</html>

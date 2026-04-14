@@ -1,0 +1,968 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Kreative — Step 02 · Output Size</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com" />
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+  <link href="https://fonts.googleapis.com/css2?family=Montserrat:ital,wght@0,400;0,500;0,600;0,700;1,400&display=swap" rel="stylesheet" />
+  <style>
+    /* Typography scale: --fs-* tokens (shared across steps) */
+    :root {
+      --fs-badge: 8px;
+      --fs-micro: 9px;
+      --fs-overline: 10px;
+      --fs-caption: 11px;
+      --fs-body-sm: 12px;
+      --fs-body: 13px;
+      --fs-lead: 14px;
+      --fs-title-sm: 16px;
+      --fs-title: 18px;
+      --fs-title-lg: 20px;
+      --fs-display: 28px;
+      --fs-hero-logo: clamp(64px, 9vw, 112px);
+      --fs-hero-tagline: clamp(13px, 1.4vw, 17px);
+      --fs-preview-headline: clamp(var(--fs-lead), 3vw, var(--fs-title-lg));
+      --fs-preview-desc: clamp(var(--fs-overline), 2.2vw, var(--fs-body));
+      --fs-preview-cta: clamp(var(--fs-overline), 2vw, var(--fs-body-sm));
+      --fs-h1: var(--fs-title-lg);
+      --fs-h2: var(--fs-title);
+      --fs-h3: var(--fs-title-sm);
+      --fs-desc: var(--fs-body);
+      --fs-desc-sm: var(--fs-caption);
+    }
+    /* STATE: READS category | WRITES size */
+    /* GUARD: category | NEXT: page3.html | BACK: page1.html */
+
+    :root {
+      color-scheme: dark light;
+      --text: var(--text-primary);
+    }
+
+    [data-theme="dark"],
+    :root:not([data-theme]) {
+      --bg: #0a0b0e;
+      --bg-accent: radial-gradient(120% 80% at 50% 0%, rgba(255, 107, 107, 0.08) 0%, transparent 55%),
+        radial-gradient(90% 60% at 100% 100%, rgba(125, 211, 252, 0.06) 0%, transparent 50%),
+        #0a0b0e;
+      --coral: #ff6b6b;
+      --sage: #8fd9a8;
+      --sky: #7dd3fc;
+      --text-primary: #f4f4f5;
+      --text-secondary: rgba(244, 244, 245, 0.72);
+      --text-muted: rgba(244, 244, 245, 0.42);
+      --border: rgba(255, 255, 255, 0.12);
+      --size-select-ring: rgba(244, 244, 245, 0.55);
+      --size-select-fill: rgba(255, 255, 255, 0.1);
+      --size-select-pill-fg: #f4f4f5;
+      --surface: rgba(255, 255, 255, 0.04);
+      --btn-primary-bg: linear-gradient(135deg, var(--coral) 0%, #ff8787 100%);
+      --btn-primary-color: #0a0b0e;
+      --btn-primary-shadow: 0 12px 32px rgba(255, 107, 107, 0.25);
+      --btn-next-bg: linear-gradient(135deg, #ececf0 0%, #d9d9df 100%);
+      --btn-next-color: #0a0b0e;
+      --btn-next-shadow: 0 10px 28px rgba(0, 0, 0, 0.35);
+      --toggle-bg: rgba(255, 255, 255, 0.06);
+      --toggle-border: var(--border);
+      --toggle-color: var(--text-secondary);
+      --step-nav-active-fg: #f4f4f5;
+      --step-nav-active-bg: rgba(255, 255, 255, 0.1);
+      --step-nav-active-border: rgba(244, 244, 245, 0.38);
+    }
+
+    [data-theme="light"] {
+      --bg: #f5f3ef;
+      --bg-accent: radial-gradient(120% 80% at 50% 0%, rgba(255, 107, 107, 0.12) 0%, transparent 55%),
+        radial-gradient(90% 60% at 100% 100%, rgba(125, 211, 252, 0.14) 0%, transparent 50%),
+        #f5f3ef;
+      --coral: #e85555;
+      --sage: #4fa572;
+      --sky: #3a9bc9;
+      --text-primary: #1a1b1f;
+      --text-secondary: rgba(26, 27, 31, 0.68);
+      --text-muted: rgba(26, 27, 31, 0.45);
+      --border: rgba(26, 27, 31, 0.12);
+      --size-select-ring: rgba(26, 27, 31, 0.45);
+      --size-select-fill: rgba(26, 27, 31, 0.08);
+      --size-select-pill-fg: #1a1b1f;
+      --surface: rgba(255, 255, 255, 0.72);
+      --btn-primary-bg: linear-gradient(135deg, var(--coral) 0%, #ff6b6b 100%);
+      --btn-primary-color: #ffffff;
+      --btn-primary-shadow: 0 12px 28px rgba(232, 85, 85, 0.22);
+      --btn-next-bg: linear-gradient(135deg, #33343a 0%, #1a1b1f 100%);
+      --btn-next-color: #fafafa;
+      --btn-next-shadow: 0 10px 26px rgba(0, 0, 0, 0.18);
+      --toggle-bg: rgba(255, 255, 255, 0.9);
+      --toggle-border: rgba(26, 27, 31, 0.1);
+      --toggle-color: var(--text-primary);
+      --step-nav-active-fg: #1a1b1f;
+      --step-nav-active-bg: rgba(26, 27, 31, 0.07);
+      --step-nav-active-border: rgba(26, 27, 31, 0.24);
+    }
+
+    *,
+    *::before,
+    *::after {
+      box-sizing: border-box;
+    }
+
+    html {
+      font-family: "Montserrat", system-ui, -apple-system, sans-serif;
+    }
+
+    body {
+      margin: 0;
+      min-height: 100vh;
+      background: var(--bg-accent);
+      background-color: var(--bg);
+      background-attachment: fixed;
+      color: var(--text-primary);
+      -webkit-font-smoothing: antialiased;
+    }
+
+    .k-page {
+      display: flex;
+      min-height: 100vh;
+    }
+
+    .k-sidebar {
+      width: 72px;
+      flex-shrink: 0;
+      align-self: stretch;
+      min-height: 0;
+      border-right: 1px solid var(--border);
+      background: rgba(0, 0, 0, 0.15);
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      padding: 16px 0 20px;
+      gap: 0;
+    }
+
+    [data-theme="light"] .k-sidebar {
+      background: rgba(255, 255, 255, 0.35);
+    }
+
+    .k-sidebar-btn {
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      width: 44px;
+      height: 44px;
+      border-radius: 12px;
+      border: 1px solid transparent;
+      background: transparent;
+      color: var(--text-muted);
+      cursor: pointer;
+      padding: 0;
+      transition: color 0.2s ease, background 0.2s ease, border-color 0.2s ease, opacity 0.2s ease;
+    }
+
+    .k-sidebar-btn svg {
+      width: 22px;
+      height: 22px;
+      stroke: currentColor;
+      fill: none;
+      stroke-width: 1.5;
+      stroke-linecap: round;
+      stroke-linejoin: round;
+    }
+
+    .k-sidebar-btn:hover:not(:disabled) {
+      color: var(--text-secondary);
+      background: var(--surface);
+      border-color: var(--border);
+    }
+
+    .k-sidebar-btn:disabled {
+      opacity: 0.35;
+      cursor: not-allowed;
+    }
+
+    .k-sidebar-btn.active {
+      color: var(--step-nav-active-fg);
+      background: var(--step-nav-active-bg);
+      border-color: var(--step-nav-active-border);
+    }
+
+    .k-sidebar-btn.done:not(.active) {
+      color: var(--text-secondary);
+    }
+
+    .k-main {
+      flex: 1;
+      display: flex;
+      flex-direction: column;
+      min-width: 0;
+      min-height: 0;
+    }
+
+    .k-topbar {
+      display: grid;
+      grid-template-columns: minmax(0, 1fr) auto minmax(0, 1fr);
+      align-items: center;
+      gap: 16px;
+      padding: 16px 24px;
+      border-bottom: 1px solid var(--border);
+      background: rgba(0, 0, 0, 0.12);
+    }
+
+    [data-theme="light"] .k-topbar {
+      background: rgba(255, 255, 255, 0.5);
+    }
+
+    .k-topbar-left {
+      display: flex;
+      align-items: center;
+      gap: 12px;
+      flex-wrap: wrap;
+      justify-self: start;
+      min-width: 0;
+    }
+
+    .k-btn-ghost {
+      appearance: none;
+      border: 1px solid var(--border);
+      background: var(--surface);
+      color: var(--text-secondary);
+      font-family: inherit;
+      font-size: var(--fs-overline);
+      font-weight: 600;
+      letter-spacing: 2px;
+      text-transform: uppercase;
+      padding: 10px 18px;
+      border-radius: 99px;
+      cursor: pointer;
+      transition: background 0.2s ease, color 0.2s ease, border-color 0.2s ease;
+    }
+
+    .k-btn-ghost:hover {
+      color: var(--text-primary);
+      border-color: var(--text-muted);
+    }
+
+    .k-tabs {
+      display: flex;
+      flex-wrap: nowrap;
+      gap: 4px;
+      align-items: center;
+      justify-content: center;
+      justify-self: center;
+      min-width: 0;
+      max-width: min(960px, 100%);
+      overflow-x: auto;
+      -webkit-overflow-scrolling: touch;
+    }
+
+    .k-tab {
+      font-size: var(--fs-micro);
+      font-weight: 600;
+      letter-spacing: 1.5px;
+      text-transform: uppercase;
+      padding: 6px 10px;
+      border-radius: 99px;
+      color: var(--text-muted);
+      border: 1px solid transparent;
+      background: transparent;
+      cursor: default;
+      pointer-events: none;
+    }
+
+    .k-tab.active {
+      color: var(--text-primary);
+      border-color: var(--border);
+      background: rgba(255, 255, 255, 0.06);
+    }
+
+    [data-theme="light"] .k-tab.active {
+      background: rgba(26, 27, 31, 0.05);
+    }
+
+    .k-tab.done {
+      cursor: pointer;
+      pointer-events: auto;
+      color: var(--text-secondary);
+      border-color: var(--border);
+      background: rgba(255, 255, 255, 0.04);
+    }
+
+    [data-theme="light"] .k-tab.done {
+      background: rgba(26, 27, 31, 0.04);
+    }
+
+    .k-tab.done:hover {
+      color: var(--text-primary);
+      border-color: var(--text-muted);
+    }
+
+    .k-topbar-actions {
+      display: flex;
+      align-items: center;
+      gap: 10px;
+      justify-self: end;
+      min-width: 0;
+    }
+
+    .k-btn-next {
+      appearance: none;
+      border: none;
+      font-family: inherit;
+      font-size: var(--fs-overline);
+      font-weight: 600;
+      letter-spacing: 2.5px;
+      text-transform: uppercase;
+      padding: 10px 22px;
+      border-radius: 99px;
+      color: var(--btn-next-color);
+      background: var(--btn-next-bg);
+      box-shadow: var(--btn-next-shadow);
+      cursor: pointer;
+      transition: opacity 0.2s ease, transform 0.2s ease, filter 0.2s ease;
+    }
+
+    .k-btn-next:hover:not(:disabled) {
+      transform: translateY(-1px);
+      filter: brightness(1.03);
+    }
+
+    .k-btn-next:disabled {
+      opacity: 0.4;
+      cursor: not-allowed;
+      transform: none;
+      filter: none;
+      box-shadow: none;
+    }
+
+    .k-stage {
+      display: flex;
+      gap: 0;
+      padding: 0;
+      overflow: hidden;
+      height: 100%;
+      flex: 1;
+      min-height: 0;
+    }
+
+    .k-section-title {
+      font-size: var(--fs-caption);
+      font-weight: 600;
+      letter-spacing: 3px;
+      text-transform: uppercase;
+      color: var(--text-muted);
+      margin: 0 0 16px;
+      display: flex;
+      align-items: center;
+      gap: 10px;
+      flex-wrap: wrap;
+    }
+
+    .size-list .k-section-title {
+      margin-bottom: 0;
+    }
+
+    .size-list-note {
+      font-size: var(--fs-desc);
+      color: var(--text-muted);
+      margin: 0 0 16px;
+      line-height: 1.45;
+      font-weight: 400;
+    }
+
+    .size-list {
+      width: 360px;
+      flex-shrink: 0;
+      padding: 32px 20px;
+      border-right: 1px solid var(--border);
+      overflow-y: auto;
+      display: flex;
+      flex-direction: column;
+      gap: 6px;
+    }
+
+    .size-list-items {
+      display: flex;
+      flex-direction: column;
+      gap: 6px;
+    }
+
+    .k-card.size-card {
+      width: 100%;
+      display: flex;
+      align-items: center;
+      flex-wrap: nowrap;
+      gap: 12px;
+      padding: 10px 14px;
+      border-radius: 10px;
+      border: 1px solid var(--border);
+      background: rgba(255, 255, 255, 0.03);
+      cursor: pointer;
+      box-sizing: border-box;
+      transition: border-color 0.2s ease, background 0.2s ease, box-shadow 0.2s ease;
+    }
+
+    [data-theme="light"] .k-card.size-card {
+      background: rgba(255, 255, 255, 0.65);
+    }
+
+    .k-card.size-card:hover {
+      border-color: var(--text-muted);
+    }
+
+    .k-card.size-card.active {
+      border-color: var(--size-select-ring);
+      box-shadow: 0 0 0 1.5px var(--size-select-ring);
+    }
+
+    [data-theme="light"] .k-card.size-card.active {
+      box-shadow: 0 0 0 1.5px var(--size-select-ring);
+    }
+
+    .k-card.size-card.active .item-ratio-pill {
+      background: var(--size-select-fill);
+      border-color: var(--size-select-ring);
+      color: var(--size-select-pill-fg);
+    }
+
+    .item-ratio-pill {
+      font-size: var(--fs-caption);
+      font-weight: 700;
+      letter-spacing: 0.5px;
+      background: rgba(255, 255, 255, 0.06);
+      border: 1px solid var(--border);
+      border-radius: 5px;
+      padding: 3px 8px;
+      min-width: 44px;
+      text-align: center;
+      color: var(--text-secondary);
+      flex-shrink: 0;
+      box-sizing: border-box;
+    }
+
+    [data-theme="light"] .item-ratio-pill {
+      background: rgba(26, 27, 31, 0.06);
+    }
+
+    .item-name {
+      font-size: var(--fs-body);
+      color: var(--text);
+      text-align: left;
+      white-space: nowrap;
+      overflow: hidden;
+      text-overflow: ellipsis;
+      min-width: 0;
+      flex: 1;
+    }
+
+    .size-preview {
+      flex: 1;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      justify-content: center;
+      gap: 24px;
+      padding: 32px;
+      min-width: 0;
+      min-height: 0;
+    }
+
+    .preview-frame-wrap {
+      width: 540px;
+      height: 540px;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+    }
+
+    .preview-frame {
+      width: 405px;
+      height: 405px;
+      background: rgba(255, 255, 255, 0.05);
+      border: 1.5px solid var(--size-select-ring);
+      border-radius: 10px;
+      box-shadow: 0 0 32px rgba(232, 168, 74, 0.1);
+      transition: width 0.3s cubic-bezier(0.4, 0, 0.2, 1), height 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+      flex-shrink: 0;
+    }
+
+    [data-theme="light"] .preview-frame {
+      background: rgba(26, 27, 31, 0.04);
+    }
+
+    .preview-info {
+      text-align: center;
+    }
+
+    .info-ratio {
+      font-size: var(--fs-display);
+      font-weight: 700;
+      color: var(--text);
+      letter-spacing: 1px;
+    }
+
+    .info-name {
+      font-size: var(--fs-lead);
+      color: var(--text-secondary);
+      margin-top: 4px;
+    }
+
+    .info-dims {
+      font-size: var(--fs-body-sm);
+      color: var(--text-muted);
+      margin-top: 3px;
+    }
+
+    .info-plat {
+      font-size: var(--fs-caption);
+      color: var(--text-muted);
+      margin-top: 5px;
+      letter-spacing: 0.3px;
+    }
+
+    .k-step-icon {
+      display: inline-flex;
+      align-items: center;
+      justify-content: center;
+      width: 44px;
+      height: 44px;
+      border-radius: 50%;
+      border: 1px solid var(--toggle-border);
+      background: var(--toggle-bg);
+      color: var(--toggle-color);
+      cursor: pointer;
+      transition: background 0.2s ease, border-color 0.2s ease, color 0.2s ease;
+    }
+
+    .k-step-icon:hover {
+      background: var(--surface);
+    }
+
+    .k-step-icon svg {
+      width: 20px;
+      height: 20px;
+      stroke: currentColor;
+      fill: none;
+      stroke-width: 1.75;
+      stroke-linecap: round;
+      stroke-linejoin: round;
+    }
+
+    .k-theme-toggle {
+      position: static;
+      flex-shrink: 0;
+      margin-bottom: 12px;
+    }
+
+    .k-sidebar-steps {
+      flex: 1;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      justify-content: center;
+      gap: 10px;
+      min-height: 0;
+      width: 100%;
+    }
+  </style>
+</head>
+<body>
+  <div class="k-page">
+    <aside class="k-sidebar" aria-label="Workflow">
+      <button type="button" class="k-step-icon k-theme-toggle" id="themeToggle" aria-label="Toggle color theme">
+        <svg id="icon-moon" viewBox="0 0 24 24" aria-hidden="true">
+          <path d="M21 12.79A9 9 0 1 1 11.21 3 7 7 0 0 0 21 12.79z" />
+        </svg>
+        <svg id="icon-sun" viewBox="0 0 24 24" aria-hidden="true" style="display: none">
+          <circle cx="12" cy="12" r="4" />
+          <path d="M12 2v2M12 20v2M4.93 4.93l1.41 1.41M17.66 17.66l1.41 1.41M2 12h2M20 12h2M4.93 19.07l1.41-1.41M17.66 6.34l1.41-1.41" />
+        </svg>
+      </button>
+      <div class="k-sidebar-steps" id="sidebar" aria-label="Workflow steps"></div>
+    </aside>
+
+    <main class="k-main">
+      <nav class="k-topbar" aria-label="Step navigation">
+        <div class="k-topbar-left">
+          <button type="button" class="k-btn-ghost" id="btnBack">Back</button>
+        </div>
+        <div class="k-tabs" role="tablist" aria-label="Steps">
+            <button type="button" class="k-tab done" id="tabCategory" aria-label="Go to Category">Category</button>
+            <span class="k-tab active" role="tab" aria-selected="true">Size</span>
+            <span class="k-tab" role="tab" aria-selected="false">Theme</span>
+            <span class="k-tab" role="tab" aria-selected="false">Fine Tune</span>
+            <span class="k-tab" role="tab" aria-selected="false">Reference</span>
+            <span class="k-tab" role="tab" aria-selected="false">Text &amp; Brand</span>
+            <span class="k-tab" role="tab" aria-selected="false">Generate</span>
+        </div>
+        <div class="k-topbar-actions">
+          <button type="button" class="k-btn-next" id="btnNext">Next</button>
+        </div>
+      </nav>
+
+      <div class="k-stage">
+        <div class="size-list">
+          <h2 class="k-section-title">Output Size</h2>
+          <p class="size-list-note">Size tells the AI how to frame your product.</p>
+          <div class="size-list-items" id="sizeList"></div>
+        </div>
+        <div class="size-preview">
+          <div class="preview-frame-wrap">
+            <div class="preview-frame"></div>
+          </div>
+          <div class="preview-info">
+            <div class="info-ratio"></div>
+            <div class="info-name"></div>
+            <div class="info-dims"></div>
+            <div class="info-plat"></div>
+          </div>
+        </div>
+      </div>
+    </main>
+  </div>
+
+  <script>
+    (function () {
+      var KREATIVE_KEY = "kreative_session";
+
+      function getState() {
+        try {
+          var raw = localStorage.getItem(KREATIVE_KEY);
+          return raw ? JSON.parse(raw) : {};
+        } catch (e) {
+          return {};
+        }
+      }
+
+      function setState(partial) {
+        var next = Object.assign({}, getState(), partial);
+        localStorage.setItem(KREATIVE_KEY, JSON.stringify(next));
+      }
+
+      function clearState() {
+        localStorage.removeItem(KREATIVE_KEY);
+      }
+
+      if (!getState().category) {
+        window.location.href = "page1.html";
+        return;
+      }
+
+      function syncIcons() {
+        var moon = document.getElementById("icon-moon");
+        var sun = document.getElementById("icon-sun");
+        if (!moon || !sun) return;
+        var isDark = document.documentElement.getAttribute("data-theme") !== "light";
+        moon.style.display = isDark ? "block" : "none";
+        sun.style.display = isDark ? "none" : "block";
+      }
+
+      function initTheme() {
+        var stored = localStorage.getItem("kreativeTheme");
+        var prefersDark = window.matchMedia("(prefers-color-scheme: dark)").matches;
+        var theme = stored || (prefersDark ? "dark" : "light");
+        document.documentElement.setAttribute("data-theme", theme);
+        syncIcons();
+      }
+
+      var STEP_PAGES = [
+        "page1.html",
+        "page2.html",
+        "page3.html",
+        "page4.html",
+        "page5.html",
+        "page6.html",
+        "page7.html"
+      ];
+
+      function stepReachable(stepIndex) {
+        var s = getState();
+        if (stepIndex <= 1) return true;
+        if (stepIndex === 2) return !!s.category;
+        if (stepIndex === 3) return !!s.category && !!s.size;
+        if (stepIndex === 4) return !!s.category && !!s.size && !!s.theme;
+        if (stepIndex === 5) return !!s.category && !!s.size && !!s.theme && !!s.fineTune;
+        if (stepIndex === 6) {
+          return !!s.category && !!s.size && !!s.theme && !!s.fineTune && !!s.reference;
+        }
+        if (stepIndex === 7) {
+          return (
+            !!s.category &&
+            !!s.size &&
+            !!s.theme &&
+            !!s.fineTune &&
+            !!s.reference &&
+            !!s.textBrand
+          );
+        }
+        return false;
+      }
+
+      var SIDEBAR_SVGS = [
+        '<svg viewBox="0 0 24 24" aria-hidden="true"><rect x="3" y="3" width="7" height="7" rx="1"/><rect x="14" y="3" width="7" height="7" rx="1"/><rect x="3" y="14" width="7" height="7" rx="1"/><rect x="14" y="14" width="7" height="7" rx="1"/></svg>',
+        '<svg viewBox="0 0 24 24" aria-hidden="true"><rect x="5" y="5" width="10" height="10" rx="1"/><path d="M9 3h6M9 21h6M3 9v6M21 9v6"/></svg>',
+        '<svg viewBox="0 0 24 24" aria-hidden="true"><circle cx="12" cy="12" r="3"/><path d="M12 2v2M12 20v2M2 12h2M20 12h2"/></svg>',
+        '<svg viewBox="0 0 24 24" aria-hidden="true"><path d="M4 14h4v6H4zM10 8h4v12h-4zM16 4h4v16h-4z"/></svg>',
+        '<svg viewBox="0 0 24 24" aria-hidden="true"><rect x="3" y="5" width="18" height="14" rx="2"/><circle cx="8.5" cy="10.5" r="1.5"/><path d="M21 17l-6-6-4 4-2-2-4 4"/></svg>',
+        '<svg viewBox="0 0 24 24" aria-hidden="true"><path d="M4 6h16M4 12h10M4 18h14"/></svg>',
+        '<svg viewBox="0 0 24 24" aria-hidden="true"><path d="M12 2l1.8 4.5L18 8l-4 2.5L15.5 15 12 12.5 8.5 15 10 10.5 6 8l4.2-1.5L12 2z"/></svg>'
+      ];
+
+      function renderSidebar(currentStep) {
+        var el = document.getElementById("sidebar");
+        if (!el) return;
+        var s = getState();
+        var html = "";
+        for (var i = 0; i < 7; i++) {
+          var stepNum = i + 1;
+          var reachable = stepReachable(stepNum);
+          var done =
+            stepNum < currentStep ||
+            (stepNum === 1 && !!s.category) ||
+            (stepNum === 2 && !!s.size) ||
+            (stepNum === 3 && !!s.theme) ||
+            (stepNum === 4 && !!s.fineTune) ||
+            (stepNum === 5 && !!s.reference) ||
+            (stepNum === 6 && !!s.textBrand) ||
+            (stepNum === 7 && !!s.generated);
+          var classes = "k-sidebar-btn";
+          if (stepNum === currentStep) classes += " active";
+          if (done) classes += " done";
+          var disabled = !reachable && stepNum !== currentStep;
+          var label =
+            "Go to step " +
+            stepNum +
+            (disabled ? " (locked)" : "") +
+            ": " +
+            ["Category", "Size", "Theme", "Fine Tune", "Reference", "Text & Brand", "Generate"][i];
+          html +=
+            '<button type="button" class="' +
+            classes +
+            '" data-step="' +
+            stepNum +
+            '"' +
+            (disabled ? " disabled" : "") +
+            ' aria-label="' +
+            label +
+            '" title="' +
+            label +
+            '">' +
+            SIDEBAR_SVGS[i] +
+            "</button>";
+        }
+        el.innerHTML = html;
+        var buttons = el.querySelectorAll("[data-step]");
+        for (var j = 0; j < buttons.length; j++) {
+          buttons[j].addEventListener("click", onSidebarClick);
+        }
+      }
+
+      function onSidebarClick(ev) {
+        var btn = ev.currentTarget;
+        if (btn.disabled) return;
+        var step = parseInt(btn.getAttribute("data-step"), 10);
+        if (!stepReachable(step)) return;
+        var href = STEP_PAGES[step - 1];
+        if (!href) return;
+        var path = window.location.pathname || "";
+        var at =
+          path.slice(-href.length) === href ||
+          path.replace(/\\/g, "/").split("/").pop() === href;
+        if (!at) window.location.href = href;
+      }
+
+      var SIZES = [
+        {
+          id: "s1",
+          ratio: "1:1",
+          w: 1024,
+          h: 1024,
+          label: "Shopee / Lazada listing",
+          platform: "Shopee · Lazada · Instagram"
+        },
+        {
+          id: "s2",
+          ratio: "9:16",
+          w: 1080,
+          h: 1920,
+          label: "Story / TikTok / Reels",
+          platform: "IG Story · TikTok · LINE"
+        },
+        {
+          id: "s3",
+          ratio: "16:9",
+          w: 1200,
+          h: 675,
+          label: "Banner / Web / YouTube",
+          platform: "Facebook · Web · YouTube"
+        },
+        {
+          id: "s4",
+          ratio: "4:5",
+          w: 1080,
+          h: 1350,
+          label: "Instagram feed portrait",
+          platform: "Instagram · Facebook"
+        },
+        {
+          id: "s5",
+          ratio: "2:1",
+          w: 1200,
+          h: 600,
+          label: "Shopee / Lazada banner",
+          platform: "Shopee banner · Lazada header"
+        },
+        {
+          id: "s6",
+          ratio: "3:4",
+          w: 900,
+          h: 1200,
+          label: "Print / Catalogue",
+          platform: "Print · Catalogue · Brochure"
+        }
+      ];
+
+      var activeSizeId = "s1";
+
+      function findSize(id) {
+        for (var i = 0; i < SIZES.length; i++) {
+          if (SIZES[i].id === id) return SIZES[i];
+        }
+        return null;
+      }
+
+      function formatRatioLabel(ratio) {
+        var parts = ratio.split(":");
+        return parts[0] + " : " + parts[1];
+      }
+
+      function updatePreview(size) {
+        var MAX = 405;
+        var r = size.w / size.h;
+        var w;
+        var h;
+        if (r >= 1) {
+          w = MAX;
+          h = Math.round(MAX / r);
+        } else {
+          h = MAX;
+          w = Math.round(MAX * r);
+        }
+        var frame = document.querySelector(".preview-frame");
+        var ir = document.querySelector(".info-ratio");
+        var iname = document.querySelector(".info-name");
+        var idims = document.querySelector(".info-dims");
+        var iplat = document.querySelector(".info-plat");
+        if (frame) {
+          frame.style.width = w + "px";
+          frame.style.height = h + "px";
+        }
+        if (ir) ir.textContent = formatRatioLabel(size.ratio);
+        if (iname) iname.textContent = size.label;
+        if (idims) idims.textContent = size.w + " × " + size.h + " px";
+        if (iplat) iplat.textContent = size.platform;
+      }
+
+      function selectSize(id) {
+        activeSizeId = id;
+        var cards = document.querySelectorAll(".size-card");
+        for (var i = 0; i < cards.length; i++) {
+          var match = cards[i].getAttribute("data-id") === id;
+          cards[i].classList.toggle("active", match);
+          cards[i].setAttribute("aria-pressed", match ? "true" : "false");
+        }
+        var next = document.getElementById("btnNext");
+        if (next) next.disabled = !id;
+        renderSidebar(2);
+        var sz = findSize(id);
+        if (sz) updatePreview(sz);
+      }
+
+      function renderSizeGrid() {
+        var list = document.getElementById("sizeList");
+        if (!list) return;
+        var html = "";
+        for (var i = 0; i < SIZES.length; i++) {
+          var z = SIZES[i];
+          html +=
+            '<div class="k-card size-card" data-id="' +
+            z.id +
+            '" role="button" tabindex="0" aria-pressed="false">' +
+            '<span class="item-ratio-pill">' +
+            formatRatioLabel(z.ratio) +
+            "</span>" +
+            '<span class="item-name">' +
+            z.label +
+            "</span>" +
+            "</div>";
+        }
+        list.innerHTML = html;
+        var nodes = list.querySelectorAll(".size-card");
+        for (var j = 0; j < nodes.length; j++) {
+          nodes[j].addEventListener("click", function (ev) {
+            var id = ev.currentTarget.getAttribute("data-id");
+            selectSize(id);
+          });
+          nodes[j].addEventListener("keydown", function (ev) {
+            if (ev.key === "Enter" || ev.key === " ") {
+              ev.preventDefault();
+              var id = ev.currentTarget.getAttribute("data-id");
+              selectSize(id);
+            }
+          });
+        }
+      }
+
+      function restoreSize() {
+        var s = getState();
+        if (s.size && s.size.id && findSize(s.size.id)) {
+          selectSize(s.size.id);
+        } else {
+          selectSize("s1");
+        }
+      }
+
+      document.getElementById("tabCategory").addEventListener("click", function () {
+        window.location.href = "page1.html";
+      });
+
+      document.getElementById("btnBack").addEventListener("click", function () {
+        window.location.href = "page1.html";
+      });
+
+      document.getElementById("btnNext").addEventListener("click", function () {
+        var sz = findSize(activeSizeId);
+        if (!sz) return;
+        setState({
+          size: {
+            id: sz.id,
+            ratio: sz.ratio,
+            w: sz.w,
+            h: sz.h,
+            label: sz.label,
+            platform: sz.platform
+          }
+        });
+        window.location.href = "page3.html";
+      });
+
+      initTheme();
+      renderSizeGrid();
+      restoreSize();
+
+      var toggle = document.getElementById("themeToggle");
+      if (toggle) {
+        toggle.addEventListener("click", function () {
+          var next = document.documentElement.getAttribute("data-theme") === "light" ? "dark" : "light";
+          document.documentElement.setAttribute("data-theme", next);
+          localStorage.setItem("kreativeTheme", next);
+          syncIcons();
+        });
+      }
+
+      window.getState = getState;
+      window.setState = setState;
+      window.clearState = clearState;
+    })();
+  </script>
+</body>
+</html>

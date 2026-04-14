@@ -1,0 +1,1468 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Kreative — Step 05 · Reference Image</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com" />
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+  <link href="https://fonts.googleapis.com/css2?family=Montserrat:ital,wght@0,400;0,500;0,600;0,700;1,400&display=swap" rel="stylesheet" />
+  <style>
+    /* Typography scale: --fs-* tokens (shared across steps) */
+    :root {
+      --fs-badge: 8px;
+      --fs-micro: 9px;
+      --fs-overline: 10px;
+      --fs-caption: 11px;
+      --fs-body-sm: 12px;
+      --fs-body: 13px;
+      --fs-lead: 14px;
+      --fs-title-sm: 16px;
+      --fs-title: 18px;
+      --fs-title-lg: 20px;
+      --fs-display: 28px;
+      --fs-hero-logo: clamp(64px, 9vw, 112px);
+      --fs-hero-tagline: clamp(13px, 1.4vw, 17px);
+      --fs-preview-headline: clamp(var(--fs-lead), 3vw, var(--fs-title-lg));
+      --fs-preview-desc: clamp(var(--fs-overline), 2.2vw, var(--fs-body));
+      --fs-preview-cta: clamp(var(--fs-overline), 2vw, var(--fs-body-sm));
+      --fs-h1: var(--fs-title-lg);
+      --fs-h2: var(--fs-title);
+      --fs-h3: var(--fs-title-sm);
+      --fs-desc: var(--fs-body);
+      --fs-desc-sm: var(--fs-caption);
+    }
+
+    /* STATE: READS theme, fineTune, prior sessionStorage keys | WRITES reference + ref sessionStorage on proceed */
+    /* GUARD: theme→page3, fineTune→page4 | PROCEED: btnNext → page6.html | BACK: page4.html */
+
+    :root {
+      color-scheme: dark light;
+      --text: var(--text-primary);
+      --radius-lg: 12px;
+      --radius-md: 10px;
+      --radius-sm: 8px;
+    }
+
+    [data-theme="dark"],
+    :root:not([data-theme]) {
+      --bg: #0a0b0e;
+      --bg-accent: radial-gradient(120% 80% at 50% 0%, rgba(255, 107, 107, 0.08) 0%, transparent 55%),
+        radial-gradient(90% 60% at 100% 100%, rgba(125, 211, 252, 0.06) 0%, transparent 50%),
+        #0a0b0e;
+      --coral: #ff6b6b;
+      --accent: #c4a5ff;
+      --sage: #8fd9a8;
+      --sky: #7dd3fc;
+      --text-primary: #f4f4f5;
+      --text-secondary: rgba(244, 244, 245, 0.72);
+      --text-muted: rgba(244, 244, 245, 0.42);
+      --border: rgba(255, 255, 255, 0.12);
+      --surface: rgba(255, 255, 255, 0.04);
+      --btn-primary-bg: linear-gradient(135deg, var(--coral) 0%, #ff8787 100%);
+      --btn-primary-color: #0a0b0e;
+      --btn-primary-shadow: 0 12px 32px rgba(255, 107, 107, 0.25);
+      --btn-next-bg: linear-gradient(135deg, #ececf0 0%, #d9d9df 100%);
+      --btn-next-color: #0a0b0e;
+      --btn-next-shadow: 0 10px 28px rgba(0, 0, 0, 0.35);
+      --toggle-bg: rgba(255, 255, 255, 0.06);
+      --toggle-border: var(--border);
+      --toggle-color: var(--text-secondary);
+      --step-nav-active-fg: #f4f4f5;
+      --step-nav-active-bg: rgba(255, 255, 255, 0.1);
+      --step-nav-active-border: rgba(244, 244, 245, 0.38);
+      --rf-card-bg: #111a28;
+      --rf-divider: #1e2d42;
+      --rf-icon-bg: #1e2d42;
+      --rf-icon-stroke: #4a6080;
+      --rf-dash: #1e2d42;
+      --rf-upload-icon-bg: #1e2d42;
+      --rf-upload-stroke: #4a6080;
+      --rf-up-title: #3a5070;
+      --rf-up-sub: #1e2d42;
+      --rf-desc-bg: #0d1520;
+      --rf-desc-title: #cbd5e1;
+      --rf-desc-body: #4a6080;
+      --rf-header-label: #3a5070;
+      --glass-active-bg: linear-gradient(135deg, rgba(255, 255, 255, 0.14), rgba(255, 255, 255, 0.06));
+      --glass-active-border: rgba(255, 255, 255, 0.22);
+    }
+
+    [data-theme="light"] {
+      --bg: #f5f3ef;
+      --bg-accent: radial-gradient(120% 80% at 50% 0%, rgba(255, 107, 107, 0.12) 0%, transparent 55%),
+        radial-gradient(90% 60% at 100% 100%, rgba(125, 211, 252, 0.14) 0%, transparent 50%),
+        #f5f3ef;
+      --coral: #e85555;
+      --accent: #8b6fd6;
+      --sage: #4fa572;
+      --sky: #3a9bc9;
+      --text-primary: #1a1b1f;
+      --text-secondary: rgba(26, 27, 31, 0.68);
+      --text-muted: rgba(26, 27, 31, 0.45);
+      --border: rgba(26, 27, 31, 0.12);
+      --surface: rgba(255, 255, 255, 0.72);
+      --btn-primary-bg: linear-gradient(135deg, var(--coral) 0%, #ff6b6b 100%);
+      --btn-primary-color: #ffffff;
+      --btn-primary-shadow: 0 12px 28px rgba(232, 85, 85, 0.22);
+      --btn-next-bg: linear-gradient(135deg, #33343a 0%, #1a1b1f 100%);
+      --btn-next-color: #fafafa;
+      --btn-next-shadow: 0 10px 26px rgba(0, 0, 0, 0.18);
+      --toggle-bg: rgba(255, 255, 255, 0.9);
+      --toggle-border: rgba(26, 27, 31, 0.1);
+      --toggle-color: var(--text-primary);
+      --step-nav-active-fg: #1a1b1f;
+      --step-nav-active-bg: rgba(26, 27, 31, 0.07);
+      --step-nav-active-border: rgba(26, 27, 31, 0.24);
+      --rf-card-bg: #f0f2f7;
+      --rf-divider: rgba(26, 27, 31, 0.12);
+      --rf-icon-bg: rgba(26, 27, 31, 0.08);
+      --rf-icon-stroke: var(--text-muted);
+      --rf-dash: rgba(26, 27, 31, 0.22);
+      --rf-upload-icon-bg: rgba(26, 27, 31, 0.08);
+      --rf-upload-stroke: var(--text-muted);
+      --rf-up-title: var(--text-secondary);
+      --rf-up-sub: var(--text-muted);
+      --rf-desc-bg: rgba(26, 27, 31, 0.06);
+      --rf-desc-title: var(--text-primary);
+      --rf-desc-body: var(--text-secondary);
+      --rf-header-label: var(--text-muted);
+      --glass-active-bg: rgba(26, 27, 31, 0.08);
+      --glass-active-border: rgba(26, 27, 31, 0.18);
+    }
+
+    *,
+    *::before,
+    *::after {
+      box-sizing: border-box;
+    }
+
+    html {
+      font-family: "Montserrat", system-ui, -apple-system, sans-serif;
+    }
+
+    body {
+      margin: 0;
+      min-height: 100vh;
+      background: var(--bg-accent);
+      background-color: var(--bg);
+      background-attachment: fixed;
+      color: var(--text-primary);
+      -webkit-font-smoothing: antialiased;
+    }
+
+    .k-page {
+      display: flex;
+      min-height: 100vh;
+    }
+
+    .k-sidebar {
+      width: 72px;
+      flex-shrink: 0;
+      align-self: stretch;
+      min-height: 0;
+      border-right: 1px solid var(--border);
+      background: rgba(0, 0, 0, 0.15);
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      padding: 16px 0 20px;
+      gap: 0;
+    }
+
+    [data-theme="light"] .k-sidebar {
+      background: rgba(255, 255, 255, 0.35);
+    }
+
+    .k-sidebar-btn {
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      width: 44px;
+      height: 44px;
+      border-radius: 12px;
+      border: 1px solid transparent;
+      background: transparent;
+      color: var(--text-muted);
+      cursor: pointer;
+      padding: 0;
+      transition: color 0.2s ease, background 0.2s ease, border-color 0.2s ease, opacity 0.2s ease;
+    }
+
+    .k-sidebar-btn svg {
+      width: 22px;
+      height: 22px;
+      stroke: currentColor;
+      fill: none;
+      stroke-width: 1.5;
+      stroke-linecap: round;
+      stroke-linejoin: round;
+    }
+
+    .k-sidebar-btn:hover:not(:disabled) {
+      color: var(--text-secondary);
+      background: var(--surface);
+      border-color: var(--border);
+    }
+
+    .k-sidebar-btn:disabled {
+      opacity: 0.35;
+      cursor: not-allowed;
+    }
+
+    .k-sidebar-btn.active {
+      color: var(--step-nav-active-fg);
+      background: var(--step-nav-active-bg);
+      border-color: var(--step-nav-active-border);
+    }
+
+    .k-sidebar-btn.done:not(.active) {
+      color: var(--text-secondary);
+    }
+
+    .k-main {
+      flex: 1;
+      display: flex;
+      flex-direction: column;
+      min-width: 0;
+      min-height: 0;
+    }
+
+    .k-topbar {
+      display: grid;
+      grid-template-columns: minmax(0, 1fr) auto minmax(0, 1fr);
+      align-items: center;
+      gap: 16px;
+      padding: 16px 24px;
+      border-bottom: 1px solid var(--border);
+      background: rgba(0, 0, 0, 0.12);
+      flex-shrink: 0;
+    }
+
+    [data-theme="light"] .k-topbar {
+      background: rgba(255, 255, 255, 0.5);
+    }
+
+    .k-topbar-left {
+      display: flex;
+      align-items: center;
+      gap: 12px;
+      flex-wrap: wrap;
+      justify-self: start;
+      min-width: 0;
+    }
+
+    .k-btn-ghost {
+      appearance: none;
+      border: 1px solid var(--border);
+      background: var(--surface);
+      color: var(--text-secondary);
+      font-family: inherit;
+      font-size: var(--fs-overline);
+      font-weight: 600;
+      letter-spacing: 2px;
+      text-transform: uppercase;
+      padding: 10px 18px;
+      border-radius: 99px;
+      cursor: pointer;
+      transition: background 0.2s ease, color 0.2s ease, border-color 0.2s ease;
+    }
+
+    .k-btn-ghost:hover {
+      color: var(--text-primary);
+      border-color: var(--text-muted);
+    }
+
+    .k-tabs {
+      display: flex;
+      flex-wrap: nowrap;
+      gap: 4px;
+      align-items: center;
+      justify-content: center;
+      justify-self: center;
+      min-width: 0;
+      max-width: min(960px, 100%);
+      overflow-x: auto;
+      -webkit-overflow-scrolling: touch;
+    }
+
+    .k-tab {
+      font-size: var(--fs-micro);
+      font-weight: 600;
+      letter-spacing: 1.5px;
+      text-transform: uppercase;
+      padding: 6px 10px;
+      border-radius: 99px;
+      color: var(--text-muted);
+      border: 1px solid transparent;
+      background: transparent;
+      cursor: default;
+      pointer-events: none;
+    }
+
+    .k-tab.active {
+      color: var(--text-primary);
+      border-color: var(--glass-active-border);
+      background: var(--glass-active-bg);
+      -webkit-backdrop-filter: blur(10px);
+      backdrop-filter: blur(10px);
+      box-shadow: 0 4px 24px rgba(0, 0, 0, 0.12);
+    }
+
+    [data-theme="light"] .k-tab.active {
+      box-shadow: 0 2px 16px rgba(26, 27, 31, 0.06);
+    }
+
+    .k-tab.done {
+      cursor: pointer;
+      pointer-events: auto;
+      color: var(--text-secondary);
+      border-color: var(--border);
+      background: rgba(255, 255, 255, 0.04);
+    }
+
+    [data-theme="light"] .k-tab.done {
+      background: rgba(26, 27, 31, 0.04);
+    }
+
+    .k-tab.done:hover {
+      color: var(--text-primary);
+      border-color: var(--text-muted);
+    }
+
+    .k-topbar-actions {
+      display: flex;
+      align-items: center;
+      gap: 10px;
+      justify-self: end;
+      min-width: 0;
+    }
+
+    .k-btn-next {
+      appearance: none;
+      border: none;
+      font-family: inherit;
+      font-size: var(--fs-overline);
+      font-weight: 600;
+      letter-spacing: 2.5px;
+      text-transform: uppercase;
+      padding: 10px 22px;
+      border-radius: 99px;
+      color: var(--btn-next-color);
+      background: var(--btn-next-bg);
+      box-shadow: var(--btn-next-shadow);
+      cursor: pointer;
+      transition: transform 0.2s ease, filter 0.2s ease;
+    }
+
+    .k-btn-next:hover {
+      transform: translateY(-1px);
+      filter: brightness(1.03);
+    }
+
+    .k-stage {
+      flex: 1;
+      min-height: 0;
+      padding: 0;
+      overflow: auto;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+    }
+
+    .k-stage-inner {
+      width: min(100%, 1500px);
+      max-width: 1500px;
+      margin: auto;
+      padding: 44px 36px 72px;
+      box-sizing: border-box;
+      flex-shrink: 0;
+    }
+
+    .rf-header {
+      display: flex;
+      align-items: center;
+      gap: 16px;
+      flex-wrap: wrap;
+      margin-bottom: 18px;
+    }
+
+    .rf-title {
+      font-size: var(--fs-body);
+      font-weight: 700;
+      letter-spacing: 0.14em;
+      text-transform: uppercase;
+      color: var(--rf-header-label);
+    }
+
+    [data-theme="dark"] .rf-title,
+    :root:not([data-theme]) .rf-title {
+      color: rgba(255, 255, 255, 0.35);
+    }
+
+    /* Outer glass card (.rf-card ≡ spec .ref-card) */
+    .rf-card {
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: 0;
+      width: 100%;
+      position: relative;
+      overflow: hidden;
+    }
+
+    [data-theme="dark"] .rf-card,
+    :root:not([data-theme]) .rf-card {
+      background: rgba(255, 255, 255, 0.05);
+      -webkit-backdrop-filter: blur(20px) saturate(160%);
+      backdrop-filter: blur(20px) saturate(160%);
+      border: 1px solid rgba(255, 255, 255, 0.12);
+      border-radius: var(--radius-lg);
+      box-shadow: 0 8px 32px rgba(0, 0, 0, 0.35);
+    }
+
+    [data-theme="light"] .rf-card {
+      background: rgba(255, 255, 255, 0.72);
+      -webkit-backdrop-filter: blur(20px) saturate(160%);
+      backdrop-filter: blur(20px) saturate(160%);
+      border: 1px solid rgba(26, 27, 31, 0.12);
+      border-radius: var(--radius-lg);
+      box-shadow: 0 8px 28px rgba(26, 27, 31, 0.08);
+    }
+
+    .rf-card::before {
+      content: "";
+      position: absolute;
+      top: 0;
+      left: 0;
+      right: 0;
+      height: 1px;
+      background: linear-gradient(
+        90deg,
+        transparent 0%,
+        rgba(255, 255, 255, 0.35) 40%,
+        rgba(255, 255, 255, 0.35) 60%,
+        transparent 100%
+      );
+      pointer-events: none;
+      z-index: 1;
+    }
+
+    [data-theme="light"] .rf-card::before {
+      background: linear-gradient(
+        90deg,
+        transparent 0%,
+        rgba(255, 255, 255, 0.9) 40%,
+        rgba(255, 255, 255, 0.9) 60%,
+        transparent 100%
+      );
+    }
+
+    @media (max-width: 720px) {
+      .rf-card {
+        grid-template-columns: 1fr;
+      }
+
+      .rf-col--modes {
+        border-right: none !important;
+        border-bottom: 1px solid rgba(255, 255, 255, 0.08);
+      }
+
+      [data-theme="light"] .rf-col--modes {
+        border-bottom: 1px solid var(--border);
+      }
+    }
+
+    .rf-col {
+      padding: 31px;
+      min-width: 0;
+    }
+
+    .rf-col--modes {
+      border-right: 1px solid var(--rf-divider);
+    }
+
+    [data-theme="dark"] .rf-col--modes,
+    :root:not([data-theme]) .rf-col--modes {
+      border-right: 1px solid rgba(255, 255, 255, 0.08);
+      background: transparent;
+    }
+
+    [data-theme="light"] .rf-col--modes {
+      border-right: 1px solid var(--border);
+      background: transparent;
+    }
+
+    .rf-sub {
+      font-size: var(--fs-body-sm);
+      font-weight: 600;
+      letter-spacing: 0.11em;
+      text-transform: uppercase;
+      color: var(--text-muted);
+      margin-bottom: 18px;
+    }
+
+    [data-theme="dark"] .rf-sub,
+    :root:not([data-theme]) .rf-sub {
+      color: rgba(255, 255, 255, 0.35);
+    }
+
+    .rf-rows {
+      display: flex;
+      flex-direction: column;
+      gap: 9px;
+    }
+
+    .rf-row {
+      display: flex;
+      align-items: flex-start;
+      gap: 16px;
+      padding: 16px 16px;
+      border-radius: var(--radius-sm);
+      border: 1px solid transparent;
+      cursor: pointer;
+      transition: background 0.2s ease, border-color 0.2s ease, box-shadow 0.2s ease;
+    }
+
+    [data-theme="dark"] .rf-row,
+    :root:not([data-theme]) .rf-row {
+      background: transparent;
+      border: 1px solid transparent;
+    }
+
+    [data-theme="dark"] .rf-row:hover,
+    :root:not([data-theme]) .rf-row:hover {
+      background: rgba(255, 255, 255, 0.06);
+      border-color: rgba(255, 255, 255, 0.1);
+    }
+
+    [data-theme="dark"] .rf-row.sel,
+    :root:not([data-theme]) .rf-row.sel {
+      background: rgba(255, 255, 255, 0.1);
+      -webkit-backdrop-filter: blur(20px);
+      backdrop-filter: blur(20px);
+      border-color: rgba(255, 255, 255, 0.3);
+      box-shadow:
+        inset 2px 2px 8px rgba(255, 255, 255, 0.1),
+        inset 1px 1px 4px rgba(255, 255, 255, 0.08);
+    }
+
+    [data-theme="light"] .rf-row:hover {
+      background: rgba(26, 27, 31, 0.04);
+      border-color: rgba(26, 27, 31, 0.12);
+    }
+
+    [data-theme="light"] .rf-row.sel {
+      background: rgba(255, 255, 255, 0.85);
+      border-color: rgba(26, 27, 31, 0.18);
+      box-shadow:
+        inset 1px 1px 6px rgba(255, 255, 255, 0.8),
+        inset 0 0 0 1px rgba(26, 27, 31, 0.06);
+    }
+
+    .rf-row-icon {
+      width: 44px;
+      height: 44px;
+      border-radius: 12px;
+      flex-shrink: 0;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      transition: background 0.2s ease, border-color 0.2s ease;
+      border: 1px solid transparent;
+    }
+
+    [data-theme="dark"] .rf-row-icon,
+    :root:not([data-theme]) .rf-row-icon {
+      background: rgba(255, 255, 255, 0.06);
+      border-color: rgba(255, 255, 255, 0.1);
+    }
+
+    [data-theme="dark"] .rf-row.sel .rf-row-icon,
+    :root:not([data-theme]) .rf-row.sel .rf-row-icon {
+      background: rgba(255, 255, 255, 0.12);
+      border-color: rgba(255, 255, 255, 0.22);
+    }
+
+    [data-theme="light"] .rf-row-icon {
+      background: rgba(26, 27, 31, 0.06);
+      border-color: rgba(26, 27, 31, 0.08);
+    }
+
+    [data-theme="light"] .rf-row.sel .rf-row-icon {
+      background: rgba(26, 27, 31, 0.08);
+      border-color: rgba(26, 27, 31, 0.14);
+    }
+
+    [data-theme="light"] .rf-row-icon svg {
+      stroke: rgba(26, 27, 31, 0.45);
+    }
+
+    [data-theme="light"] .rf-row.sel .rf-row-icon svg {
+      stroke: rgba(26, 27, 31, 0.85);
+    }
+
+    [data-theme="light"] .rf-row-icon svg .rf-mood-dot {
+      fill: rgba(26, 27, 31, 0.45);
+    }
+
+    [data-theme="light"] .rf-row.sel .rf-row-icon svg .rf-mood-dot {
+      fill: rgba(26, 27, 31, 0.85);
+    }
+
+    .rf-row-icon svg {
+      width: 22px;
+      height: 22px;
+      stroke: var(--rf-icon-stroke);
+      fill: none;
+      stroke-width: 1.2;
+      stroke-linecap: round;
+      stroke-linejoin: round;
+    }
+
+    [data-theme="dark"] .rf-row-icon svg,
+    :root:not([data-theme]) .rf-row-icon svg {
+      stroke: rgba(255, 255, 255, 0.5);
+    }
+
+    [data-theme="dark"] .rf-row.sel .rf-row-icon svg,
+    :root:not([data-theme]) .rf-row.sel .rf-row-icon svg {
+      stroke: rgba(255, 255, 255, 0.9);
+    }
+
+    .rf-row-icon svg .rf-mood-dot {
+      fill: var(--rf-icon-stroke);
+      fill-opacity: 0.45;
+      stroke: none;
+    }
+
+    [data-theme="dark"] .rf-row-icon svg .rf-mood-dot,
+    :root:not([data-theme]) .rf-row-icon svg .rf-mood-dot {
+      fill: rgba(255, 255, 255, 0.5);
+      fill-opacity: 1;
+    }
+
+    [data-theme="dark"] .rf-row.sel .rf-row-icon svg .rf-mood-dot,
+    :root:not([data-theme]) .rf-row.sel .rf-row-icon svg .rf-mood-dot {
+      fill: rgba(255, 255, 255, 0.9);
+    }
+
+    .rf-row-txt {
+      flex: 1;
+      min-width: 0;
+    }
+
+    .rf-row-name {
+      font-size: var(--fs-title);
+      font-weight: 600;
+      color: #94a3b8;
+      line-height: 1.15;
+    }
+
+    [data-theme="dark"] .rf-row-name,
+    :root:not([data-theme]) .rf-row-name {
+      color: rgba(255, 255, 255, 0.7);
+    }
+
+    [data-theme="dark"] .rf-row.sel .rf-row-name,
+    :root:not([data-theme]) .rf-row.sel .rf-row-name {
+      color: rgba(255, 255, 255, 0.95);
+      font-weight: 600;
+    }
+
+    [data-theme="light"] .rf-row-name {
+      color: var(--text-secondary);
+    }
+
+    [data-theme="light"] .rf-row.sel .rf-row-name {
+      color: var(--text-primary);
+    }
+
+    .rf-row-desc {
+      font-size: var(--fs-lead);
+      color: #2e4060;
+      margin-top: 4px;
+      line-height: 1.35;
+    }
+
+    [data-theme="dark"] .rf-row-desc,
+    :root:not([data-theme]) .rf-row-desc {
+      color: rgba(255, 255, 255, 0.38);
+    }
+
+    [data-theme="dark"] .rf-row.sel .rf-row-desc,
+    :root:not([data-theme]) .rf-row.sel .rf-row-desc {
+      color: rgba(255, 255, 255, 0.6);
+    }
+
+    [data-theme="light"] .rf-row-desc {
+      color: var(--text-muted);
+    }
+
+    [data-theme="light"] .rf-row.sel .rf-row-desc {
+      color: var(--text-secondary);
+    }
+
+    .rf-col--upload {
+      display: flex;
+      flex-direction: column;
+      gap: 21px;
+      background: transparent;
+    }
+
+    .rf-upload {
+      position: relative;
+      min-height: 250px;
+      border-radius: var(--radius-md);
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      padding: 44px 31px;
+      cursor: pointer;
+      transition: border-color 0.2s ease, background 0.2s ease;
+      flex-shrink: 0;
+    }
+
+    [data-theme="dark"] .rf-upload,
+    :root:not([data-theme]) .rf-upload {
+      background: rgba(255, 255, 255, 0.04);
+      border: 1.5px dashed rgba(255, 255, 255, 0.18);
+    }
+
+    [data-theme="dark"] .rf-upload:hover,
+    :root:not([data-theme]) .rf-upload:hover {
+      background: rgba(255, 255, 255, 0.08);
+      border-color: rgba(232, 168, 74, 0.6);
+    }
+
+    [data-theme="light"] .rf-upload {
+      background: rgba(255, 255, 255, 0.5);
+      border: 1.5px dashed rgba(26, 27, 31, 0.2);
+    }
+
+    [data-theme="light"] .rf-upload:hover {
+      background: rgba(255, 255, 255, 0.72);
+      border-color: rgba(232, 168, 74, 0.55);
+    }
+
+    .rf-upload.has-file {
+      border-style: solid;
+      cursor: default;
+    }
+
+    [data-theme="dark"] .rf-upload.has-file,
+    :root:not([data-theme]) .rf-upload.has-file {
+      border-color: rgba(255, 255, 255, 0.14);
+    }
+
+    [data-theme="light"] .rf-upload.has-file {
+      border-color: rgba(26, 27, 31, 0.14);
+    }
+
+    .rf-upload input[type="file"] {
+      position: absolute;
+      inset: 0;
+      opacity: 0;
+      cursor: pointer;
+      width: 100%;
+      height: 100%;
+    }
+
+    .rf-upload.has-file input[type="file"] {
+      display: none;
+    }
+
+    .rf-upload-inner {
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      gap: 10px;
+      text-align: center;
+      pointer-events: none;
+    }
+
+    .rf-up-icon {
+      width: 60px;
+      height: 60px;
+      border-radius: 10px;
+      background: var(--rf-upload-icon-bg);
+      display: flex;
+      align-items: center;
+      justify-content: center;
+    }
+
+    .rf-up-icon svg {
+      width: 26px;
+      height: 26px;
+      stroke: var(--rf-upload-stroke);
+      fill: none;
+      stroke-width: 1.2;
+      stroke-linecap: round;
+      stroke-linejoin: round;
+    }
+
+    .rf-up-title {
+      font-size: var(--fs-title);
+      color: var(--rf-up-title);
+      font-weight: 600;
+    }
+
+    [data-theme="dark"] .rf-up-title,
+    :root:not([data-theme]) .rf-up-title {
+      color: rgba(255, 255, 255, 0.78);
+    }
+
+    .rf-up-sub {
+      font-size: var(--fs-lead);
+      color: var(--rf-up-sub);
+    }
+
+    [data-theme="dark"] .rf-up-sub,
+    :root:not([data-theme]) .rf-up-sub {
+      color: rgba(255, 255, 255, 0.42);
+    }
+
+    .rf-file-meta {
+      display: none;
+      flex-direction: column;
+      align-items: center;
+      gap: 10px;
+      width: 100%;
+      padding: 4px 0;
+    }
+
+    .rf-upload.has-file .rf-upload-inner {
+      display: none;
+    }
+
+    .rf-upload.has-file .rf-file-meta {
+      display: flex;
+    }
+
+    .rf-thumb {
+      max-width: 100%;
+      max-height: 180px;
+      object-fit: contain;
+      border-radius: 8px;
+    }
+
+    .rf-file-name {
+      font-size: var(--fs-lead);
+      font-weight: 600;
+      color: var(--text-primary);
+      word-break: break-all;
+      text-align: center;
+      max-width: 100%;
+    }
+
+    .rf-remove {
+      appearance: none;
+      border: 1px solid var(--border);
+      background: var(--surface);
+      color: var(--text-secondary);
+      font-size: var(--fs-title);
+      font-weight: 600;
+      width: 42px;
+      height: 42px;
+      border-radius: 10px;
+      cursor: pointer;
+      line-height: 1;
+      font-family: inherit;
+    }
+
+    .rf-remove:hover {
+      color: var(--coral);
+      border-color: var(--coral);
+    }
+
+    .rf-desc {
+      border-radius: var(--radius-md);
+      padding: 21px 24px;
+    }
+
+    [data-theme="dark"] .rf-desc,
+    :root:not([data-theme]) .rf-desc {
+      background: rgba(255, 255, 255, 0.06);
+      border: 1px solid rgba(255, 255, 255, 0.1);
+    }
+
+    [data-theme="light"] .rf-desc {
+      background: rgba(255, 255, 255, 0.55);
+      border: 1px solid rgba(26, 27, 31, 0.1);
+    }
+
+    .rf-desc-title {
+      font-size: var(--fs-title-lg);
+      font-weight: 700;
+      color: var(--rf-desc-title);
+      margin-bottom: 10px;
+    }
+
+    [data-theme="dark"] .rf-desc-title,
+    :root:not([data-theme]) .rf-desc-title {
+      color: rgba(255, 255, 255, 0.92);
+    }
+
+    .rf-desc-body {
+      font-size: var(--fs-title-sm);
+      color: var(--rf-desc-body);
+      line-height: 1.6;
+    }
+
+    [data-theme="dark"] .rf-desc-body,
+    :root:not([data-theme]) .rf-desc-body {
+      color: rgba(255, 255, 255, 0.58);
+    }
+
+    .k-step-icon {
+      display: inline-flex;
+      align-items: center;
+      justify-content: center;
+      width: 44px;
+      height: 44px;
+      border-radius: 50%;
+      border: 1px solid var(--toggle-border);
+      background: var(--toggle-bg);
+      color: var(--toggle-color);
+      cursor: pointer;
+      transition: background 0.2s ease, border-color 0.2s ease, color 0.2s ease;
+    }
+
+    .k-step-icon:hover {
+      background: var(--surface);
+    }
+
+    .k-step-icon svg {
+      width: 20px;
+      height: 20px;
+      stroke: currentColor;
+      fill: none;
+      stroke-width: 1.75;
+      stroke-linecap: round;
+      stroke-linejoin: round;
+    }
+
+    .k-theme-toggle {
+      position: static;
+      flex-shrink: 0;
+      margin-bottom: 12px;
+    }
+
+    .k-sidebar-steps {
+      flex: 1;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      justify-content: center;
+      gap: 10px;
+      min-height: 0;
+      width: 100%;
+    }
+  </style>
+</head>
+<body>
+  <div class="k-page">
+    <aside class="k-sidebar" aria-label="Workflow">
+      <button type="button" class="k-step-icon k-theme-toggle" id="themeToggle" aria-label="Toggle color theme">
+        <svg id="icon-moon" viewBox="0 0 24 24" aria-hidden="true">
+          <path d="M21 12.79A9 9 0 1 1 11.21 3 7 7 0 0 0 21 12.79z" />
+        </svg>
+        <svg id="icon-sun" viewBox="0 0 24 24" aria-hidden="true" style="display: none">
+          <circle cx="12" cy="12" r="4" />
+          <path d="M12 2v2M12 20v2M4.93 4.93l1.41 1.41M17.66 17.66l1.41 1.41M2 12h2M20 12h2M4.93 19.07l1.41-1.41M17.66 6.34l1.41-1.41" />
+        </svg>
+      </button>
+      <div class="k-sidebar-steps" id="sidebar" aria-label="Workflow steps"></div>
+    </aside>
+
+    <main class="k-main">
+      <nav class="k-topbar" aria-label="Step navigation">
+        <div class="k-topbar-left">
+          <button type="button" class="k-btn-ghost" id="btnBack">Back</button>
+        </div>
+        <div class="k-tabs" role="tablist" aria-label="Steps">
+            <button type="button" class="k-tab done" id="tabCategory">Category</button>
+            <button type="button" class="k-tab done" id="tabSize">Size</button>
+            <button type="button" class="k-tab done" id="tabTheme">Theme</button>
+            <button type="button" class="k-tab done" id="tabFineTune">Fine Tune</button>
+            <span class="k-tab active" role="tab" aria-selected="true">Reference</span>
+            <span class="k-tab" role="tab" aria-selected="false">Text &amp; Brand</span>
+            <span class="k-tab" role="tab" aria-selected="false">Generate</span>
+        </div>
+        <div class="k-topbar-actions">
+          <button type="button" class="k-btn-next" id="btnNext">Next</button>
+        </div>
+      </nav>
+
+      <div class="k-stage">
+        <div class="k-stage-inner">
+          <div class="rf-header">
+            <span class="rf-title">Reference image</span>
+          </div>
+          <div class="rf-card">
+            <div class="rf-col rf-col--modes">
+              <div class="rf-sub">How AI uses it</div>
+              <div class="rf-rows" id="rfRows" role="radiogroup" aria-label="How AI uses reference"></div>
+            </div>
+            <div class="rf-col rf-col--upload">
+              <div class="rf-upload" id="uploadZone" role="button" tabindex="0" aria-label="Upload reference image">
+                <input type="file" id="fileInput" accept=".jpg,.jpeg,.png,.webp" />
+                <div class="rf-upload-inner" id="uploadPlaceholder">
+                  <div class="rf-up-icon" aria-hidden="true">
+                    <svg viewBox="0 0 16 16" aria-hidden="true">
+                      <rect x="1" y="10" width="14" height="4" rx="1.5" />
+                      <path d="M8 8V2M5 5l3-3 3 3" />
+                    </svg>
+                  </div>
+                  <div class="rf-up-title">Upload reference image</div>
+                  <div class="rf-up-sub">JPG · PNG · WEBP · Max 10MB</div>
+                </div>
+                <div class="rf-file-meta" id="uploadFileMeta">
+                  <img class="rf-thumb" id="previewImg" alt="" />
+                  <div class="rf-file-name" id="fileNameLabel"></div>
+                  <button type="button" class="rf-remove" id="btnClearUpload" aria-label="Remove image">×</button>
+                </div>
+              </div>
+              <div class="rf-desc">
+                <div class="rf-desc-title" id="descTitle"></div>
+                <div class="rf-desc-body" id="descBody"></div>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+
+    </main>
+  </div>
+
+  <script>
+    (function () {
+      var KREATIVE_KEY = "kreative_session";
+
+      function getState() {
+        try {
+          var raw = localStorage.getItem(KREATIVE_KEY);
+          return raw ? JSON.parse(raw) : {};
+        } catch (e) {
+          return {};
+        }
+      }
+
+      function setState(partial) {
+        var next = Object.assign({}, getState(), partial);
+        localStorage.setItem(KREATIVE_KEY, JSON.stringify(next));
+      }
+
+      function clearState() {
+        localStorage.removeItem(KREATIVE_KEY);
+      }
+
+      if (!getState().theme) {
+        window.location.href = "page3.html";
+        return;
+      }
+      if (!getState().fineTune) {
+        window.location.href = "page4.html";
+        return;
+      }
+
+      /* Read keys from prior steps (prompt); no UI binding required */
+      try {
+        sessionStorage.getItem("kreative_brand");
+        sessionStorage.getItem("kreative_theme");
+        sessionStorage.getItem("kreative_temperature");
+        sessionStorage.getItem("kreative_strength");
+      } catch (eRead) {}
+
+      function syncIcons() {
+        var moon = document.getElementById("icon-moon");
+        var sun = document.getElementById("icon-sun");
+        if (!moon || !sun) return;
+        var isDark = document.documentElement.getAttribute("data-theme") !== "light";
+        moon.style.display = isDark ? "block" : "none";
+        sun.style.display = isDark ? "none" : "block";
+      }
+
+      function initTheme() {
+        var stored = localStorage.getItem("kreativeTheme");
+        var prefersDark = window.matchMedia("(prefers-color-scheme: dark)").matches;
+        var theme = stored || (prefersDark ? "dark" : "light");
+        document.documentElement.setAttribute("data-theme", theme);
+        syncIcons();
+      }
+
+      var STEP_PAGES = [
+        "page1.html",
+        "page2.html",
+        "page3.html",
+        "page4.html",
+        "page5.html",
+        "page6.html",
+        "page7.html"
+      ];
+
+      function stepReachable(stepIndex) {
+        var s = getState();
+        if (stepIndex <= 1) return true;
+        if (stepIndex === 2) return !!s.category;
+        if (stepIndex === 3) return !!s.category && !!s.size;
+        if (stepIndex === 4) return !!s.category && !!s.size && !!s.theme;
+        if (stepIndex === 5) return !!s.category && !!s.size && !!s.theme && !!s.fineTune;
+        if (stepIndex === 6) {
+          return !!s.category && !!s.size && !!s.theme && !!s.fineTune && !!s.reference;
+        }
+        if (stepIndex === 7) {
+          return (
+            !!s.category &&
+            !!s.size &&
+            !!s.theme &&
+            !!s.fineTune &&
+            !!s.reference &&
+            !!s.textBrand
+          );
+        }
+        return false;
+      }
+
+      var SIDEBAR_SVGS = [
+        '<svg viewBox="0 0 24 24" aria-hidden="true"><rect x="3" y="3" width="7" height="7" rx="1"/><rect x="14" y="3" width="7" height="7" rx="1"/><rect x="3" y="14" width="7" height="7" rx="1"/><rect x="14" y="14" width="7" height="7" rx="1"/></svg>',
+        '<svg viewBox="0 0 24 24" aria-hidden="true"><rect x="5" y="5" width="10" height="10" rx="1"/><path d="M9 3h6M9 21h6M3 9v6M21 9v6"/></svg>',
+        '<svg viewBox="0 0 24 24" aria-hidden="true"><circle cx="12" cy="12" r="4" fill="none" stroke="currentColor"/><path d="M12 2v2M12 20v2M4.93 4.93l1.41 1.41M17.66 17.66l1.41 1.41M2 12h2M20 12h2M4.93 19.07l1.41-1.41M17.66 6.34l1.41-1.41" fill="none"/><circle cx="7.5" cy="7.5" r="1.25" fill="currentColor"/><circle cx="17" cy="16" r="1.25" fill="currentColor"/></svg>',
+        '<svg viewBox="0 0 24 24" aria-hidden="true"><path d="M4 14h4v6H4zM10 8h4v12h-4zM16 4h4v16h-4z"/></svg>',
+        '<svg viewBox="0 0 24 24" aria-hidden="true"><rect x="3" y="5" width="18" height="14" rx="2"/><circle cx="8.5" cy="10.5" r="1.5"/><path d="M21 17l-6-6-4 4-2-2-4 4"/></svg>',
+        '<svg viewBox="0 0 24 24" aria-hidden="true"><path d="M4 6h16M4 12h10M4 18h14"/></svg>',
+        '<svg viewBox="0 0 24 24" aria-hidden="true"><path d="M12 2l1.8 4.5L18 8l-4 2.5L15.5 15 12 12.5 8.5 15 10 10.5 6 8l4.2-1.5L12 2z"/></svg>'
+      ];
+
+      function renderSidebar(currentStep) {
+        var el = document.getElementById("sidebar");
+        if (!el) return;
+        var s = getState();
+        var html = "";
+        for (var i = 0; i < 7; i++) {
+          var stepNum = i + 1;
+          var reachable = stepReachable(stepNum);
+          var done =
+            stepNum < currentStep ||
+            (stepNum === 1 && !!s.category) ||
+            (stepNum === 2 && !!s.size) ||
+            (stepNum === 3 && !!s.theme) ||
+            (stepNum === 4 && !!s.fineTune) ||
+            (stepNum === 5 && !!s.reference) ||
+            (stepNum === 6 && !!s.textBrand) ||
+            (stepNum === 7 && !!s.generated);
+          var classes = "k-sidebar-btn";
+          if (stepNum === currentStep) classes += " active";
+          if (done) classes += " done";
+          var disabled = !reachable && stepNum !== currentStep;
+          var label =
+            "Go to step " +
+            stepNum +
+            (disabled ? " (locked)" : "") +
+            ": " +
+            ["Category", "Size", "Theme", "Fine Tune", "Reference", "Text & Brand", "Generate"][i];
+          html +=
+            '<button type="button" class="' +
+            classes +
+            '" data-step="' +
+            stepNum +
+            '"' +
+            (disabled ? " disabled" : "") +
+            ' aria-label="' +
+            label +
+            '" title="' +
+            label +
+            '">' +
+            SIDEBAR_SVGS[i] +
+            "</button>";
+        }
+        el.innerHTML = html;
+        var buttons = el.querySelectorAll("[data-step]");
+        for (var j = 0; j < buttons.length; j++) {
+          buttons[j].addEventListener("click", onSidebarClick);
+        }
+      }
+
+      function onSidebarClick(ev) {
+        var btn = ev.currentTarget;
+        if (btn.disabled) return;
+        var step = parseInt(btn.getAttribute("data-step"), 10);
+        if (!stepReachable(step)) return;
+        var href = STEP_PAGES[step - 1];
+        if (!href) return;
+        var path = window.location.pathname || "";
+        var at =
+          path.slice(-href.length) === href ||
+          path.replace(/\\/g, "/").split("/").pop() === href;
+        if (!at) window.location.href = href;
+      }
+
+      var REF_ROWS = [
+        {
+          id: "none",
+          modeLabel: "No Reference",
+          label: "No Reference",
+          sub: "Prompt only",
+          title: "No Reference",
+          body:
+            "AI generates entirely from your prompt and chosen theme. No visual reference is used.",
+          svg:
+            '<svg viewBox="0 0 16 16" aria-hidden="true"><circle cx="8" cy="8" r="6" stroke-width="1.4"/><line x1="8" y1="2" x2="8" y2="14" stroke-width="1.4"/><line x1="2" y1="8" x2="14" y2="8" stroke-width="1.4"/></svg>'
+        },
+        {
+          id: "lighting",
+          modeLabel: "Lighting",
+          label: "Lighting",
+          sub: "Direction · shadow quality",
+          title: "Lighting",
+          body:
+            "AI reads the light direction and shadow quality from your image — applying the same lighting logic to brand visuals.",
+          svg:
+            '<svg viewBox="0 0 16 16" aria-hidden="true"><circle cx="12" cy="4" r="2.5" stroke-width="1.3"/><path d="M10 6 L4 14" stroke-width="1.3" stroke-linecap="round"/><ellipse cx="5" cy="13.5" rx="4" ry="1.5" stroke-width="1.1"/></svg>'
+        },
+        {
+          id: "texture",
+          modeLabel: "Surface Texture",
+          label: "Surface Texture",
+          sub: "Concrete · linen · marble",
+          title: "Surface Texture",
+          body:
+            "AI extracts surface material cues — roughness, grain, and finish — to apply consistent texture language across your brand visuals.",
+          svg:
+            '<svg viewBox="0 0 16 16" aria-hidden="true"><path d="M1 5 Q3 3 5 5 Q7 7 9 5 Q11 3 13 5 Q15 7 16 5" stroke-width="1.3" fill="none" stroke-linecap="round"/><path d="M1 9 Q3 7 5 9 Q7 11 9 9 Q11 7 13 9 Q15 11 16 9" stroke-width="1.3" fill="none" stroke-linecap="round" opacity="0.6"/><path d="M1 13 Q3 11 5 13 Q7 15 9 13 Q11 11 13 13 Q15 15 16 13" stroke-width="1.3" fill="none" stroke-linecap="round" opacity="0.3"/></svg>'
+        },
+        {
+          id: "mood",
+          modeLabel: "Mood / Atmosphere",
+          label: "Mood / Atmosphere",
+          sub: "Non-scene feeling",
+          title: "Mood / Atmosphere",
+          body:
+            "AI captures the emotional tone and atmospheric quality of your image — translating it into a consistent brand feeling.",
+          svg:
+            '<svg viewBox="0 0 16 16" aria-hidden="true"><circle cx="8" cy="8" r="6" stroke-width="1.3" stroke-dasharray="2.5 2"/><circle cx="8" cy="8" r="2.5" class="rf-mood-dot"/></svg>'
+        },
+        {
+          id: "composition",
+          modeLabel: "Composition Layout",
+          label: "Composition Layout",
+          sub: "Spatial arrangement",
+          title: "Composition",
+          body:
+            "AI studies the spatial arrangement and visual hierarchy in your image — mirroring the same compositional structure.",
+          svg:
+            '<svg viewBox="0 0 16 16" aria-hidden="true"><rect x="1" y="1" width="6" height="9" rx="1.2" stroke-width="1.3"/><rect x="9" y="1" width="6" height="4" rx="1.2" stroke-width="1.3"/><rect x="9" y="7" width="6" height="8" rx="1.2" stroke-width="1.3"/><rect x="1" y="12" width="6" height="3" rx="1.2" stroke-width="1.3"/></svg>'
+        }
+      ];
+
+      var selectedIndex = 0;
+      var selectedRefType = "none";
+      var refB64 = null;
+      var refMime = null;
+      var lastFileName = "";
+
+      function syncDescPanel() {
+        var row = REF_ROWS[selectedIndex];
+        if (!row) return;
+        var dt = document.getElementById("descTitle");
+        var db = document.getElementById("descBody");
+        if (dt) dt.textContent = row.title;
+        if (db) db.textContent = row.body;
+      }
+
+      function selectRow(i) {
+        if (i < 0 || i >= REF_ROWS.length) return;
+        selectedIndex = i;
+        selectedRefType = REF_ROWS[i].id;
+        var rows = document.querySelectorAll(".rf-row");
+        for (var j = 0; j < rows.length; j++) {
+          var on = parseInt(rows[j].getAttribute("data-idx"), 10) === i;
+          rows[j].classList.toggle("sel", on);
+          rows[j].setAttribute("aria-checked", on ? "true" : "false");
+        }
+        syncDescPanel();
+        renderSidebar(5);
+      }
+
+      function renderRfRows() {
+        var list = document.getElementById("rfRows");
+        if (!list) return;
+        var html = "";
+        for (var i = 0; i < REF_ROWS.length; i++) {
+          var r = REF_ROWS[i];
+          html +=
+            '<div class="rf-row" data-idx="' +
+            i +
+            '" role="radio" tabindex="0" aria-checked="false">' +
+            '<div class="rf-row-icon">' +
+            r.svg +
+            "</div>" +
+            '<div class="rf-row-txt"><div class="rf-row-name">' +
+            r.label +
+            '</div><div class="rf-row-desc">' +
+            r.sub +
+            "</div></div></div>";
+        }
+        list.innerHTML = html;
+        var nodes = list.querySelectorAll(".rf-row");
+        for (var k = 0; k < nodes.length; k++) {
+          nodes[k].addEventListener("click", function () {
+            selectRow(parseInt(this.getAttribute("data-idx"), 10));
+          });
+          nodes[k].addEventListener("keydown", function (ev) {
+            if (ev.key === "Enter" || ev.key === " ") {
+              ev.preventDefault();
+              selectRow(parseInt(ev.currentTarget.getAttribute("data-idx"), 10));
+            }
+          });
+        }
+        selectRow(selectedIndex);
+      }
+
+      function showRefPreview() {
+        var zone = document.getElementById("uploadZone");
+        var ph = document.getElementById("uploadPlaceholder");
+        var meta = document.getElementById("uploadFileMeta");
+        var img = document.getElementById("previewImg");
+        var fn = document.getElementById("fileNameLabel");
+        if (!zone || !ph || !meta || !img || !fn) return;
+        if (refB64 && refMime) {
+          zone.classList.add("has-file");
+          img.src = "data:" + refMime + ";base64," + refB64;
+          img.alt = lastFileName || "Reference preview";
+          fn.textContent = lastFileName || "Image attached";
+        } else {
+          zone.classList.remove("has-file");
+          img.removeAttribute("src");
+          img.alt = "";
+          fn.textContent = "";
+        }
+      }
+
+      function onFileSelected(file) {
+        if (!file) return;
+        var okTypes = ["image/jpeg", "image/png", "image/webp"];
+        if (okTypes.indexOf(file.type) === -1) {
+          alert("Please choose a JPG, PNG, or WEBP image.");
+          return;
+        }
+        if (file.size > 10 * 1024 * 1024) {
+          alert("File must be 10MB or smaller.");
+          return;
+        }
+        var reader = new FileReader();
+        reader.onload = function () {
+          var res = reader.result;
+          if (typeof res !== "string") return;
+          var comma = res.indexOf(",");
+          refB64 = comma >= 0 ? res.slice(comma + 1) : res;
+          refMime = file.type;
+          lastFileName = file.name || "";
+          showRefPreview();
+        };
+        reader.readAsDataURL(file);
+      }
+
+      function restoreFromState() {
+        var s = getState();
+        if (s.reference && s.reference.type) {
+          for (var ri = 0; ri < REF_ROWS.length; ri++) {
+            if (REF_ROWS[ri].id === s.reference.type) {
+              selectedIndex = ri;
+              selectedRefType = s.reference.type;
+              break;
+            }
+          }
+          if (s.reference.imageB64 && s.reference.mime) {
+            refB64 = s.reference.imageB64;
+            refMime = s.reference.mime;
+            lastFileName = s.reference.fileName || "";
+          }
+        }
+      }
+
+      initTheme();
+      restoreFromState();
+      renderRfRows();
+      if (refB64 && refMime) showRefPreview();
+      renderSidebar(5);
+
+      function bindIfPresent(id, event, handler) {
+        var node = document.getElementById(id);
+        if (node) node.addEventListener(event, handler);
+      }
+
+      bindIfPresent("tabCategory", "click", function () {
+        window.location.href = "page1.html";
+      });
+      bindIfPresent("tabSize", "click", function () {
+        window.location.href = "page2.html";
+      });
+      bindIfPresent("tabTheme", "click", function () {
+        window.location.href = "page3.html";
+      });
+      bindIfPresent("tabFineTune", "click", function () {
+        window.location.href = "page4.html";
+      });
+      bindIfPresent("btnBack", "click", function () {
+        window.location.href = "page4.html";
+      });
+
+      function proceedToPage6() {
+        var b64 = refB64;
+        var mime = refMime;
+        var row = REF_ROWS[selectedIndex];
+        var label = row ? row.modeLabel : "No Reference";
+        try {
+          sessionStorage.setItem("kreative_ref_mode", String(selectedIndex));
+          sessionStorage.setItem("kreative_ref_mode_label", label);
+          sessionStorage.setItem("kreative_ref_image", b64 || "");
+        } catch (e1) {}
+        setState({
+          reference: {
+            type: selectedRefType,
+            imageB64: b64 || null,
+            mime: mime || null,
+            fileName: lastFileName || null,
+            modeIndex: selectedIndex,
+            modeLabel: label
+          }
+        });
+        window.location.href = "page6.html";
+      }
+
+      bindIfPresent("btnNext", "click", proceedToPage6);
+
+      bindIfPresent("fileInput", "change", function () {
+        var input = document.getElementById("fileInput");
+        var f = input && input.files && input.files[0];
+        onFileSelected(f);
+      });
+
+      bindIfPresent("btnClearUpload", "click", function (e) {
+        e.stopPropagation();
+        refB64 = null;
+        refMime = null;
+        lastFileName = "";
+        var fi = document.getElementById("fileInput");
+        if (fi) fi.value = "";
+        showRefPreview();
+      });
+
+      var toggle = document.getElementById("themeToggle");
+      if (toggle) {
+        toggle.addEventListener("click", function () {
+          var next = document.documentElement.getAttribute("data-theme") === "light" ? "dark" : "light";
+          document.documentElement.setAttribute("data-theme", next);
+          localStorage.setItem("kreativeTheme", next);
+          syncIcons();
+          if (typeof syncDescPanel === "function") syncDescPanel();
+        });
+      }
+
+      window.getState = getState;
+      window.setState = setState;
+      window.clearState = clearState;
+    })();
+  </script>
+</body>
+</html>
